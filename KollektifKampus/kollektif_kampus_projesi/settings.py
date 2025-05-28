@@ -107,6 +107,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Varsayılan birincil anahtar türü
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
