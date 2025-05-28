@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <!-- Karakter seti ve viewport ayarları -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Sayfa başlığı -->
+    <title>{% block title %}Kollektif Kampüs{% endblock %}</title>
+    <!-- Statik dosyaları yükle -->
+    {% load static %}
+    <!-- Ana CSS dosyası -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <!-- Font Awesome ikon kütüphanesi -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Sayfaya özel CSS ekleme bloğu -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Ana sayfa düzeni kapsayıcısı -->
+    <div class="ana-kapsayici">
+        <!-- Sol Kenar Çubuğu -->
+        <aside class="sol-kenar-cubugu">
+            <!-- Marka/Logo alanı -->
+            <div class="kenar-cubugu-marka">
+                <a href="{% url 'home' %}">
+                    <i class="fa-solid fa-graduation-cap kenar-cubugu-ikon"></i>
+                    <span class="kenar-cubugu-metin kenar-cubugu-marka-metin">Kollektif Kampüs</span>
+                </a>
+            </div>
+            
+            <!-- Navigasyon menüsü -->
+            <nav class="kenar-cubugu-navigasyon">
+                <!-- Ana Sayfa linki -->
+                <a href="{% url 'home' %}" class="kenar-cubugu-nav-oge {% if request.path == '/' %}active{% endif %}">
+                    <i class="fa-solid fa-house kenar-cubugu-ikon"></i>
+                    <span class="kenar-cubugu-metin">Ana Sayfa</span>
+                </a>
+                
+                <!-- Kullanıcı giriş yapmışsa gösterilecek menü elemanları -->
+                {% if user.is_authenticated %}
+                    <!-- Yeni Talep Oluştur linki -->
+                    <a href="{% url 'talepler:ders_istegi_olustur' %}" class="kenar-cubugu-nav-oge {% if '/talepler/olustur/' in request.path %}active{% endif %}">
+                        <i class="fa-solid fa-plus kenar-cubugu-ikon"></i>
+                        <span class="kenar-cubugu-metin">Yeni Talep Oluştur</span>
+                    </a>
+                    
+                    <!-- Sohbetler linki ve okunmamış mesaj bildirimi -->
+                    <a href="{% url 'iletisim:kullanici_sohbetleri' %}" class="kenar-cubugu-nav-oge position-relative {% if '/iletisim/sohbetler/' in request.path or '/sohbet/' in request.path %}active{% endif %}">
+                        <i class="fa-solid fa-envelope kenar-cubugu-ikon"></i>
+                        <span class="kenar-cubugu-metin">Sohbetler</span>
+                        <!-- Okunmamış mesaj sayısı için bildirim balonu -->
+                        <span id="okunmamis-mesaj-bildirim" class="badge badge-danger" style="display: none;"></span>
+                    </a>
+                    
+                    <!-- Normal kullanıcı ise "Eğitmen Olarak Başvur" linki -->
+                    {% if user.is_authenticated and not user.profil.is_egitmen %}
+                    <a href="{% url 'kullanicilar:egitmen_basvurusu' %}" class="kenar-cubugu-nav-oge {% if '/kullanicilar/egitmen-basvurusu/' in request.path %}active{% endif %}">
+                        <i class="fa-solid fa-user-graduate kenar-cubugu-ikon"></i>
+                        <span class="kenar-cubugu-metin">Eğitmen Olarak Başvur</span>
+                    </a>
+                    {% endif %}
+                    
+                    <!-- Moderatör ise Moderatör Paneli linki -->
+                    {% if user.profil.is_moderator %}
+                    <a href="{% url 'moderasyon:panel_anasayfa' %}" class="kenar-cubugu-nav-oge {% if '/moderasyon/panel/' in request.path %}active{% endif %}">
+                        <i class="fa-solid fa-shield-halved kenar-cubugu-ikon"></i>
+                        <span class="kenar-cubugu-metin">Moderatör Paneli</span>
+                    </a>
+                    {% endif %}
+                    
+                    <!-- Admin ise Admin Paneli linki -->
+                    {% if user.profil.is_admin %}
+                    <a href="/admin/" class="kenar-cubugu-nav-oge" target="_blank">
+                        <i class="fa-solid fa-user-shield kenar-cubugu-ikon"></i>
+                        <span class="kenar-cubugu-metin">Admin Paneli</span>
+                    </a>
+                    {% endif %}
+                {% endif %}
+        </nav>
+            
+            <!-- Kullanıcı giriş yapmışsa profil ve çıkış alanı -->
+            {% if user.is_authenticated %}
+                <!-- Kullanıcı profil linki -->
+                <a href="{% url 'kullanicilar:profil_detay' username=user.username %}" class="kenar-cubugu-profil">
+                    <!-- Profil avatarı -->
+                    <div class="profil-avatar">
+                        {% if user.profil.profil_fotografi_index > 0 %}
+                            <img src="{% static 'img/profil_fotografi_' %}{{ user.profil.profil_fotografi_index }}.png" alt="{{ user.username }}">
+                        {% else %}
+                            <div class="avatar-placeholder">{{ user.username|first|upper }}</div>
+                        {% endif %}
+                    </div>
+                    <!-- Profil bilgileri -->
+                    <div class="profil-bilgi">
+                        <div class="profil-isim-kenar-cubugu">{{ user.get_full_name|default:user.username }}</div>
+                        <div class="profil-kullanici-adi">@{{ user.username }}</div>
+                        
+                        <!-- Kullanıcı rol bilgisi -->
+                        <div class="profil-rol">
+                            <span class="profil-rol-rozeti profil-rol-rozeti-{{ user.profil.kullanici_rolu|lower }}">
+                                {% if user.profil.kullanici_rolu == 'NORMAL' %}
+                                    <i class="fa-solid fa-user"></i>
+                                {% elif user.profil.kullanici_rolu == 'EGITMEN' %}
+                                    <i class="fa-solid fa-chalkboard-user"></i>
+                                {% elif user.profil.kullanici_rolu == 'MODERATOR' %}
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                {% elif user.profil.kullanici_rolu == 'ADMIN' %}
+                                    <i class="fa-solid fa-user-shield"></i>
+                                {% endif %}
+                                {{ user.profil.get_kullanici_rolu_display }}
+                            </span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Çıkış yap butonu -->
+                <div class="mt-2">
+                    <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline w-100">
+                            <i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap
+                        </button>
+                    </form>
+                </div>
+            {% else %}
+                <!-- Kullanıcı giriş yapmamışsa gösterilecek aksiyon butonları -->
+                <div class="sidebar-actions mt-4">
+                    <!-- Giriş Yap butonu -->
+                    <a href="{% url 'kullanicilar:giris' %}" class="btn btn-outline w-100 mb-2">
+                        <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
+                    </a>
+                    <!-- Kayıt Ol butonu -->
+                    <a href="{% url 'kullanicilar:kayit_ol' %}" class="btn btn-primary w-100">
+                        <i class="fa-solid fa-user-plus"></i> Kayıt Ol
+                    </a>
+                </div>
+            {% endif %}
+        </aside>
+        
+        <!-- Ana İçerik Alanı -->
+        <main class="ana-icerik-alani">
+        <!-- Mesaj bildirimleri (Django messages framework) -->
+        {% if messages %}
+                <div class="messages-container">
+                {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}" role="alert">
+                            {{ message }}
+                        </div>
+                {% endfor %}
+                </div>
+        {% endif %}
+            
+            <!-- Sayfa içeriğinin yükleneceği blok -->
+            {% block content %}{% endblock %}
+    </main>
+
+        <!-- Sağ Kenar Çubuğu -->
+        <aside class="sag-kenar-cubugu">
+            <!-- Kullanıcı giriş yapmışsa Son Sohbetler bölümü -->
+            {% if user.is_authenticated %}
+                <div class="kenar-cubugu-bolum">
+                    <div class="kenar-cubugu-bolum-baslik">
+                        Son Sohbetler
+                    </div>
+                    <!-- Son sohbetlerin AJAX ile yükleneceği alan -->
+                    <div class="kenar-cubugu-liste" id="son-mesajlar-listesi">
+                        <div class="kenar-cubugu-liste-oge text-center">
+                            <span class="kenar-cubugu-oge-alt-baslik">Sohbetler yükleniyor...</span>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            
+            <!-- En İyi Eğitmenler Liderlik Tablosu bölümü -->
+            <div class="kenar-cubugu-bolum">
+                <div class="kenar-cubugu-bolum-baslik">
+                    En İyi Eğitmenler
+                </div>
+                <!-- En iyi eğitmenlerin AJAX ile yükleneceği alan -->
+                <div class="kenar-cubugu-liste" id="liderlik-tablosu">
+                    <div class="kenar-cubugu-liste-oge text-center">
+                        <span class="kenar-cubugu-oge-alt-baslik">Veriler yükleniyor...</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Reklam alanı -->
+            <div class="kenar-cubugu-bolum">
+                <div class="kenar-cubugu-bolum-baslik">
+                    Sponsorlu İçerik
+                </div>
+                <div class="kenar-cubugu-reklam">
+                    <img src="{% static 'img/reklam_placeholder.png' %}" alt="Reklam" width="294" class="img-fluid">
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Sayfaya özel JavaScript ekleme bloğu -->
+    {% block extra_js %}{% endblock %}
+    
+    <!-- Genel JavaScript kodları -->
+    <script>
+        // En iyi eğitmenleri getiren fonksiyon
+        function enIyiEgitmenleriGetir() {
+            try {
+                fetch('/geribildirim/en-iyi-egitmenler/')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Sunucu yanıtı başarısız: ' + response.status + ' - ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const liderlikTablosu = document.getElementById('liderlik-tablosu');
+                        if (!liderlikTablosu) return;
+                        
+                        if (data.length === 0) {
+                            liderlikTablosu.innerHTML = '<div class="kenar-cubugu-liste-oge text-center"><span class="kenar-cubugu-oge-alt-baslik">Henüz değerlendirme bulunmuyor.</span></div>';
+                            return;
+                        }
+                        
+                        liderlikTablosu.innerHTML = '';
+                        data.slice(0, 3).forEach((egitmen, index) => {
+                            liderlikTablosu.innerHTML += `
+                                <a href="/kullanicilar/profil/${egitmen.username}/" class="kenar-cubugu-liste-oge">
+                                    <div class="d-flex align-center gap-2">
+                                        <span class="profile-rank">${index + 1}</span>
+                                        <div class="kenar-cubugu-oge-icerik">
+                                            <div class="kenar-cubugu-oge-baslik">${egitmen.ad_soyad || egitmen.username}</div>
+                                            <div class="kenar-cubugu-oge-alt-baslik">${egitmen.verilen_ders_sayisi} Değerlendirme</div>
+                                        </div>
+                                    </div>
+                                    <div class="kenar-cubugu-oge-aksiyon">
+                                        <span class="badge badge-rating">${egitmen.ortalama_puan.toFixed(1)}</span>
+                                    </div>
+                                </a>
+                            `;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('En iyi eğitmenler alınamadı:', error);
+                        const liderlikTablosu = document.getElementById('liderlik-tablosu');
+                        if (liderlikTablosu) {
+                            liderlikTablosu.innerHTML = '<div class="kenar-cubugu-liste-oge text-center"><span class="kenar-cubugu-oge-alt-baslik">Veriler yüklenemedi. Hata: ' + error.message + '</span></div>';
+                        }
+                    });
+            } catch (error) {
+                console.error('En iyi eğitmenler kontrolü sırasında bir hata oluştu:', error);
+                const liderlikTablosu = document.getElementById('liderlik-tablosu');
+                if (liderlikTablosu) {
+                    liderlikTablosu.innerHTML = '<div class="kenar-cubugu-liste-oge text-center"><span class="kenar-cubugu-oge-alt-baslik">İşlem sırasında hata: ' + error.message + '</span></div>';
+                }
+            }
+        }
+        
+        // Sayfa yüklendiğinde çalışacak kodlar
+        document.addEventListener('DOMContentLoaded', function() {
+            // En iyi eğitmenleri yükle (hem giriş yapmış hem de yapmamış kullanıcılar için)
+            enIyiEgitmenleriGetir();
+            
+            // Filtre tuşu için event listener (Eğer varsa)
+            const filterToggleButton = document.querySelector('.filtre-ac-kapat-buton');
+            const filterOptions = document.getElementById('filter-options');
+            
+            if (filterToggleButton && filterOptions) {
+                filterToggleButton.addEventListener('click', function() {
+                    if (filterOptions.style.display === 'none') {
+                        filterOptions.style.display = 'flex';
+                    } else {
+                        filterOptions.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+    
+    <!-- Kullanıcı giriş yapmışsa çalışacak JavaScript kodları -->
+    {% if user.is_authenticated %}
+    <script>
+        // Okunmayan mesaj sayısını kontrol eden fonksiyon
+        function okunmayanMesajlariKontrolEt() {
+            try {
+                fetch('{% url "iletisim:okunmayan_mesaj_sayisi" %}')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Sunucu yanıtı başarısız: ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const okunmayanSayi = data.okunmayan_mesaj_sayisi;
+                        const bildirimElemani = document.getElementById('okunmamis-mesaj-bildirim');
+                        
+                        if (okunmayanSayi > 0) {
+                            bildirimElemani.textContent = okunmayanSayi;
+                            bildirimElemani.style.display = 'inline-flex';
+                        } else {
+                            bildirimElemani.style.display = 'none';
+                        }
+                    })
+                    .catch(error => console.error('Okunmayan mesaj bilgisi alınamadı:', error));
+            } catch (error) {
+                console.error('Okunmayan mesaj kontrolü sırasında bir hata oluştu:', error);
+            }
+        }
+        
+        // Son mesajları getiren fonksiyon
+        function sonMesajlariGetir() {
+            try {
+                fetch('/iletisim/son-mesajlar/')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Sunucu yanıtı başarısız: ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const sonMesajlarListesi = document.getElementById('son-mesajlar-listesi');
+                        if (!sonMesajlarListesi) return;
+                        
+                        if (data.length === 0) {
+                            sonMesajlarListesi.innerHTML = '<div class="kenar-cubugu-liste-oge text-center"><span class="kenar-cubugu-oge-alt-baslik">Henüz sohbet bulunmuyor.</span></div>';
+                            return;
+                        }
+                        
+                        sonMesajlarListesi.innerHTML = '';
+                    
+                        data.slice(0, 2).forEach(sohbet => {
+                            sonMesajlarListesi.innerHTML += `
+                                <a href="/iletisim/sohbet/${sohbet.sohbet_id}/" class="kenar-cubugu-liste-oge">
+                                    <div class="kenar-cubugu-oge-icerik">
+                                        <div class="kenar-cubugu-oge-baslik">${sohbet.karsi_taraf_adi}</div>
+                                        <div class="kenar-cubugu-oge-alt-baslik">${sohbet.son_mesaj.substring(0, 30)}${sohbet.son_mesaj.length > 30 ? '...' : ''}</div>
+                                    </div>
+                                    <div class="kenar-cubugu-oge-aksiyon">
+                                        <span class="kenar-cubugu-oge-alt-baslik">${sohbet.tarih}</span>
+                                    </div>
+                                </a>
+                            `;
+                        });
+                        
+                        // İkiden fazla sohbet varsa "Tüm Sohbetler" butonunu ekle
+                        if (data.length > 2) {
+                            sonMesajlarListesi.innerHTML += `
+                                <a href="/iletisim/sohbetlerim/" class="kenar-cubugu-liste-oge tum-sohbetler-buton">
+                                    <div class="kenar-cubugu-oge-icerik text-center">
+                                        <div class="kenar-cubugu-oge-baslik">Tüm Sohbetler</div>
+                                    </div>
+                                </a>
+                            `;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Son sohbetler alınamadı:', error);
+                        const sonMesajlarListesi = document.getElementById('son-mesajlar-listesi');
+                        if (sonMesajlarListesi) {
+                            sonMesajlarListesi.innerHTML = '<div class="kenar-cubugu-liste-oge text-center"><span class="kenar-cubugu-oge-alt-baslik">Sohbetler yüklenemedi.</span></div>';
+                        }
+                    });
+            } catch (error) {
+                console.error('Son sohbetler kontrolü sırasında bir hata oluştu:', error);
+            }
+        }
+        
+        // Sayfa yüklendiğinde okunmayan mesajları ve sohbetleri kontrol et
+        document.addEventListener('DOMContentLoaded', function() {
+            okunmayanMesajlariKontrolEt();
+            sonMesajlariGetir();
+            
+            // Okunmayan mesajları ve son sohbetleri periyodik olarak güncelle
+            setInterval(okunmayanMesajlariKontrolEt, 30000); // 30 saniye
+            setInterval(sonMesajlariGetir, 60000); // 60 saniye
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

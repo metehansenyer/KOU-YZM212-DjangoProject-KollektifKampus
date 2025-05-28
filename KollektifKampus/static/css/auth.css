@@ -1,0 +1,260 @@
+/* Kimlik doğrulama sayfaları için genel kapsayıcı stilleri */
+.auth-kapsayici {
+    width: 100%;
+    color: var(--white-color);
+}
+
+/* Kimlik doğrulama sayfası başlığı stilleri */
+.auth-baslik {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1.25rem;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    background-color: rgba(21, 24, 28, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+/* Kimlik doğrulama ana içerik kapsayıcısı stilleri */
+.auth-ana-kapsayici {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Kimlik doğrulama formu veya bilgi kartı stilleri */
+.auth-kart {
+    background-color: var(--content-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Uyarı mesajı kutusu genel stilleri */
+.auth-uyari {
+    display: flex;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    color: var(--white-color);
+}
+
+/* Uyarı kutusu içindeki ikon alanı stilleri */
+.auth-uyari-ikon {
+    flex-shrink: 0;
+    margin-right: 16px;
+}
+
+/* Uyarı kutusu içindeki ikon stilleri */
+.auth-uyari-ikon i {
+    font-size: 24px;
+}
+
+/* Uyarı kutusu içindeki metin içerik alanı stilleri */
+.auth-uyari-icerik {
+    flex: 1;
+}
+
+/* Uyarı kutusu içerik alanındaki paragraf stilleri */
+.auth-uyari-icerik p {
+    margin: 0 0 10px 0;
+    line-height: 1.5;
+}
+
+/* Uyarı kutusu içerik alanındaki son paragraf stilleri */
+.auth-uyari-icerik p:last-child {
+    margin-bottom: 0;
+}
+
+/* Tehlike (danger) türündeki uyarı kutusu stilleri */
+.auth-uyari-tehlike {
+    background-color: rgba(244, 33, 46, 0.2);
+    border: 1px solid rgba(244, 33, 46, 0.3);
+}
+
+/* Tehlike uyarı kutusu içindeki ikon rengi */
+.auth-uyari-tehlike .auth-uyari-ikon i {
+    color: rgba(244, 33, 46, 0.9);
+}
+
+/* Uyarı (warning) türündeki uyarı kutusu stilleri */
+.auth-uyari-uyari {
+    background-color: rgba(255, 212, 0, 0.2);
+    border: 1px solid rgba(255, 212, 0, 0.3);
+}
+
+/* Uyarı uyarı kutusu içindeki ikon rengi */
+.auth-uyari-uyari .auth-uyari-ikon i {
+    color: rgba(255, 212, 0, 0.9);
+}
+
+/* Bilgi (info) türündeki uyarı kutusu stilleri */
+.auth-uyari-bilgi {
+    background-color: rgba(29, 155, 240, 0.2);
+    border: 1px solid rgba(29, 155, 240, 0.3);
+}
+
+/* Bilgi uyarı kutusu içindeki ikon rengi */
+.auth-uyari-bilgi .auth-uyari-ikon i {
+    color: rgba(29, 155, 240, 0.9);
+}
+
+/* Başarı (success) türündeki uyarı kutusu stilleri */
+.auth-uyari-basari {
+    background-color: rgba(0, 186, 124, 0.2);
+    border: 1px solid rgba(0, 186, 124, 0.3);
+}
+
+/* Başarı uyarı kutusu içindeki ikon rengi */
+.auth-uyari-basari .auth-uyari-ikon i {
+    color: rgba(0, 186, 124, 0.9);
+}
+
+/* Kimlik doğrulama formu stilleri */
+.auth-form {
+    margin-bottom: 24px;
+}
+
+/* Form içindeki her bir giriş grubu stilleri */
+.auth-form-grup {
+    margin-bottom: 20px;
+}
+
+/* Form grubu içindeki etiket (label) stilleri */
+.auth-form-grup label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--white-color);
+}
+
+/* Form kontrol elemanları (input, textarea vb.) stilleri */
+.auth-form-kontrol {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: var(--extra-light-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--white-color);
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+/* Form kontrol elemanları odaklanma (focus) stilleri */
+.auth-form-kontrol:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(29, 161, 242, 0.3);
+}
+
+/* Kimlik doğrulama butonu genel stilleri */
+.auth-buton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 100%;
+    font-size: 16px;
+}
+
+/* Birincil (primary) kimlik doğrulama butonu stilleri */
+.auth-buton-birincil {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+}
+
+/* Birincil kimlik doğrulama butonu üzerine gelme (hover) stilleri */
+.auth-buton-birincil:hover {
+    background-color: var(--primary-hover);
+    color: var(--white-color);
+}
+
+/* Kimlik doğrulama butonu içindeki ikon stilleri */
+.auth-buton i {
+    margin-right: 8px;
+}
+
+/* Kimlik doğrulama kartı altındaki bağlantılar kapsayıcısı stilleri */
+.auth-baglantilar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+/* Kimlik doğrulama kartı altındaki bağlantı stilleri */
+.auth-baglanti {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: var(--extra-light-color);
+    border-radius: 8px;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+/* Kimlik doğrulama kartı altındaki bağlantı üzerine gelme (hover) stilleri */
+.auth-baglanti:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+/* Kimlik doğrulama kartı altındaki bağlantı içindeki ikon stilleri */
+.auth-baglanti i {
+    margin-right: 12px;
+    font-size: 18px;
+}
+
+/* Form elemanları altındaki yardım metni stilleri */
+.auth-yardim-metni {
+    display: block;
+    font-size: 13px;
+    color: var(--secondary-color);
+    margin-top: 5px;
+}
+
+/* Yardım metni içindeki liste stilleri */
+.auth-yardim-metni ul {
+    margin: 5px 0 0 0;
+    padding-left: 20px;
+}
+
+/* Yardım metni içindeki liste elemanı stilleri */
+.auth-yardim-metni li {
+    margin-bottom: 3px;
+}
+
+/* Form elemanları altındaki genel form metni stilleri */
+.auth-form-metni {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--secondary-color);
+}
+
+/* Form metni içindeki liste stilleri */
+.auth-form-metni ul {
+    padding-left: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/* Tam genişlik sağlayan yardımcı sınıf */
+.auth-w-100 {
+    width: 100%;
+}

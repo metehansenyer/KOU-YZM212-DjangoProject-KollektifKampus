@@ -1,0 +1,1200 @@
+/* Talep sayfaları genel stilleri */
+
+/* Genel talep sınıflandırmaları */
+
+/* Talep kapsayıcısı */
+.talep-kapsayici {
+    width: 100%;
+    color: var(--white-color);
+}
+
+/* Talep detay sayfası ana kapsayıcısı */
+.talep-detay-kapsayici {
+    width: 100%;
+    color: var(--white-color);
+    max-width: 1000px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+/* Talep sayfası başlık bannerı */
+.talep-banner {
+    background: var(--extra-light-color);
+    padding: 24px 0;
+    position: relative;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Banner içerik alanı */
+.talep-banner-icerik {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Banner başlığı */
+.talep-banner h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--white-color);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+}
+
+/* Banner başlığı ikonu */
+.talep-banner h2::before {
+    content: "\f15c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    margin-right: 12px;
+    color: var(--primary-color);
+    font-size: 24px;
+}
+
+/* Ana içerik alanı */
+.talep-ana-icerik {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Talep bilgi kartı */
+.talep-kart {
+    background-color: var(--content-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    padding: 28px;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Kart üzerine gelme efekti */
+.talep-kart:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Kart başlık alanı */
+.talep-kart-baslik {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Kart başlığı */
+.talep-kart-baslik h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white-color);
+    display: flex;
+    align-items: center;
+}
+
+/* Kart başlığı ikonu */
+.talep-kart-baslik h4 i {
+    margin-right: 8px;
+    color: var(--primary-color);
+}
+
+/* Talep başlığı ve durum bölümü */
+.talep-baslik-bolum {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Başlık bölümü sol taraf */
+.talep-baslik-sol h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: var(--white-color);
+}
+
+/* Talep meta bilgileri */
+.talep-meta {
+    display: flex;
+    align-items: center;
+    color: var(--secondary-color);
+    font-size: 14px;
+}
+
+/* Meta etiketi */
+.talep-meta-etiket {
+    margin-right: 4px;
+}
+
+/* Meta linki */
+.talep-meta-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+/* Meta linki üzerine gelme efekti */
+.talep-meta-link:hover {
+    color: #1a91da;
+    text-decoration: underline;
+}
+
+/* Durum rozetleri */
+.talep-durum-rozet {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 30px;
+    white-space: nowrap;
+}
+
+/* Küçük durum rozeti */
+.talep-rozet-sm {
+    font-size: 12px;
+    padding: 4px 10px;
+}
+
+/* Aktif durum stili */
+.durum-aktif {
+    background-color: rgba(0, 186, 124, 0.2);
+    color: #00ba7c;
+}
+
+/* Kapalı durum stili */
+.durum-kapali {
+    background-color: rgba(224, 36, 94, 0.2);
+    color: #e0245e;
+}
+
+/* Eğitmen atandı durum stili */
+.durum-atandi {
+    background-color: rgba(29, 161, 242, 0.2);
+    color: #1da1f2;
+}
+
+/* Tamamlandı durum stili */
+.durum-tamamlandi {
+    background-color: rgba(120, 86, 255, 0.2);
+    color: #7856ff;
+}
+
+/* Beklemede durum stili */
+.durum-beklemede {
+    background-color: rgba(255, 173, 31, 0.2);
+    color: #ffad1f;
+}
+
+/* Geri çekildi durum stili */
+.durum-geri-cekildi {
+    background-color: rgba(110, 118, 125, 0.2);
+    color: #6e767d;
+}
+
+/* Talep detay bilgileri bölümü */
+.talep-detay-bolum {
+    margin-bottom: 24px;
+    background-color: var(--extra-light-color);
+    border-radius: 16px;
+    padding: 25px;
+    border: 1px solid var(--border-color);
+}
+
+/* Bilgi grubu */
+.talep-bilgi-grup {
+    display: flex;
+    margin-bottom: 15px;
+    font-size: 15px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+/* Bilgi etiketi */
+.talep-bilgi-etiket {
+    font-weight: 600;
+    margin-right: 12px;
+    min-width: 140px;
+    color: var(--secondary-color);
+    flex-shrink: 0;
+}
+
+/* Bilgi değeri */
+.talep-bilgi-deger {
+    color: var(--white-color);
+    flex: 1;
+    word-wrap: break-word;
+}
+
+/* Detaylı bilgi alanları */
+.talep-bilgi-detay {
+    background-color: var(--content-bg);
+    border-radius: 12px;
+    padding: 18px;
+    margin: 16px 0;
+    border-left: 4px solid var(--primary-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.6s ease;
+}
+
+/* Detaylı bilgi üzerine gelme efekti */
+.talep-bilgi-detay:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Detaylı bilgi başlığı */
+.talep-bilgi-baslik {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--white-color);
+    display: flex;
+    align-items: center;
+}
+
+/* Detaylı bilgi ikonu */
+.talep-bilgi-baslik i {
+    margin-right: 8px;
+    color: var(--primary-color);
+    font-size: 16px;
+}
+
+/* Detaylı bilgi içeriği */
+.talep-bilgi-icerik {
+    color: var(--secondary-color);
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+/* Tarih bilgileri grubu */
+.talep-tarih-grup {
+    margin-top: 20px;
+    border-top: 1px solid var(--border-color);
+    background: linear-gradient(135deg, rgba(29, 161, 242, 0.05) 0%, rgba(29, 161, 242, 0.02) 100%);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Tarih grubu başlığı öncesi */
+.talep-tarih-grup::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color) 0%, rgba(29, 161, 242, 0.5) 100%);
+    border-radius: 12px 12px 0 0;
+}
+
+/* Açıklama alanı */
+.talep-aciklama {
+    background-color: var(--content-bg);
+    border-radius: 12px;
+    padding: 18px;
+    margin: 16px 0;
+    border-left: 4px solid #00ba7c;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.6s ease;
+}
+
+/* Açıklama üzerine gelme efekti */
+.talep-aciklama:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Açıklama başlığı */
+.talep-aciklama-baslik {
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--white-color);
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
+
+/* Açıklama başlığı ikonu */
+.talep-aciklama-baslik i {
+    margin-right: 8px;
+    color: #00ba7c;
+    font-size: 16px;
+}
+
+/* Açıklama içeriği */
+.talep-aciklama-icerik {
+    color: var(--secondary-color);
+    white-space: pre-wrap;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+/* Aksiyon butonları alanı */
+.talep-butonlar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    justify-content: flex-end;
+}
+
+/* Genel buton stili */
+.talep-buton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 30px;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+/* Buton ikonu */
+.talep-buton i {
+    margin-right: 8px;
+}
+
+/* Buton üzerine gelme efekti */
+.talep-buton:hover {
+    background-color: #1a91da;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    color: white;
+}
+
+/* Birincil buton stili */
+.talep-buton-birincil {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Başarı butonu stili */
+.talep-buton-basari {
+    background-color: #00ba7c;
+    color: white;
+}
+
+/* Başarı butonu üzerine gelme efekti */
+.talep-buton-basari:hover {
+    background-color: #00a36b;
+    color: white;
+}
+
+/* Uyarı butonu stili */
+.talep-buton-uyari {
+    background-color: #ffad1f;
+    color: #15202b;
+}
+
+/* Uyarı butonu üzerine gelme efekti */
+.talep-buton-uyari:hover {
+    background-color: #f0a213;
+    color: #15202b;
+}
+
+/* Tehlike butonu stili */
+.talep-buton-tehlike {
+    background-color: #e0245e;
+    color: white;
+}
+
+/* Tehlike butonu üzerine gelme efekti */
+.talep-buton-tehlike:hover {
+    background-color: #c11e51;
+    color: white;
+}
+
+/* İkincil buton stili */
+.talep-buton-ikincil {
+    background-color: var(--extra-light-color);
+    color: var(--white-color);
+    border: 1px solid var(--border-color);
+}
+
+/* İkincil buton üzerine gelme efekti */
+.talep-buton-ikincil:hover {
+    background-color: var(--border-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: var(--white-color);
+}
+
+/* Pasif buton stili */
+.talep-buton-pasif {
+    background-color: #6E767D;
+    cursor: default;
+    opacity: 0.8;
+}
+
+/* Pasif buton üzerine gelme efekti */
+.talep-buton-pasif:hover {
+    background-color: #6E767D;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Küçük buton stili */
+.talep-buton-sm {
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+/* Buton grubu */
+.talep-buton-grubu {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+}
+
+/* Eğitmen başvuru bölümü */
+.talep-basvuru-bolum {
+    background-color: var(--extra-light-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Başvuru bölümü başlığı */
+.talep-basvuru-baslik {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--white-color);
+    display: flex;
+    align-items: center;
+}
+
+/* Başvuru başlığı ikonu */
+.talep-basvuru-baslik i {
+    margin-right: 8px;
+    color: var(--primary-color);
+}
+
+/* Başvuru formu */
+.talep-basvuru-form {
+    width: 100%;
+}
+
+/* Form alanı grubu */
+.talep-form-grup {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+/* Form alanı etiketi */
+.talep-form-grup label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--white-color);
+    font-weight: 500;
+}
+
+/* Form alanı input ve textarea */
+.talep-form-grup textarea,
+.talep-form-grup input {
+    width: 100%;
+    padding: 12px 14px;
+    background-color: var(--content-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--white-color);
+    transition: all 0.2s;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+/* Form alanı odaklanma durumu */
+.talep-form-grup textarea:focus,
+.talep-form-grup input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(29, 161, 242, 0.3);
+}
+
+/* Form alanı hata mesajı */
+.talep-form-hata {
+    color: #e0245e;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+/* Genel uyarı mesajları */
+.talep-uyari {
+    display: flex;
+    align-items: flex-start;
+    padding: 18px;
+    border-radius: 12px;
+    margin: 24px 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Uyarı mesajı ikonu */
+.talep-uyari i {
+    margin-right: 16px;
+    font-size: 22px;
+    flex-shrink: 0;
+    padding-top: 2px;
+}
+
+/* Uyarı kutusu içerik divi */
+.talep-uyari div {
+    flex-grow: 1;
+}
+
+/* Bilgi uyarı stili */
+.talep-uyari-bilgi {
+    background-color: rgba(29, 161, 242, 0.1);
+    border: 1px solid rgba(29, 161, 242, 0.3);
+    color: #1da1f2;
+}
+
+/* Uyarı (dikkat) stili */
+.talep-uyari-uyari {
+    background-color: rgba(255, 173, 31, 0.1);
+    border: 1px solid rgba(255, 173, 31, 0.3);
+    color: #ffad1f;
+}
+
+/* Başarı uyarı stili */
+.talep-uyari-basari {
+    background-color: rgba(0, 186, 124, 0.1);
+    border: 1px solid rgba(0, 186, 124, 0.3);
+    color: #00ba7c;
+}
+
+/* Tehlike uyarı stili */
+.talep-uyari-tehlike {
+    background-color: rgba(224, 36, 94, 0.15);
+    border: 1px solid rgba(224, 36, 94, 0.4);
+    color: #e0245e;
+}
+
+/* Uyarı başlık stili */
+.talep-uyari-baslik {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Uyarı liste stili */
+.talep-uyari-liste {
+    margin: 10px 0 0 0;
+    padding-left: 20px;
+}
+
+/* Uyarı liste elemanı stili */
+.talep-uyari-liste li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+    padding-left: 5px;
+}
+
+/* Uyarı başlığı */
+.talep-uyari h4 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 12px 0;
+}
+
+/* Uyarı paragrafı */
+.talep-uyari p {
+    margin: 0 0 10px;
+    line-height: 1.5;
+    font-size: 15px;
+}
+
+/* Tehlike uyarısı başlık rengi */
+.talep-uyari-tehlike h4 {
+    color: #e0245e;
+}
+
+/* Tehlike uyarısı paragraf rengi */
+.talep-uyari-tehlike p {
+    color: var(--white-color);
+}
+
+/* Tehlike uyarısı ikon rengi */
+.talep-uyari-tehlike i {
+    color: #e0245e;
+}
+
+/* Uyarı (dikkat) başlık rengi */
+.talep-uyari-uyari h4 {
+    color: #ffad1f;
+}
+
+/* Uyarı (dikkat) paragraf rengi */
+.talep-uyari-uyari p {
+    color: var(--white-color);
+}
+
+/* Uyarı (dikkat) ikon rengi */
+.talep-uyari-uyari i {
+    color: #ffad1f;
+}
+
+/* Giriş yapma yönlendirme alanı */
+.talep-giris-yonlendirme {
+    display: flex;
+    align-items: center;
+    background-color: var(--extra-light-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Giriş yönlendirme ikonu */
+.talep-giris-yonlendirme i {
+    font-size: 20px;
+    margin-right: 12px;
+    color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+/* Giriş yönlendirme paragrafı */
+.talep-giris-yonlendirme p {
+    margin: 0;
+    color: var(--secondary-color);
+}
+
+/* Giriş yönlendirme linki */
+.talep-giris-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* Giriş yönlendirme linki üzerine gelme efekti */
+.talep-giris-link:hover {
+    text-decoration: underline;
+}
+
+/* Genel liste stilleri */
+.talep-liste {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Liste öğesi */
+.talep-liste-item {
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Son liste öğesinin alt çizgisi */
+.talep-liste-item:last-child {
+    border-bottom: none;
+}
+
+/* Liste öğesi başlığı */
+.talep-liste-baslik {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+/* Liste başlığı sol taraf */
+.talep-liste-baslik-sol {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Liste başlığı h5 */
+.talep-liste-baslik-sol h5 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    color: var(--white-color);
+    font-weight: 600;
+}
+
+/* Liste meta bilgisi */
+.talep-liste-meta {
+    font-size: 13px;
+    color: var(--secondary-color);
+}
+
+/* Liste öğesi içeriği */
+.talep-liste-icerik {
+    color: var(--secondary-color);
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+/* Liste öğesi butonları */
+.talep-liste-butonlar {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Inline form stili */
+.talep-inline-form {
+    display: inline;
+}
+
+/* Liste öğesi mesajları */
+.talep-liste-mesaj {
+    font-size: 14px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Liste mesajı ikonu */
+.talep-liste-mesaj i {
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+/* Başarı mesajı stili */
+.talep-liste-mesaj-basari {
+    background-color: rgba(0, 186, 124, 0.1);
+    color: #00ba7c;
+}
+
+/* Tehlike mesajı stili */
+.talep-liste-mesaj-tehlike {
+    background-color: rgba(224, 36, 94, 0.1);
+    color: #e0245e;
+}
+
+/* Boş liste durumu */
+.talep-liste-bos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    color: var(--secondary-color);
+    text-align: center;
+}
+
+/* Boş liste ikonu */
+.talep-liste-bos i {
+    font-size: 40px;
+    margin-bottom: 15px;
+    opacity: 0.7;
+}
+
+/* Boş liste paragrafı */
+.talep-liste-bos p {
+    margin: 0;
+}
+
+/* Badge stili */
+.talep-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--extra-light-color);
+    color: var(--secondary-color);
+    border-radius: 15px;
+    font-size: 14px;
+    padding: 2px 10px;
+    margin-left: 10px;
+}
+
+/* Puan rozeti stili */
+.talep-puan-rozet {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+/* Yüksek puan stili */
+.puan-yuksek {
+    background-color: rgba(0, 186, 124, 0.2);
+    color: #00ba7c;
+}
+
+/* Orta puan stili */
+.puan-orta {
+    background-color: rgba(29, 161, 242, 0.2);
+    color: #1da1f2;
+}
+
+/* Düşük puan stili */
+.puan-dusuk {
+    background-color: rgba(255, 173, 31, 0.2);
+    color: #ffad1f;
+}
+
+/* Çok düşük puan stili */
+.puan-cok-dusuk {
+    background-color: rgba(224, 36, 94, 0.2);
+    color: #e0245e;
+}
+
+/* Tamamlama formu stili */
+.tamamlama-form {
+    width: 100%;
+}
+
+/* Form sayfaları stilleri */
+
+/* Ana kapsayıcı */
+.form-ana-kapsayici {
+    padding: 1rem;
+    margin: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Satır düzeni */
+.satir {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Sütun düzeni */
+.sutun-2-3 {
+    flex: 0 0 80%;
+    max-width: 80%;
+    width: 100%;
+}
+
+/* Kaydırma */
+.kaydirma-1-6 {
+    margin-left: 10%;
+}
+
+/* Kart bileşeni */
+.kart {
+    background-color: var(--content-bg);
+    border: none;
+    margin-bottom: 20px;
+    border-radius: 16px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Kart başlığı */
+.kart-baslik {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1.25rem;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    background-color: rgba(21, 24, 28, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+}
+
+/* Kart içeriği */
+.kart-icerik {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Form elemanları için karanlık tema stilleri */
+.form-talep {
+    padding: 10px 5px;
+}
+
+/* Her form alanı grubu için stil */
+.form-grup {
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+}
+
+/* Hatalı form grubu içindeki elemanlar */
+.form-grup-hatali input,
+.form-grup-hatali textarea,
+.form-grup-hatali select {
+    border-color: #e0245e;
+    background-color: rgba(224, 36, 94, 0.05);
+}
+
+/* Form etiketi */
+.form-etiket {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Form etiketi metni */
+.form-grup label {
+    display: inline-block;
+    color: var(--white-color);
+    font-weight: 500;
+    font-size: 15px;
+    margin: 0;
+}
+
+/* Zorunlu alan işareti */
+.form-zorunlu-alan {
+    color: #e0245e;
+    margin-left: 4px;
+    font-weight: bold;
+}
+
+/* Form altındaki açıklama metni */
+.form-aciklama {
+    font-size: 13px;
+    color: var(--secondary-color);
+}
+
+/* Form kontrol elemanları */
+select, textarea, input[type="text"], input[type="number"] {
+    width: 100%;
+    background-color: var(--extra-light-color);
+    color: var(--white-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+/* Form kontrol elemanlarının odaklanma durumu */
+select:focus, textarea:focus, input[type="text"]:focus, input[type="number"]:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(29, 161, 242, 0.3);
+    background-color: rgba(21, 24, 28, 0.9);
+}
+
+/* Textarea özel stili */
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Genel hata kutusu ve mesajları */
+.form-hata-kutusu {
+    display: flex;
+    align-items: flex-start;
+    background-color: rgba(224, 36, 94, 0.1);
+    border: 1px solid #e0245e;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+/* Genel hata ikonu */
+.form-hata-ikon {
+    font-size: 24px;
+    color: #e0245e;
+    margin-right: 16px;
+    flex-shrink: 0;
+}
+
+/* Genel hata mesajları metni */
+.form-hata-mesajlar {
+    color: #e0245e;
+}
+
+/* Genel hata mesajları içindeki paragraflar */
+.form-hata-mesajlar p {
+    margin: 0 0 8px 0;
+}
+
+/* Genel hata mesajları içindeki son paragraf */
+.form-hata-mesajlar p:last-child {
+    margin-bottom: 0;
+}
+
+/* Alan bazlı hata mesajı kutusu */
+.form-alan-hata {
+    display: flex;
+    align-items: flex-start;
+    background-color: rgba(224, 36, 94, 0.1);
+    color: #e0245e;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-top: 8px;
+    font-size: 13px;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Alan bazlı mini hata ikonu */
+.form-hata-ikon-mini {
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+/* Başarı mesajı kutusu */
+.form-basari-kutusu {
+    display: flex;
+    align-items: flex-start;
+    background-color: rgba(0, 186, 124, 0.1);
+    border: 1px solid #00ba7c;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+    animation: fadeInSlide 0.4s ease;
+}
+
+/* Başarı ikonu */
+.form-basari-ikon {
+    font-size: 24px;
+    color: #00ba7c;
+    margin-right: 16px;
+    flex-shrink: 0;
+}
+
+/* Başarı mesajı metni */
+.form-basari-mesaj {
+    color: #00ba7c;
+    font-weight: 500;
+}
+
+/* Animasyonlar */
+
+/* Görünme animasyonu */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Görünme ve yukarı kayma animasyonu */
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Aşağıdan yukarı görünme animasyonu */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Soluk metin stilleri */
+.metin-solan {
+    color: var(--secondary-color);
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* Buton grubu */
+.buton-grubu {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Genel buton stilleri */
+.buton {
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    border: none;
+}
+
+/* Başarı (gönderme) butonu stilleri */
+.buton-basari {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Başarı butonunun üzerine gelme stilleri */
+.buton-basari:hover {
+    background-color: #1a91da;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* İkincil (iptal) butonu stilleri */
+.buton-ikincil {
+    background-color: transparent;
+    color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+}
+
+/* İkincil butonun üzerine gelme stilleri */
+.buton-ikincil:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--white-color);
+    text-decoration: none;
+}
+
+/* Hata durumunda sallanma animasyonu */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+/* Sallanma animasyonunu uygulayan sınıf */
+.form-shake {
+    animation: shake 0.4s ease-in-out;
+}
+
+/* Silme onay sayfası stilleri */
+
+/* Silme onay kartı stilleri */
+.silme-onay-kart {
+    padding: 30px;
+}

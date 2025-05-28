@@ -1,0 +1,257 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!--- Sayfa başlığını ayarla -->
+{% block title %}{{ form_baslik }} - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/talep.css' %}">
+{% endblock %}
+
+<!--- Ana içerik bloğu -->
+{% block content %}
+<!--- Ana kapsayıcı div -->
+<div class="form-ana-kapsayici mt-4">
+    <!--- Satır div -->
+    <div class="satir">
+        <!--- İçerik sütunu (2/3 genişlik, 1/6 kaydırma) -->
+        <div class="sutun-2-3 kaydirma-1-6">
+            <!--- Kart bileşeni -->
+            <div class="kart">
+                <!--- Kart başlığı -->
+                <div class="kart-baslik">
+                    <h4>{{ form_baslik }}</h4>
+                </div>
+                <!--- Kart içeriği -->
+                <div class="kart-icerik">
+                    <!--- Form genel hatalarını göster -->
+                    {% if form.non_field_errors %}
+                        <!--- Genel hata kutusu -->
+                        <div class="form-hata-kutusu">
+                            <!--- Hata ikonu -->
+                            <div class="form-hata-ikon">
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                            </div>
+                            <!--- Hata mesajları listesi -->
+                            <div class="form-hata-mesajlar">
+                                {% for error in form.non_field_errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <!--- Form başarı mesajlarını göster -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if message.tags == 'success' %}
+                                <!--- Başarı mesajı kutusu -->
+                                <div class="form-basari-kutusu">
+                                    <!--- Başarı ikonu -->
+                                    <div class="form-basari-ikon">
+                                        <i class="fa-solid fa-check-circle"></i>
+                                    </div>
+                                    <!--- Başarı mesajı metni -->
+                                    <div class="form-basari-mesaj">
+                                        {{ message }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+                    <!--- Ders isteği gönderme formu -->
+                    <form method="post" novalidate class="form-talep" id="dersIstegiForm">
+                        {% csrf_token %}
+                        
+                        <!--- Form için gerekli medya dosyalarını (JS/CSS) yükle -->
+                        {{ form.media }}
+
+                        <!--- Gizli form alanlarını işle -->
+                        {% for hidden_field in form.hidden_fields %}
+                            {{ hidden_field }}
+                        {% endfor %}
+
+                        <!--- Görünür form alanlarını döngüye al -->
+                        {% for field in form.visible_fields %}
+                            <!--- Her form alanı için grup div'i -->
+                            <div class="form-grup mb-4 {% if field.errors %}form-grup-hatali{% endif %}" id="grup-{{ field.auto_id }}">
+                                <!--- Alan etiketi -->
+                                <div class="form-etiket">
+                                    {{ field.label_tag }}
+                                    {% if field.field.required %}
+                                        <!--- Zorunlu alan işareti -->
+                                        <span class="form-zorunlu-alan">*</span>
+                                    {% endif %}
+                                </div>
+                                
+                                {% if field.help_text %}
+                                    <!--- Yardım metni -->
+                                    <small class="metin-solan d-block mb-2">{{ field.help_text }}</small>
+                                {% endif %}
+                                
+                                <!--- Form alanı (input, select, textarea vb.) -->
+                                {{ field }}
+                                
+                                <!--- Alanın Django tarafından oluşturulan hatalarını göster -->
+                                {% if field.errors %}
+                                    <!--- Alan bazlı hata mesajı kutusu -->
+                                    <div class="form-alan-hata">
+                                        <!--- Mini hata ikonu -->
+                                        <div class="form-hata-ikon-mini">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                        </div>
+                                        <!--- Hata mesajları -->
+                                        {% for error in field.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                
+                                <!--- Alan için JavaScript ile gösterilecek dinamik hata mesajı bölümü -->
+                                <div class="form-alan-hata" id="hata-{{ field.auto_id }}" style="display: none;">
+                                    <!--- Mini hata ikonu -->
+                                    <div class="form-hata-ikon-mini">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                    </div>
+                                    <!--- Dinamik hata mesajı metni -->
+                                    <span id="hata-mesaj-{{ field.auto_id }}"></span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        
+                        <!--- Zorunlu alanlar için açıklama -->
+                        <div class="form-aciklama mb-3">
+                            <span class="form-zorunlu-alan">*</span> ile işaretlenen alanlar zorunludur
+                        </div>
+                        
+                        <!--- Form gönderme ve iptal butonları grubu -->
+                        <div class="buton-grubu mt-5">
+                            <!--- İptal butonu (liste sayfasına yönlendirir) -->
+                            <a href="{% url 'talepler:ders_istekleri_listesi' %}" class="buton buton-ikincil">İptal</a>
+                            <!--- Form gönderme butonu (Güncelle veya Oluştur metni dinamik) -->
+                            <button type="submit" class="buton buton-basari">
+                                {% if form.instance.pk %}Güncelle{% else %}Oluştur{% endif %}
+                            </button>
+                        </div>
+                    </form>
+
+                    {% if form.instance.pk %}
+                        {# <div class="mt-4"><a href="{% url 'talepler:ders_istegi_sil' pk=form.instance.pk %}" class="text-danger">Bu Ders Talebini Sil</a></div> #}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+<!--- Ek JavaScript bloğu -->
+{% block extra_js %}
+<script>
+    // DOM tamamen yüklendiğinde çalışacak kod
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form elementini ID'sine göre al
+        const form = document.getElementById('dersIstegiForm');
+        
+        // Form gönderildiğinde çalışacak event listener
+        form.addEventListener('submit', function(e) {
+            let formGecerli = true; // Formun geçerli olup olmadığını tutan bayrak
+            
+            // İlgili ders alanını kontrol et
+            const ders = document.getElementById('id_ders');
+            if (!ders.value) {
+                // Alan boşsa hata göster
+                hataGoster(ders, 'Lütfen ilgili bir ders seçiniz.');
+                formGecerli = false;
+            } else {
+                // Alan doluysa hatayı gizle
+                hataGizle(ders);
+            }
+            
+            // Ders karşılığında teklif alanını kontrol et
+            const teklif = document.getElementById('id_teklif_edilen_karsilik');
+            if (!teklif.value.trim()) {
+                // Alan boşsa hata göster
+                hataGoster(teklif, 'Lütfen ders karşılığında teklifinizi belirtin.');
+                formGecerli = false;
+            } else {
+                // Alan doluysa hatayı gizle
+                hataGizle(teklif);
+            }
+            
+            // Mekan tercihi alanını kontrol et
+            const mekan = document.getElementById('id_mekan_tercihi');
+            if (!mekan.value.trim()) {
+                // Alan boşsa hata göster
+                hataGoster(mekan, 'Lütfen tercih ettiğiniz buluşma yerini belirtin.');
+                formGecerli = false;
+            } else {
+                // Alan doluysa hatayı gizle
+                hataGizle(mekan);
+            }
+            
+            // Zaman tercihi alanını kontrol et
+            const zaman = document.getElementById('id_zaman_tercihi');
+            if (!zaman.value.trim()) {
+                // Alan boşsa hata göster
+                hataGoster(zaman, 'Lütfen uygun olduğunuz zamanları belirtin.');
+                formGecerli = false;
+            } else {
+                // Alan doluysa hatayı gizle
+                hataGizle(zaman);
+            }
+            
+            // Eğer form geçerli değilse submit işlemini engelle
+            if (!formGecerli) {
+                e.preventDefault(); // Formun gönderilmesini engelle
+                // Hata durumunda kartı salla
+                document.querySelector('.kart').classList.add('form-shake');
+                // Sallanma animasyonu bittikten sonra sınıfı kaldır
+                setTimeout(() => {
+                    document.querySelector('.kart').classList.remove('form-shake');
+                }, 500);
+                
+                // Kart başlığına kaydır (kullanıcının hataları görmesi için)
+                document.querySelector('.kart-baslik').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+        
+        // Alan bazlı hata mesajını gösteren fonksiyon
+        function hataGoster(element, mesaj) {
+            // İlgili alanın grup ve hata elementlerinin ID'lerini oluştur
+            const grupId = 'grup-' + element.id;
+            const hataId = 'hata-' + element.id;
+            const hataMesajId = 'hata-mesaj-' + element.id;
+            
+            // Grup div'ine hata sınıfını ekle
+            document.getElementById(grupId).classList.add('form-grup-hatali');
+            // Hata mesajı div'ini görünür yap
+            document.getElementById(hataId).style.display = 'flex';
+            // Hata mesajı metnini ayarla
+            document.getElementById(hataMesajId).textContent = mesaj;
+            
+            // Input'a hata stilini uygula (kenarlık ve arka plan)
+            element.style.borderColor = '#e0245e';
+            element.style.backgroundColor = 'rgba(224, 36, 94, 0.05)';
+        }
+        
+        // Alan bazlı hata mesajını gizleyen fonksiyon
+        function hataGizle(element) {
+            // İlgili alanın grup ve hata elementlerinin ID'lerini oluştur
+            const grupId = 'grup-' + element.id;
+            const hataId = 'hata-' + element.id;
+            
+            // Grup div'inden hata sınıfını kaldır
+            document.getElementById(grupId).classList.remove('form-grup-hatali');
+            // Hata mesajı div'ini gizle
+            document.getElementById(hataId).style.display = 'none';
+            
+            // Input stilini normal hale getir
+            element.style.borderColor = 'var(--border-color)';
+            element.style.backgroundColor = 'var(--extra-light-color)';
+        }
+    });
+</script>
+{% endblock %}

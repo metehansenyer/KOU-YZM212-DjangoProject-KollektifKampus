@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Ders Talebini Sil: {{ ders_istegi.talep_basligi }} - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/talep.css' %}">
+{% endblock %}
+
+{% block content %}
+<!--- Ana içerik kapsayıcısı -->
+<div class="talep-detay-kapsayici">
+    <!--- Talep başlık bannerı -->
+    <div class="talep-banner">
+        <!--- Banner içeriği -->
+        <div class="talep-banner-icerik">
+            <h2>Ders Talebini Sil</h2>
+        </div>
+    </div>
+
+    <!--- Silme onay içeriği ana alanı -->
+    <div class="talep-ana-icerik">
+        <!--- Silme onay kartı -->
+        <div class="talep-kart silme-onay-kart">
+            <!--- Tehlike uyarısı bölümü -->
+            <div class="talep-uyari talep-uyari-tehlike">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <div>
+                    <h4>Silme İşlemini Onaylayın</h4>
+                    <p><strong>"{{ ders_istegi.talep_basligi }}"</strong> başlıklı ders talebini silmek istediğinizden emin misiniz?</p>
+                    <p>Bu işlem geri alınamaz.</p>
+                </div>
+            </div>
+
+            <!--- Silinecek talep bilgileri bölümü -->
+            <div class="talep-detay-bolum">
+                <!--- Bilgi bölümü başlığı -->
+                <div class="talep-bilgi-baslik">Silinecek Talep Bilgileri</div>
+
+                <!--- Ders bilgisi grubu -->
+                <div class="talep-bilgi-grup">
+                    <span class="talep-bilgi-etiket">Ders:</span>
+                    <span class="talep-bilgi-deger">{{ ders_istegi.ders.ders_adi|default:"Belirtilmemiş" }}</span>
+                </div>
+
+                <!--- Kategori bilgisi grubu -->
+                <div class="talep-bilgi-grup">
+                    <span class="talep-bilgi-etiket">Kategori:</span>
+                    <span class="talep-bilgi-deger">{{ ders_istegi.ders.kategori|default:"Belirtilmemiş" }}</span>
+                </div>
+
+                <!--- Oluşturulma tarihi bilgisi grubu -->
+                <div class="talep-bilgi-grup">
+                    <span class="talep-bilgi-etiket">Oluşturulma:</span>
+                    <span class="talep-bilgi-deger">{{ ders_istegi.olusturulma_tarihi|date:"d F Y H:i" }}</span>
+                </div>
+
+                <!--- Durum bilgisi grubu -->
+                <div class="talep-bilgi-grup">
+                    <span class="talep-bilgi-etiket">Durum:</span>
+                    <span class="talep-bilgi-deger">{{ ders_istegi.get_talep_durumu_display }}</span>
+                </div>
+
+                {% if ders_istegi.atanan_egitmen %}
+                <!--- Atanan eğitmen bilgisi grubu (eğer varsa) -->
+                <div class="talep-bilgi-grup">
+                    <span class="talep-bilgi-etiket">Atanan Eğitmen:</span>
+                    <span class="talep-bilgi-deger">{{ ders_istegi.atanan_egitmen.user.username }}</span>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if ders_istegi.talep_durumu != 'AKTIF' or ders_istegi.atanan_egitmen %}
+            <!--- Uyarı mesajı (eğer talep aktif değilse veya eğitmen atanmışsa) -->
+            <div class="talep-uyari talep-uyari-uyari">
+                <i class="fa-solid fa-exclamation-circle"></i>
+                <div>
+                    <h4>Dikkat!</h4>
+                    <p>Bu talep {% if ders_istegi.talep_durumu != 'AKTIF' %}aktif değil{% endif %}{% if ders_istegi.talep_durumu != 'AKTIF' and ders_istegi.atanan_egitmen %} ve {% endif %}{% if ders_istegi.atanan_egitmen %}atanmış bir eğitmene sahip{% endif %}. Bu tür talepler genellikle silinemez.</p>
+                    <p>Eğer bu talebi silmek için özel bir yetkiye sahipseniz (moderatör/admin), devam edebilirsiniz.</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!--- Silme onay formu -->
+            <form method="post" class="talep-silme-form">
+                {% csrf_token %}
+                <!--- Butonlar alanı -->
+                <div class="talep-butonlar">
+                    <!--- Silme butonu -->
+                    <button type="submit" class="talep-buton talep-buton-tehlike">
+                        <i class="fa-solid fa-trash"></i> Evet, Sil
+                    </button>
+                    <!--- Vazgeç butonu -->
+                    <a href="{% url 'talepler:ders_istegi_detay' ders_istegi.pk %}" class="talep-buton talep-buton-ikincil">
+                        <i class="fa-solid fa-xmark"></i> Hayır, Vazgeç
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

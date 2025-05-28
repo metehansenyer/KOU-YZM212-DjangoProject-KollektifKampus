@@ -1,0 +1,281 @@
+{% extends 'moderasyon/panel_temel.html' %}
+
+{% load static %}
+
+
+{% block panel_content %}
+
+<!--- İki sütunlu düzen için ana kapsayıcı -->
+<div class="mod-two-columns">
+    <!--- Sol Kolon: Ders İsteği Detayları -->
+    <div class="mod-column">
+        <!--- Ders isteği detayları kartı -->
+        <div class="mod-card">
+            <!--- Kart başlığı ve işlemler alanı -->
+            <div class="mod-card-title">
+                <!--- Başlık metni ve ikonu -->
+                <span><i class="fa-solid fa-magnifying-glass"></i> Ders İsteği Detayları</span>
+                <!--- İşlem butonları kapsayıcısı -->
+                <div class="mod-actions">
+                    <!--- Ders isteğini kapatma formu -->
+                    <form method="post" action="{% url 'moderasyon:ders_istegi_kapat' ders_istegi_id=ders_istegi.id %}"
+                          style="display: inline;" onsubmit="return confirm('Bu ders isteğini kapatmak istediğinize emin misiniz?');">
+                        {% csrf_token %}
+                        <!--- Kapat butonu -->
+                        <button type="submit" class="mod-btn mod-btn-danger mod-btn-sm buton-esit">
+                            <i class="fa-solid fa-times"></i> Kapat
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!--- Ders İsteği Detayları İçeriği -->
+            <div class="ders-istegi-detay">
+                <!--- Başlık ve durum etiketi -->
+                <div class="ders-istegi-baslik">
+                    <h2>{{ ders_istegi.talep_basligi }}</h2>
+                    <!--- Durum etiketi -->
+                    <span class="mod-badge mod-badge-info">{{ ders_istegi.get_talep_durumu_display }}</span>
+                </div>
+
+                <!--- Bilgi satırları kapsayıcısı -->
+                <div class="ders-istegi-bilgiler">
+                    <!--- Talep eden kullanıcı bilgisi -->
+                    <div class="ders-istegi-bilgi-satir">
+                        <span class="ders-istegi-etiket">Talep Eden:</span>
+                        <span class="ders-istegi-deger">
+                            <!--- Kullanıcı profili bağlantısı -->
+                            <a href="{% url 'kullanicilar:profil_detay' username=ders_istegi.talep_eden_kullanici.user.username %}">
+                                {{ ders_istegi.talep_eden_kullanici.user.username }}
+                            </a>
+                        </span>
+                    </div>
+
+                    <!--- Ders bilgisi -->
+                    <div class="ders-istegi-bilgi-satir">
+                        <span class="ders-istegi-etiket">Ders:</span>
+                        <span class="ders-istegi-deger">{{ ders_istegi.ders.ders_adi }}</span>
+                    </div>
+
+                    <!--- Oluşturulma tarihi bilgisi -->
+                    <div class="ders-istegi-bilgi-satir">
+                        <span class="ders-istegi-etiket">Oluşturulma Tarihi:</span>
+                        <span class="ders-istegi-deger">{{ ders_istegi.olusturulma_tarihi|date:"d.m.Y H:i" }}</span>
+                    </div>
+
+                    <!--- Buluşma tercihleri bilgisi -->
+                    <div class="ders-istegi-bilgi-satir">
+                        <span class="ders-istegi-etiket">Buluşma Tercihleri:</span>
+                        <span class="ders-istegi-deger">{{ ders_istegi.bulusma_tercihleri|default:"Belirtilmemiş" }}</span>
+                    </div>
+
+                    <!--- Ders karşılığı bilgisi -->
+                    <div class="ders-istegi-bilgi-satir">
+                        <span class="ders-istegi-etiket">Ders Karşılığı:</span>
+                        <span class="ders-istegi-deger">{{ ders_istegi.ders_karsiligi|default:"Belirtilmemiş" }}</span>
+                    </div>
+                </div>
+
+                <!--- Detaylı açıklama başlığı -->
+                <h3 class="ders-istegi-alt-baslik">Detaylı Açıklama</h3>
+                <!--- Detaylı açıklama içeriği -->
+                <div class="ders-istegi-aciklama">
+                    {{ ders_istegi.detayli_aciklama|linebreaks }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--- Sağ Kolon: Eğitmen Başvuruları -->
+    <div class="mod-column">
+        <!--- Eğitmen başvuruları kartı -->
+        <div class="mod-card">
+            <!--- Kart başlığı ve başvuru sayısı -->
+            <div class="mod-card-title">
+                <span><i class="fa-solid fa-clipboard-check"></i> Eğitmen Başvuruları ({{ egitmen_basvurulari|length }})</span>
+            </div>
+
+            <!--- Başvurular varsa listeyi göster -->
+            {% if egitmen_basvurulari %}
+            <!--- Başvuru listesi kapsayıcısı -->
+            <div class="mod-list">
+                <!--- Her bir başvuru için döngü -->
+                {% for basvuru in egitmen_basvurulari %}
+                <!--- Başvuru öğesi -->
+                <div class="mod-list-item">
+                    <!--- Başvuran kullanıcı adı ve tarih -->
+                    <div class="basvuru-baslik">
+                        <!--- Başvuran kullanıcı profili bağlantısı -->
+                        <a href="{% url 'kullanicilar:profil_detay' username=basvuru.basvuran_egitmen.user.username %}">
+                            {{ basvuru.basvuran_egitmen.user.username }}
+                        </a>
+                        <!--- Başvuru tarihi -->
+                        <span class="basvuru-tarih">{{ basvuru.basvuru_tarihi|date:"d.m.Y" }}</span>
+                    </div>
+
+                    <!--- Başvuru durumu etiketi -->
+                    <div class="basvuru-durum">
+                        {% if basvuru.basvuru_durumu == 'BEKLEMEDE' %}
+                            <span class="mod-badge mod-badge-warning">Beklemede</span>
+                        {% elif basvuru.basvuru_durumu == 'KABUL_EDILDI' %}
+                            <span class="mod-badge mod-badge-success">Kabul Edildi</span>
+                        {% elif basvuru.basvuru_durumu == 'REDDEDILDI' %}
+                            <span class="mod-badge mod-badge-danger">Reddedildi</span>
+                        {% endif %}
+                    </div>
+
+                    <!--- Başvuru işlemleri (Profili Görüntüle) -->
+                    <div class="basvuru-islemler">
+                        <!--- Profili görüntüle butonu -->
+                        <a href="{% url 'kullanicilar:profil_detay' username=basvuru.basvuran_egitmen.user.username %}" class="mod-btn mod-btn-primary mod-btn-sm buton-esit">
+                            <i class="fa-solid fa-eye"></i> Profili Görüntüle
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <!--- Başvuru yoksa gösterilecek mesaj -->
+            <div class="mod-list-item text-center">
+                <p>Bu ders isteği için henüz eğitmen başvurusu bulunmamaktadır.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<!--- Sayfaya özel CSS stilleri bloğu -->
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* İki sütunlu düzen stilleri */
+    .mod-two-columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    /* Ders isteği başlık ve durum alanı stilleri */
+    .ders-istegi-baslik {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+
+    /* Ders isteği başlık (h2) stilleri */
+    .ders-istegi-baslik h2 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--white-color);
+    }
+
+    /* Ders isteği alt başlık (h3) stilleri */
+    .ders-istegi-alt-baslik {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 15px 0 10px 0;
+        color: var(--white-color);
+    }
+
+    /* Ders isteği bilgi satırları kapsayıcısı stilleri */
+    .ders-istegi-bilgiler {
+        background-color: rgba(0,0,0,0.1);
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    /* Ders isteği bilgi satırı stilleri */
+    .ders-istegi-bilgi-satir {
+        display: flex;
+        margin-bottom: 8px;
+    }
+
+    /* Son bilgi satırının alt boşluğunu kaldır */
+    .ders-istegi-bilgi-satir:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Bilgi etiketi (sol kısım) stilleri */
+    .ders-istegi-etiket {
+        width: 140px;
+        font-weight: 500;
+        color: var(--secondary-color);
+        font-size: 13px;
+    }
+
+    /* Bilgi değeri (sağ kısım) stilleri */
+    .ders-istegi-deger {
+        flex: 1;
+        color: var(--white-color);
+        font-size: 13px;
+    }
+
+    /* Bilgi değeri içindeki bağlantı stilleri */
+    .ders-istegi-deger a {
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+
+    /* Bilgi değeri içindeki bağlantı hover stilleri */
+    .ders-istegi-deger a:hover {
+        text-decoration: underline;
+    }
+
+    /* Ders isteği detaylı açıklama alanı stilleri */
+    .ders-istegi-aciklama {
+        font-size: 14px;
+        color: var(--light-color);
+        line-height: 1.5;
+        background-color: rgba(0,0,0,0.1);
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    /* Başvuru öğesi başlık alanı stilleri */
+    .basvuru-baslik {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+    /* Başvuru başlığındaki kullanıcı adı bağlantısı stilleri */
+    .basvuru-baslik a {
+        font-weight: 600;
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+
+    /* Başvuru tarihi stilleri */
+    .basvuru-tarih {
+        font-size: 12px;
+        color: var(--secondary-color);
+    }
+
+    /* Başvuru durumu etiketi alanı stilleri */
+    .basvuru-durum {
+        margin-bottom: 8px;
+    }
+
+    /* Başvuru işlemleri (butonlar) alanı stilleri */
+    .basvuru-islemler {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    /* Metni ortalama yardımcı sınıfı */
+    .text-center {
+        text-align: center;
+    }
+
+    /* Butonların eşit yükseklikte olması için stil */
+    .buton-esit {
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+    }
+</style>
+{% endblock %}

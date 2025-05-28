@@ -1,0 +1,180 @@
+{% extends 'moderasyon/panel_temel.html' %}
+
+{% load static %}
+
+{% block panel_content %}
+<!--- Ana moderasyon kartı -->
+<div class="mod-card">
+    <!--- Kart başlığı alanı -->
+    <div class="mod-card-title">
+        <!--- Başlık metni ve ikonu -->
+        <span><i class="fa-solid fa-user-slash"></i> Engelli Kullanıcılar</span>
+    </div>
+
+    <!--- Arama ve filtreleme formu -->
+    <form method="get" class="mod-filter-form">
+        <!--- Arama giriş alanı -->
+        <input type="text" name="arama" placeholder="Kullanıcı ara..." class="mod-input" value="{{ arama }}">
+
+        <!--- Rol filtreleme seçeneği -->
+        <select name="rol" class="mod-select">
+            <option value="">Tüm Roller</option>
+            <option value="NORMAL" {% if rol == 'NORMAL' %}selected{% endif %}>Normal</option>
+            <option value="EGITMEN" {% if rol == 'EGITMEN' %}selected{% endif %}>Eğitmen</option>
+            <option value="MODERATOR" {% if rol == 'MODERATOR' %}selected{% endif %}>Moderatör</option>
+            <option value="ADMIN" {% if rol == 'ADMIN' %}selected{% endif %}>Admin</option>
+        </select>
+
+        <!--- Süre filtreleme seçeneği -->
+        <select name="sure" class="mod-select">
+            <option value="">Tüm Süreler</option>
+            <option value="bir_gun" {% if sure == 'bir_gun' %}selected{% endif %}>1 Günden Az</option>
+            <option value="bir_hafta" {% if sure == 'bir_hafta' %}selected{% endif %}>1 Haftadan Az</option>
+            <option value="bir_ay" {% if sure == 'bir_ay' %}selected{% endif %}>1 Aydan Az</option>
+            <option value="uzun" {% if sure == 'uzun' %}selected{% endif %}>1 Aydan Fazla</option>
+        </select>
+
+        <!--- Arama butonu -->
+        <button type="submit" class="mod-btn mod-btn-primary">
+            <i class="fa-solid fa-search"></i> Ara
+        </button>
+    </form>
+
+    <!--- Engelli kullanıcılar tablosu için duyarlı kapsayıcı -->
+    <div class="mod-table-responsive">
+        <!--- Engelli kullanıcılar tablosu -->
+        <table class="mod-table">
+            <!--- Tablo başlığı -->
+            <thead>
+                <tr>
+                    <th>Kullanıcı</th>
+                    <!--- Küçük ekranlarda gizlenen e-posta sütunu -->
+                    <th class="d-none-sm">E-posta</th>
+                    <th>Rol</th>
+                    <!--- Orta ekranlarda gizlenen kalan süre sütunu -->
+                    <th class="d-none-md">Kalan Süre</th>
+                    <!--- Orta ekranlarda gizlenen bitiş tarihi sütunu -->
+                    <th class="d-none-md">Bitiş Tarihi</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <!--- Tablo içeriği -->
+            <tbody>
+                <!--- Her bir engelli kullanıcı için döngü -->
+                {% for profil in kullanicilar %}
+                <tr>
+                    <td>
+                        <!--- Kullanıcı bilgisi kapsayıcısı -->
+                        <div class="kullanici-info">
+                            <!--- Kullanıcı adı -->
+                            <span class="username">{{ profil.user.username }}</span>
+                            <!--- Küçük ekranlarda gösterilen bitiş tarihi bilgisi -->
+                            <span class="bitis-tarih d-sm-only">
+                                {{ profil.ban_bitis_tarihi|timeuntil }} kaldı
+                            </span>
+                        </div>
+                    </td>
+                    <!--- Küçük ekranlarda gizlenen e-posta -->
+                    <td class="d-none-sm">{{ profil.user.email }}</td>
+                    <td>
+                        <!--- Kullanıcı rolüne göre rozet -->
+                        {% if profil.kullanici_rolu == 'NORMAL' %}
+                            <span class="mod-badge mod-badge-info">Normal</span>
+                        {% elif profil.kullanici_rolu == 'EGITMEN' %}
+                            <span class="mod-badge mod-badge-success">Eğitmen</span>
+                        {% elif profil.kullanici_rolu == 'MODERATOR' %}
+                            <span class="mod-badge mod-badge-warning">Mod</span>
+                        {% elif profil.kullanici_rolu == 'ADMIN' %}
+                            <span class="mod-badge mod-badge-danger">Admin</span>
+                        {% endif %}
+                    </td>
+                    <!--- Orta ekranlarda gizlenen kalan süre -->
+                    <td class="d-none-md">{{ profil.ban_bitis_tarihi|timeuntil }}</td>
+                    <!--- Orta ekranlarda gizlenen bitiş tarihi -->
+                    <td class="d-none-md">{{ profil.ban_bitis_tarihi|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        <!--- Kullanıcı profiline gitme butonu -->
+                        <a href="{% url 'kullanicilar:profil_detay' username=profil.user.username %}" class="mod-btn mod-btn-primary mod-btn-sm buton-esit">
+                            <i class="fa-solid fa-eye"></i> <span class="d-none-sm">Görüntüle</span>
+                        </a>
+
+                        <!--- Engeli kaldırma formu ve butonu -->
+                        <form method="post" action="{% url 'moderasyon:kullanici_engel_kaldir' user_id=profil.user.id %}" style="display: inline;"
+                              onsubmit="return confirm('{{ profil.user.username }} kullanıcısının engelini kaldırmak istediğinize emin misiniz?');">
+                            {% csrf_token %}
+                            <button type="submit" class="mod-btn mod-btn-success mod-btn-sm buton-esit">
+                                <i class="fa-solid fa-user-check"></i> <span class="d-none-sm">Engeli Kaldır</span>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <!--- Engelli kullanıcı bulunamadığında gösterilecek satır -->
+                <tr>
+                    <td colspan="6" class="text-center">Engelli kullanıcı bulunamadı.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!--- Sayfalama bölümü -->
+    {% if is_paginated %}
+    <div class="mod-pagination">
+        {% if page_obj.has_previous %}
+            <!--- İlk sayfaya gitme bağlantısı -->
+            <a href="?page=1{% if arama %}&arama={{ arama }}{% endif %}{% if rol %}&rol={{ rol }}{% endif %}{% if sure %}&sure={{ sure }}{% endif %}" class="page-link">İlk</a>
+            <!--- Önceki sayfaya gitme bağlantısı -->
+            <a href="?page={{ page_obj.previous_page_number }}{% if arama %}&arama={{ arama }}{% endif %}{% if rol %}&rol={{ rol }}{% endif %}{% if sure %}&sure={{ sure }}{% endif %}" class="page-link">Önceki</a>
+        {% endif %}
+
+        <!--- Mevcut sayfa bilgisi -->
+        <span class="page-link current">
+            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <!--- Sonraki sayfaya gitme bağlantısı -->
+            <a href="?page={{ page_obj.next_page_number }}{% if arama %}&arama={{ arama }}{% endif %}{% if rol %}&rol={{ rol }}{% endif %}{% if sure %}&sure={{ sure }}{% endif %}" class="page-link">Sonraki</a>
+            <!--- Son sayfaya gitme bağlantısı -->
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if arama %}&arama={{ arama }}{% endif %}{% if rol %}&rol={{ rol }}{% endif %}{% if sure %}&sure={{ sure }}{% endif %}" class="page-link">Son</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* Kullanıcı bilgisi kapsayıcısı stilleri */
+    .kullanici-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Kullanıcı adı stilleri */
+    .kullanici-info .username {
+        font-weight: 500;
+    }
+
+    /* Bitiş tarihi/kalan süre stilleri */
+    .kullanici-info .bitis-tarih {
+        font-size: 12px;
+        color: var(--secondary-color);
+        margin-top: 4px;
+    }
+
+    /* Sadece küçük ekranlarda gösterilecek elementler */
+    .d-sm-only {
+        display: none;
+    }
+
+    /* Butonların eşit yükseklikte olması için stiller */
+    .buton-esit {
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+    }
+</style>
+{% endblock %}

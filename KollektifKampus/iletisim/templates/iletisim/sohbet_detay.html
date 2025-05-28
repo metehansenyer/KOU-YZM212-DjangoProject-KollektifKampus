@@ -1,0 +1,311 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ sohbet.ders_istegi.talep_basligi }} - Sohbet - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/iletisim.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="iletisim-baslik">
+    <div class="iletisim-baslik-kapsayici">
+        <h4 class="iletisim-baslik-adi">
+            {{ sohbet.ders_istegi.talep_basligi }}
+            {% if karsi_taraf %}
+                <small class="iletisim-baslik-alt-metin">- {{ karsi_taraf.user.get_full_name|default:karsi_taraf.user.username }} ile sohbet</small>
+            {% endif %}
+        </h4>
+        <a href="{% url 'talepler:ders_istegi_detay' pk=sohbet.ders_istegi.id %}" class="iletisim-buton-bilgi">Ders İsteği Detayları</a>
+    </div>
+</div>
+
+<!--- Kullanıcı kimlik bilgilerini JSON olarak sayfaya gömerek JavaScript'e güvenli bir şekilde aktar -->
+{{ kullanici_profili.user.id|json_script:"kullanici-id" }}
+{{ kullanici_profili.user.username|json_script:"kullanici-username" }}
+
+<div class="iletisim-ana-icerik sohbet-detay">
+    <div class="iletisim-mesaj-kutusu" id="mesajKutusu">
+        {% for mesaj in mesajlar %}
+            {% if mesaj.gonderen_kullanici %}
+                <!-- Normal kullanıcı mesajı -->
+                <div class="iletisim-mesaj {% if mesaj.gonderen_kullanici == kullanici_profili %}iletisim-mesaj-kendim{% else %}iletisim-mesaj-karsi{% endif %}">
+                    {% if mesaj.gonderen_kullanici != kullanici_profili %}
+                        <!-- Karşı tarafın mesajıysa gönderen adını göster -->
+                        <div class="iletisim-mesaj-gonderen">{{ mesaj.gonderen_kullanici.user.get_full_name|default:mesaj.gonderen_kullanici.user.username }}</div>
+                    {% endif %}
+                    <div class="iletisim-mesaj-icerik">{{ mesaj.icerik|linebreaksbr }}</div> <!-- Mesaj içeriği, satır sonlarını <br> ile değiştir -->
+                    <div class="iletisim-mesaj-zaman">{{ mesaj.gonderilme_tarihi|date:"d.m.Y H:i" }}</div> <!-- Mesaj gönderilme zamanı -->
+                </div>
+            {% else %}
+                <!-- Sistem mesajı -->
+                <div class="iletisim-mesaj iletisim-mesaj-sistem">
+                    {{ mesaj.icerik }} <!-- Sistem mesajı içeriği -->
+                    <div class="iletisim-mesaj-zaman">{{ mesaj.gonderilme_tarihi|date:"d.m.Y H:i" }}</div> <!-- Sistem mesajı zamanı -->
+                </div>
+            {% endif %}
+        {% empty %}
+            <!-- Hiç mesaj yoksa gösterilecek içerik -->
+            <div class="iletisim-bos-mesaj">
+                <p>Henüz hiç mesaj bulunmuyor.</p>
+                <p>İlk mesajı göndererek sohbete başlayabilirsiniz.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Yazıyor bildiriminin gösterileceği alan -->
+    <div id="yaziyorBildirimi" class="iletisim-yaziyor-bildirimi"></div>
+
+    <!-- Mesaj gönderme formu -->
+    <form id="mesajForm" class="iletisim-mesaj-form" method="post" action="{% url 'iletisim:mesaj_gonder' sohbet_id=sohbet.id %}">
+        {% csrf_token %} <!-- CSRF koruması -->
+        <input type="text" name="icerik" id="mesajInput" class="iletisim-mesaj-input" placeholder="Mesajınızı yazın..." required> <!-- Mesaj input alanı -->
+        <button type="submit" class="iletisim-mesaj-gonder">Gönder</button> <!-- Gönder butonu -->
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Django değişkenlerini json_script ile JavaScript değişkenlerine güvenli bir şekilde aktarma
+    var KULLANICI_ID = JSON.parse(document.getElementById('kullanici-id').textContent);
+    var KULLANICI_ADI = JSON.parse(document.getElementById('kullanici-username').textContent);
+
+    let mesajWebSocket; // WebSocket bağlantısı için değişken
+    let yaziyorZamanAsimiID = null; // "Yazıyor..." bildirimini gizlemek için zamanlayıcı ID'si
+
+    // Sayfa tamamen yüklendiğinde çalışacak kod bloğu
+    document.addEventListener('DOMContentLoaded', function() {
+        const mesajKutusu = document.getElementById('mesajKutusu');
+        // Sayfa yüklendiğinde mesaj kutusunu en alta kaydır
+        mesajKutusu.scrollTop = mesajKutusu.scrollHeight;
+
+        // WebSocket bağlantısını kurma fonksiyonunu çağır
+        baglantiyiKur();
+
+        // Mesaj input alanına her karakter girildiğinde çalışacak olay dinleyicisi
+        document.getElementById('mesajInput').addEventListener('input', function() {
+            // WebSocket bağlantısı açıksa "yazıyor" durumunu gönder
+            if (mesajWebSocket && mesajWebSocket.readyState === WebSocket.OPEN) {
+                mesajWebSocket.send(JSON.stringify({
+                    'type': 'yaziyor',
+                    'yaziyor': true
+                }));
+
+                // Önceki "yazıyor" zamanlayıcısını temizle (varsa)
+                if (yaziyorZamanAsimiID) {
+                    clearTimeout(yaziyorZamanAsimiID);
+                }
+
+                // 2 saniye yazma durursa "yazıyor..." bildirimini kapatmak için yeni bir zamanlayıcı başlat
+                yaziyorZamanAsimiID = setTimeout(function() {
+                    if (mesajWebSocket && mesajWebSocket.readyState === WebSocket.OPEN) {
+                        mesajWebSocket.send(JSON.stringify({
+                            'type': 'yaziyor',
+                            'yaziyor': false
+                        }));
+                    }
+                }, 2000); // 2000 milisaniye = 2 saniye
+            }
+        });
+    });
+
+    // WebSocket bağlantısını kuran fonksiyon
+    function baglantiyiKur() {
+        // Sayfanın protokolüne göre (http/https) WebSocket protokolünü (ws/wss) belirle
+        const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        // WebSocket sunucu adresini oluştur
+        const wsUrl = wsProtocol + window.location.host + '/ws/sohbet/{{ sohbet.id }}/';
+
+        console.log('WebSocket bağlantısı kuruluyor:', wsUrl); // Konsola bağlantı bilgisini yazdır
+
+        // Yeni bir WebSocket bağlantısı oluştur
+        mesajWebSocket = new WebSocket(wsUrl);
+
+        // Bağlantı başarıyla kurulduğunda çalışacak olay dinleyicisi
+        mesajWebSocket.onopen = function(e) {
+            console.log('WebSocket bağlantısı kuruldu'); // Konsola başarı mesajı yazdır
+        };
+
+        // Sunucudan mesaj geldiğinde çalışacak olay dinleyicisi
+        mesajWebSocket.onmessage = function(e) {
+            console.log('Mesaj alındı:', e.data); // Gelen mesajı konsola yazdır (hata ayıklama için)
+
+            try {
+                // Gelen JSON verisini ayrıştır
+                const data = JSON.parse(e.data);
+
+                // Mesaj tipine göre farklı işlemler yap
+                if (data.type === 'sohbet_mesaji') {
+                    // Gelen mesaj bir sohbet mesajı ise ekrana ekle
+                    console.log('Sohbet mesajı alındı:', data); // Sohbet mesajı detaylarını konsola yazdır
+                    ekranaMesajEkle({ // Mesajı ekrana ekleyen fonksiyonu çağır
+                        kullanici_id: parseInt(data.kullanici_id), // Kullanıcı ID'sini sayıya çevir
+                        kullanici_adi: data.kullanici_adi,
+                        mesaj: data.mesaj,
+                        gonderilme_tarihi: data.gonderilme_tarihi,
+                        sistem_mesaji: false // Bu bir sistem mesajı değil
+                    });
+                } else if (data.type === 'yaziyor_bildirimi') {
+                    // Gelen mesaj bir "yazıyor" bildirimi ise
+                    const kullaniciId = parseInt(data.kullanici_id); // Bildirimi gönderen kullanıcı ID'si
+                    const kullaniciAdi = data.kullanici_adi; // Bildirimi gönderen kullanıcı adı
+                    const yaziyorMu = data.yaziyor; // Kullanıcının yazıp yazmadığı (true/false)
+
+                    const yaziyorBildirimi = document.getElementById('yaziyorBildirimi'); // Yazıyor bildirimi div'ini al
+
+                    // Eğer bildirim kendi kullanıcımızdan gelmiyorsa ve kullanıcı yazıyorsa
+                    if (kullaniciId !== KULLANICI_ID && yaziyorMu) {
+                        // Yazıyor bildirimini göster ve içeriğini ayarla
+                        yaziyorBildirimi.innerHTML = `${kullaniciAdi} yazıyor<span class="iletisim-yaziyor-noktalar"></span>`;
+                        yaziyorBildirimi.classList.add('aktif'); // Aktif sınıfını ekleyerek görünür yap
+                    } else {
+                        // Kullanıcı yazmıyorsa veya bildirim kendimizden geliyorsa bildirimi gizle
+                        yaziyorBildirimi.innerHTML = ''; // İçeriği temizle
+                        yaziyorBildirimi.classList.remove('aktif'); // Aktif sınıfını kaldırarak gizle
+                    }
+                } else if (data.type === 'debug') {
+                    // Gelen mesaj bir hata ayıklama mesajı ise konsola yazdır
+                    console.log('Hata ayıklama mesajı:', data.message);
+                }
+            } catch (error) {
+                // Mesaj işlenirken bir hata oluşursa konsola yazdır
+                console.error('Mesaj işlenirken hata oluştu:', error, e.data);
+            }
+        };
+
+        // WebSocket bağlantısı kapandığında çalışacak olay dinleyicisi
+        mesajWebSocket.onclose = function(e) {
+            console.log('WebSocket bağlantısı kapatıldı, kod:', e.code, 'neden:', e.reason); // Kapanma bilgisini konsola yazdır
+            // 5 saniye sonra yeniden bağlanmayı dene
+            setTimeout(function() {
+                baglantiyiKur(); // Bağlantıyı yeniden kurma fonksiyonunu çağır
+            }, 5000); // 5000 milisaniye = 5 saniye bekle
+        };
+
+        // WebSocket bağlantısında hata oluştuğunda çalışacak olay dinleyicisi
+        mesajWebSocket.onerror = function(e) {
+            console.error('WebSocket hatası:', e); // Hata detaylarını konsola yazdır
+            // Hata durumunda bağlantıyı kapat (onclose tetiklenecek ve yeniden bağlanmayı deneyecek)
+            mesajWebSocket.close();
+        };
+    }
+
+    // Gelen mesaj verisini kullanarak mesajı HTML olarak ekrana ekleyen fonksiyon
+    function ekranaMesajEkle(data) {
+        const mesajKutusu = document.getElementById('mesajKutusu'); // Mesaj kutusu div'ini al
+        const mesajDiv = document.createElement('div'); // Yeni bir div elementi oluştur
+
+        // Mesajı gönderenin mevcut kullanıcı olup olmadığını kontrol et
+        const kendiMesajim = data.kullanici_id === KULLANICI_ID;
+
+        // Mesaj türüne göre (sistem mesajı mı, kullanıcı mesajı mı) div'in sınıfını ve içeriğini belirle
+        if (data.sistem_mesaji) {
+            // Sistem mesajı ise
+            mesajDiv.className = 'iletisim-mesaj iletisim-mesaj-sistem'; // Sistem mesajı sınıflarını ata
+            mesajDiv.innerHTML = `
+                ${data.mesaj} <!-- Sistem mesajı içeriği -->
+                <div class="iletisim-mesaj-zaman">${data.gonderilme_tarihi}</div> <!-- Mesaj zamanı -->
+            `;
+        } else {
+            // Normal kullanıcı mesajı ise
+            // Mesajı gönderen bizsek 'iletisim-mesaj-kendim', karşı tarafsa 'iletisim-mesaj-karsi' sınıfını ata
+            mesajDiv.className = `iletisim-mesaj ${kendiMesajim ? 'iletisim-mesaj-kendim' : 'iletisim-mesaj-karsi'}`;
+
+            let icerik = '';
+            // Eğer mesajı gönderen biz değilsek, gönderen kullanıcının adını ekle
+            if (!kendiMesajim) {
+                icerik += `<div class="iletisim-mesaj-gonderen">${data.kullanici_adi}</div>`;
+            }
+
+            // Mesaj içeriğini ve zamanını HTML içeriğine ekle
+            // Mesaj içeriğindeki satır sonlarını <br> etiketleriyle değiştir
+            icerik += `
+                <div class="iletisim-mesaj-icerik">${data.mesaj.replace(/\n/g, '<br>')}</div>
+                <div class="iletisim-mesaj-zaman">${data.gonderilme_tarihi}</div>
+            `;
+
+            mesajDiv.innerHTML = icerik; // Oluşturulan HTML içeriğini div'e ata
+        }
+
+        // Oluşturulan mesaj div'ini mesaj kutusuna ekle
+        mesajKutusu.appendChild(mesajDiv);
+        // Mesaj kutusunu en alta kaydırarak yeni mesajın görünmesini sağla
+        mesajKutusu.scrollTop = mesajKutusu.scrollHeight;
+
+        // Yeni mesaj geldiğinde "yazıyor" bildirimini temizle
+        document.getElementById('yaziyorBildirimi').innerHTML = '';
+        document.getElementById('yaziyorBildirimi').classList.remove('aktif');
+    }
+
+    // Mesaj gönderme formu submit edildiğinde çalışacak olay dinleyicisi
+    document.getElementById('mesajForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Formun varsayılan submit işlemini engelle
+
+        const mesajInput = document.getElementById('mesajInput'); // Mesaj input alanını al
+        const icerik = mesajInput.value.trim(); // Input alanındaki metni al ve başındaki/sonundaki boşlukları temizle
+
+        if (icerik === '') return; // Eğer mesaj boşsa gönderme işlemini durdur
+
+        // WebSocket bağlantısı açıksa mesajı WebSocket üzerinden gönder
+        if (mesajWebSocket && mesajWebSocket.readyState === WebSocket.OPEN) {
+            mesajWebSocket.send(JSON.stringify({
+                'type': 'sohbet_mesaji', // Mesaj tipi
+                'mesaj': icerik // Mesaj içeriği
+            }));
+
+            // Mesaj başarıyla gönderildikten sonra input alanını temizle
+            mesajInput.value = '';
+
+            // "Yazıyor..." durumunu iptal et ve sunucuya bildir
+            if (yaziyorZamanAsimiID) {
+                clearTimeout(yaziyorZamanAsimiID); // Zamanlayıcıyı temizle
+                mesajWebSocket.send(JSON.stringify({
+                    'type': 'yaziyor',
+                    'yaziyor': false // Yazma durumunu false olarak gönder
+                }));
+            }
+        } else {
+            // WebSocket bağlantısı yoksa veya kapalıysa AJAX ile mesajı gönder
+            console.warn('WebSocket bağlantısı kapalı, AJAX ile gönderiliyor.'); // Konsola uyarı yazdır
+            const form = this; // Form elementini al
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; // CSRF token'ını al
+
+            // Fetch API kullanarak POST isteği gönder
+            fetch(form.action, {
+                method: 'POST', // HTTP metodu
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded', // İçerik tipi
+                    'X-CSRFToken': csrfToken // CSRF token'ını başlığa ekle
+                },
+                body: `icerik=${encodeURIComponent(icerik)}` // Form verisini URL-encoded formatında gönder
+            })
+            .then(response => response.json()) // Sunucudan gelen yanıtı JSON olarak ayrıştır
+            .then(data => {
+                if (data.success) {
+                    // AJAX isteği başarılıysa
+                    mesajInput.value = ''; // Input alanını temizle
+
+                    // Mesajı ekrana ekle (WebSocket çalışmadığında)
+                    ekranaMesajEkle({
+                        kullanici_id: KULLANICI_ID, // Kendi kullanıcı ID'miz
+                        kullanici_adi: KULLANICI_ADI, // Kendi kullanıcı adımız
+                        mesaj: data.icerik, // Sunucudan dönen mesaj içeriği
+                        gonderilme_tarihi: data.gonderilme_tarihi, // Sunucudan dönen gönderilme tarihi
+                        sistem_mesaji: false // AJAX ile gönderilenler sistem mesajı değildir
+                    });
+                } else {
+                    // AJAX isteği başarısızsa hata mesajını göster
+                    alert('Mesaj gönderilemedi: ' + data.error);
+                }
+            })
+            .catch(error => {
+                // AJAX isteği sırasında bir hata oluşursa
+                console.error('Hata:', error); // Hatayı konsola yazdır
+                alert('Mesaj gönderilirken bir hata oluştu.'); // Kullanıcıya hata bildirimi göster
+            });
+        }
+    });
+</script>
+{% endblock %}

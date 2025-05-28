@@ -1,0 +1,554 @@
+/* Geribildirim Sayfası Genel Stilleri */
+
+/* Kapsayıcı stilleri */
+.geribildirim-kapsayici {
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+    color: var(--white-color);
+}
+
+/* Banner bölümü stilleri */
+.geribildirim-banner {
+    background-color: var(--extra-light-color);
+    padding: 20px 0;
+    position: relative;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Banner içerik stilleri */
+.geribildirim-banner-icerik {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Banner başlık stilleri */
+.geribildirim-banner h2 {
+    font-size: 26px;
+    font-weight: bold;
+    margin: 0;
+    color: var(--white-color);
+}
+
+/* Ana içerik bölümü stilleri */
+.geribildirim-ana-icerik {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Kart görünümü stilleri */
+.geribildirim-kart {
+    padding: 24px;
+    border-radius: 16px;
+    background-color: var(--bg-secondary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Başlık ve meta bilgileri bölümü stilleri */
+.geribildirim-baslik-bolum {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Başlık sol bölüm stilleri */
+.geribildirim-baslik-sol h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: var(--white-color);
+    display: flex;
+    align-items: center;
+}
+
+/* Başlık ikonu stilleri */
+.geribildirim-baslik-sol h3 i {
+    margin-right: 8px;
+    color: var(--primary-color);
+}
+
+/* Meta bilgi stilleri */
+.geribildirim-meta {
+    display: flex;
+    align-items: center;
+    color: var(--secondary-color);
+    font-size: 14px;
+}
+
+/* Üst boşluk sınıfı */
+.mt-2 {
+    margin-top: 8px;
+}
+
+/* Meta etiket stilleri */
+.geribildirim-meta-etiket {
+    margin-right: 4px;
+    color: var(--secondary-color);
+}
+
+/* Meta link stilleri */
+.geribildirim-meta-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+/* Meta link hover stilleri */
+.geribildirim-meta-link:hover {
+    color: #1a91da;
+    text-decoration: underline;
+}
+
+/* Meta değer stilleri */
+.geribildirim-meta-deger {
+    color: var(--white-color);
+}
+
+/* Bilgi/Uyarı kutusu stilleri */
+.geribildirim-uyari {
+    display: flex;
+    align-items: flex-start;
+    padding: 18px;
+    border-radius: 12px;
+    margin: 24px 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Uyarı ikonu stilleri */
+.geribildirim-uyari i {
+    margin-right: 16px;
+    font-size: 22px;
+    flex-shrink: 0;
+    padding-top: 2px;
+}
+
+/* Uyarı içerik div stilleri */
+.geribildirim-uyari div {
+    flex-grow: 1;
+}
+
+/* Uyarı başlık stilleri */
+.geribildirim-uyari-baslik {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Bilgi uyarı kutusu renk stilleri */
+.geribildirim-uyari-bilgi {
+    background-color: rgba(29, 161, 242, 0.1);
+    border: 1px solid rgba(29, 161, 242, 0.3);
+    color: #1da1f2;
+}
+
+/* Form elementleri stilleri */
+.geribildirim-form {
+    margin-top: 24px;
+}
+
+/* Form grup stilleri */
+.geribildirim-form-grup {
+    margin-bottom: 20px;
+}
+
+/* Form etiket stilleri */
+.geribildirim-form-etiket {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--white-color);
+}
+
+/* Form kontrol (input/textarea) stilleri */
+.geribildirim-form-kontrol {
+    width: 100%;
+    padding: 12px 14px;
+    background-color: var(--extra-light-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--white-color);
+    font-size: 15px;
+    transition: all 0.2s ease;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+/* Form kontrol focus stilleri */
+.geribildirim-form-kontrol:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(29, 161, 242, 0.2);
+}
+
+/* Puan seçim alanı stilleri */
+.geribildirim-puan-secimi {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+/* Puan seçeneği kapsayıcı stilleri */
+.geribildirim-puan-secenegi {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Puan label stilleri */
+.geribildirim-puan-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--extra-light-color);
+    border: 1px solid var(--border-color);
+    color: var(--white-color);
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Seçili puan label stilleri */
+input[type="radio"]:checked + .geribildirim-puan-label {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 0 10px rgba(29, 161, 242, 0.5);
+    transform: scale(1.1);
+}
+
+/* Gizli radio input stilleri */
+input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+/* Puan label hover stilleri */
+.geribildirim-puan-label:hover {
+    background-color: rgba(29, 161, 242, 0.2);
+    transform: scale(1.05);
+}
+
+/* Butonlar bölümü stilleri */
+.geribildirim-butonlar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Genel buton stilleri */
+.geribildirim-buton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 30px;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+/* Buton ikonu stilleri */
+.geribildirim-buton i {
+    margin-right: 8px;
+}
+
+/* Buton hover stilleri */
+.geribildirim-buton:hover {
+    background-color: #1a91da;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    color: white;
+}
+
+/* Başarı butonu stilleri */
+.geribildirim-buton-basari {
+    background-color: #00ba7c;
+    color: white;
+}
+
+/* Başarı butonu hover stilleri */
+.geribildirim-buton-basari:hover {
+    background-color: #00a36b;
+    color: white;
+}
+
+/* Tehlike butonu stilleri */
+.geribildirim-buton-tehlike {
+    background-color: #e0245e;
+    color: white;
+}
+
+/* Tehlike butonu hover stilleri */
+.geribildirim-buton-tehlike:hover {
+    background-color: #c11e51;
+    color: white;
+}
+
+/* İkincil buton stilleri */
+.geribildirim-buton-ikincil {
+    background-color: var(--extra-light-color);
+    color: var(--white-color);
+    border: 1px solid var(--border-color);
+    padding: 8px 15px;
+    font-size: 14px;
+}
+
+/* İkincil buton hover stilleri */
+.geribildirim-buton-ikincil:hover {
+    background-color: var(--border-color);
+    color: var(--white-color);
+}
+
+/* Değerlendirme Özeti Stilleri */
+.geribildirim-ozet {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+}
+
+/* Özet puan stilleri */
+.geribildirim-ozet-puan {
+    font-size: 56px;
+    font-weight: bold;
+    color: var(--primary-color);
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+/* Özet yıldız stilleri */
+.geribildirim-ozet-yildizlar {
+    font-size: 32px;
+    letter-spacing: 8px;
+    margin: 10px 0 15px;
+}
+
+/* Dolu yıldız stilleri */
+.yildiz-dolu {
+    color: #FFAD1F;
+}
+
+/* Boş yıldız stilleri */
+.yildiz-bos {
+    color: var(--border-color);
+}
+
+/* Özet sayaç stilleri */
+.geribildirim-ozet-sayac {
+    font-size: 16px;
+    color: var(--secondary-color);
+}
+
+/* Boş mesaj stilleri */
+.geribildirim-bos-mesaj {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 0;
+}
+
+/* Boş mesaj ikonu stilleri */
+.geribildirim-bos-mesaj i {
+    font-size: 48px;
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+}
+
+/* Boş mesaj paragraf stilleri */
+.geribildirim-bos-mesaj p {
+    font-size: 18px;
+    color: var(--secondary-color);
+    margin: 0;
+}
+
+/* Değerlendirmeler Listesi Stilleri */
+.geribildirim-liste {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Liste öğesi stilleri */
+.geribildirim-liste-item {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s;
+}
+
+/* Son liste öğesi stilleri */
+.geribildirim-liste-item:last-child {
+    border-bottom: none;
+}
+
+/* Liste öğesi hover stilleri */
+.geribildirim-liste-item:hover {
+    background-color: var(--extra-light-color);
+}
+
+/* Liste başlık stilleri */
+.geribildirim-liste-baslik {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+/* Liste başlık sol bölüm stilleri */
+.geribildirim-liste-baslik-sol {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Kullanıcı link stilleri */
+.geribildirim-kullanici-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--white-color);
+    margin-bottom: 5px;
+}
+
+/* Kullanıcı avatar stilleri */
+.geribildirim-kullanici-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 2px solid var(--primary-color);
+}
+
+/* Kullanıcı avatar placeholder stilleri */
+.geribildirim-kullanici-avatar-placeholder {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Kullanıcı isim stilleri */
+.geribildirim-kullanici-isim {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* Kullanıcı isim hover stilleri */
+.geribildirim-kullanici-link:hover .geribildirim-kullanici-isim {
+    text-decoration: underline;
+}
+
+/* Tarih stilleri */
+.geribildirim-tarih {
+    font-size: 13px;
+    color: var(--secondary-color);
+}
+
+/* Puan gösterge stilleri */
+.geribildirim-puan {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 20px;
+    min-width: 45px;
+    text-align: center;
+}
+
+/* Yüksek puan renk stilleri */
+.puan-yuksek {
+    background-color: rgba(0, 186, 124, 0.2);
+    color: #00ba7c;
+}
+
+/* Orta puan renk stilleri */
+.puan-orta {
+    background-color: rgba(29, 161, 242, 0.2);
+    color: #1da1f2;
+}
+
+/* Düşük puan renk stilleri */
+.puan-dusuk {
+    background-color: rgba(255, 173, 31, 0.2);
+    color: #ffad1f;
+}
+
+/* Çok düşük puan renk stilleri */
+.puan-cok-dusuk {
+    background-color: rgba(224, 36, 94, 0.2);
+    color: #e0245e;
+}
+
+/* Değerlendirmenin yapıldığı ders bilgisi stili */
+.geribildirim-ders {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    color: var(--secondary-color);
+    font-size: 15px;
+}
+
+/* Ders ikonu stilleri */
+.geribildirim-ders i {
+    margin-right: 8px;
+    color: var(--primary-color);
+}
+
+/* Ders link stilleri */
+.geribildirim-ders-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    margin: 0 5px;
+    font-weight: 500;
+}
+
+/* Ders link hover stilleri */
+.geribildirim-ders-link:hover {
+    text-decoration: underline;
+}
+
+/* Değerlendirme yorumu bölümü stili */
+.geribildirim-yorum {
+    background-color: var(--extra-light-color);
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+}
+
+/* Yorum içerik stilleri */
+.geribildirim-yorum-icerik {
+    color: var(--light-color);
+    line-height: 1.5;
+    font-size: 15px;
+}

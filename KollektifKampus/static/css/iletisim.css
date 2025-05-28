@@ -1,0 +1,447 @@
+/* İletişim sayfaları genel stilleri */
+
+/* Kapsayıcı stilleri */
+.iletisim-kapsayici {
+    width: 100%;
+    color: var(--white-color);
+}
+
+/* Başlık stilleri */
+.iletisim-baslik {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1.25rem;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    background-color: rgba(21, 24, 28, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+/* Başlık kapsayıcı stilleri */
+.iletisim-baslik-kapsayici {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+/* Başlık adı stilleri */
+.iletisim-baslik-adi {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--white-color);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Başlık alt metin stilleri */
+.iletisim-baslik-alt-metin {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+    font-weight: normal;
+    margin-left: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Ana içerik stilleri */
+.iletisim-ana-icerik {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    flex: 1;
+    overflow-y: auto;
+    width: 100%;
+    height: calc(100vh - 120px); /* Başlık ve form için alan bırak */
+}
+
+/* Sohbet detay ana içerik stilleri */
+.iletisim-ana-icerik.sohbet-detay {
+    height: calc(100vh - 80px); /* Başlık yüksekliği çıkarılmış tam ekran */
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    align-items: stretch; /* İçeriği tam genişlikte yay */
+}
+
+/* Kart içerik stilleri */
+.iletisim-kart-icerik {
+    flex: 1;
+    overflow-y: auto;
+    width: 100%;
+}
+
+/* Liste grup stilleri */
+.iletisim-liste-grup {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Liste element link stilleri */
+.iletisim-liste-element-link {
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: var(--white-color);
+    transition: background-color 0.2s;
+    position: relative;
+}
+
+/* Liste element link hover stilleri */
+.iletisim-liste-element-link:hover {
+    background-color: var(--hover-color);
+    text-decoration: none;
+    color: var(--white-color);
+}
+
+/* Liste element başlık stilleri */
+.iletisim-liste-element-link h5 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+    font-weight: bold;
+    color: var(--white-color);
+}
+
+/* Esnek düzen stilleri */
+.iletisim-esnek {
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+}
+
+/* Esnek yatay ara stilleri */
+.iletisim-esnek-yatay-ara {
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+/* Metin sağ stilleri */
+.iletisim-metin-sag {
+    text-align: right;
+    min-width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+/* Metin solan stilleri */
+.iletisim-metin-solan {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+/* Metin orta stilleri */
+.iletisim-metin-orta {
+    text-align: center;
+}
+
+/* Rozet stilleri */
+.iletisim-rozet {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: var(--white-color);
+    margin-left: 4px;
+}
+
+/* Birincil rozet stilleri */
+.iletisim-rozet-birincil {
+    background-color: var(--primary-color);
+}
+
+/* Sohbet avatar stilleri */
+.iletisim-sohbet-avatar {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 50%;
+    margin-right: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid var(--border-color);
+}
+
+/* Sohbet avatar img stilleri */
+.iletisim-sohbet-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Sohbet avatar placeholder stilleri */
+.iletisim-sohbet-avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-radius: 50%;
+    text-transform: uppercase;
+}
+
+/* Sohbet içerik stilleri */
+.iletisim-sohbet-icerik {
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Boş mesaj stilleri */
+.iletisim-bos-mesaj {
+    padding: 30px;
+    text-align: center;
+    color: var(--secondary-color);
+    background-color: transparent;
+    border-radius: 8px;
+    margin: 20px auto;
+    border: 1px solid var(--border-color);
+    max-width: 500px;
+}
+
+/* Mesaj kutusu stilleri */
+.iletisim-mesaj-kutusu {
+    overflow-y: auto;
+    background-color: var(--content-bg);
+    padding: 15px 20px;
+    flex: 1;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* Mesaj kutusu after stilleri */
+.iletisim-mesaj-kutusu:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Mesaj stilleri */
+.iletisim-mesaj {
+    margin-bottom: 12px;
+    padding: 12px 16px;
+    position: relative;
+    max-width: 75%; /* Genişlik artırıldı */
+    word-wrap: break-word;
+    box-sizing: border-box;
+}
+
+/* Kendi mesaj stilleri */
+.iletisim-mesaj-kendim {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    margin-left: auto;
+    margin-right: 0;
+    border-radius: 18px 6px 18px 18px;
+    text-align: left;
+    float: right;
+    clear: both;
+}
+
+/* Karşı mesaj stilleri */
+.iletisim-mesaj-karsi {
+    background-color: var(--extra-light-color);
+    color: var(--white-color);
+    margin-right: auto;
+    margin-left: 0;
+    border-radius: 6px 18px 18px 18px;
+    float: left;
+    clear: both;
+}
+
+/* Sistem mesaj stilleri */
+.iletisim-mesaj-sistem {
+    background-color: rgba(255, 248, 225, 0.1);
+    color: var(--secondary-color);
+    margin: 15px auto;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    font-style: italic;
+    text-align: center;
+    max-width: 85%;
+    clear: both;
+    float: none;
+}
+
+/* Mesaj içerik stilleri */
+.iletisim-mesaj-icerik {
+    color: inherit;
+    line-height: 1.5;
+    font-size: 15px;
+}
+
+/* Mesaj gönderen stilleri */
+.iletisim-mesaj-gonderen {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+/* Mesaj zaman stilleri */
+.iletisim-mesaj-zaman {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 5px;
+    text-align: right;
+}
+
+/* Kendi mesaj zaman stilleri */
+.iletisim-mesaj-kendim .iletisim-mesaj-zaman {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Karşı mesaj zaman stilleri */
+.iletisim-mesaj-karsi .iletisim-mesaj-zaman {
+    color: var(--secondary-color);
+}
+
+/* Yazıyor bildirimi stilleri */
+.iletisim-yaziyor-bildirimi {
+    font-style: normal;
+    color: var(--white-color);
+    font-size: 13px;
+    min-height: 28px;
+    padding: 4px 15px;
+    background-color: var(--extra-light-color);
+    border-radius: 16px;
+    margin: 0 auto 10px 20px;
+    display: inline-flex;
+    align-items: center;
+    max-width: 200px;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    overflow: hidden;
+}
+
+/* Yazıyor bildirimi aktif stilleri */
+.iletisim-yaziyor-bildirimi.aktif {
+    opacity: 1;
+}
+
+/* Yazıyor noktalar stilleri */
+.iletisim-yaziyor-noktalar {
+    display: inline-block;
+    position: relative;
+    width: 20px;
+    text-align: left;
+    overflow: hidden;
+    height: 1.2em;
+}
+
+/* Yazıyor noktalar after stilleri */
+.iletisim-yaziyor-noktalar:after {
+    content: '...';
+    position: absolute;
+    left: 0;
+    animation: iletisim-yaziyor-animasyon 1.5s infinite;
+}
+
+/* Yazıyor animasyon keyframes */
+@keyframes iletisim-yaziyor-animasyon {
+    0% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+    100% { content: '.'; }
+}
+
+/* Mesaj formu stilleri */
+.iletisim-mesaj-form {
+    display: flex;
+    background-color: var(--content-bg);
+    padding: 15px 20px;
+    border-top: 1px solid var(--border-color);
+    width: 100%;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+/* Mesaj input stilleri */
+.iletisim-mesaj-input {
+    flex: 1;
+    padding: 12px 18px;
+    border: 1px solid var(--border-color);
+    border-radius: 25px;
+    margin-right: 12px;
+    background-color: var(--extra-light-color);
+    color: var(--white-color);
+    font-size: 15px;
+}
+
+/* Mesaj input focus stilleri */
+.iletisim-mesaj-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(29, 161, 242, 0.2);
+}
+
+/* Mesaj gönder butonu stilleri */
+.iletisim-mesaj-gonder {
+    padding: 12px 24px;
+    border-radius: 25px;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* Mesaj gönder butonu hover stilleri */
+.iletisim-mesaj-gonder:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+/* Bilgi butonu stilleri */
+.iletisim-buton-bilgi {
+    background-color: var(--extra-light-color);
+    color: var(--white-color);
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+/* Bilgi butonu hover stilleri */
+.iletisim-buton-bilgi:hover {
+    background-color: var(--hover-light);
+    text-decoration: none;
+}
+
+/* Feed başlık kapsayıcı stilleri */
+.iletisim-feed-baslik-kapsayici {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Feed başlık adı stilleri */
+.iletisim-feed-baslik-adi {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--white-color);
+}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Yeni Şifre Belirle - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-baslik">
+    <h1>Yeni Şifre Belirle</h1>
+</div>
+
+<div class="auth-ana-kapsayici">
+    <div class="auth-kart">
+        {% if validlink %}
+            <div class="auth-uyari auth-uyari-bilgi">
+                <div class="auth-uyari-ikon">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div class="auth-uyari-icerik">
+                    <p>Lütfen hesabınız için yeni bir şifre belirleyin.</p>
+                </div>
+            </div>
+
+            <form method="post" class="auth-form">
+                {% csrf_token %}
+                
+                {% if form.errors %}
+                    <div class="auth-uyari auth-uyari-tehlike">
+                        <div class="auth-uyari-ikon">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                        </div>
+                        <div class="auth-uyari-icerik">
+                            <p>{{ form.errors }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <div class="auth-form-grup">
+                    <label for="id_new_password1">Yeni Şifre</label>
+                    <input type="password" name="new_password1" id="id_new_password1" class="auth-form-kontrol" required>
+                    <small class="auth-form-metni">
+                        <ul>
+                            <li>Şifreniz diğer kişisel bilgilerinize çok benzer olamaz.</li>
+                            <li>Şifreniz en az 8 karakter içermelidir.</li>
+                            <li>Şifreniz yaygın olarak kullanılan bir şifre olamaz.</li>
+                            <li>Şifreniz tamamen sayısal olamaz.</li>
+                        </ul>
+                    </small>
+                </div>
+                
+                <div class="auth-form-grup">
+                    <label for="id_new_password2">Yeni Şifre (Tekrar)</label>
+                    <input type="password" name="new_password2" id="id_new_password2" class="auth-form-kontrol" required>
+                </div>
+                
+                <button type="submit" class="auth-buton auth-buton-birincil auth-w-100">
+                    <i class="fa-solid fa-key"></i> Şifreyi Değiştir
+                </button>
+            </form>
+        {% else %}
+            <div class="auth-uyari auth-uyari-tehlike">
+                <div class="auth-uyari-ikon">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <div class="auth-uyari-icerik">
+                    <p>Şifre sıfırlama bağlantısı geçersiz, muhtemelen daha önce kullanılmış olabilir. Lütfen yeni bir şifre sıfırlama bağlantısı isteyin.</p>
+                </div>
+            </div>
+            
+            <div class="auth-baglantilar">
+                <a href="{% url 'kullanicilar:sifre_sifirla' %}" class="auth-baglanti">
+                    <i class="fa-solid fa-key"></i>
+                    <span>Yeni şifre sıfırlama bağlantısı iste</span>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

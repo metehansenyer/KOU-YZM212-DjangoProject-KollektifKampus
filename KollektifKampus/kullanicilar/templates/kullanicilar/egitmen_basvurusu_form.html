@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!--- Sayfa başlığını ayarla -->
+{% block title %}Eğitmen Başvurusu - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/kullanici.css' %}">
+{% endblock %}
+
+<!--- Ana içerik bloğu -->
+{% block content %}
+<!--- Sayfa başlığı bölümü -->
+<div class="kullanici-baslik">
+    <h1>Eğitmen Başvurusu</h1>
+</div>
+
+<!--- İçerik kapsayıcısı -->
+<div class="kullanici-ana-kapsayici">
+    <!--- Başvuru formu kartı -->
+    <div class="kullanici-kart-kapsayici mb-4">
+        <!--- Kart başlığı -->
+        <div class="kullanici-kart-baslik">
+            <h5>Eğitmen Olmak İçin Başvur</h5>
+        </div>
+        <!--- Kart içeriği -->
+        <div class="kullanici-kart-icerik">
+            <!--- Başvuru bilgilendirme metni -->
+            <p class="mb-4">
+                Kollektif Kampüs'te eğitmen olarak diğer öğrencilere yardım etmek, bilgi ve deneyimlerinizi paylaşmak istiyorsanız 
+                aşağıdaki formu doldurarak başvurunuzu yapabilirsiniz. Başvurunuz moderatörler tarafından değerlendirilecektir.
+            </p>
+            
+            <!--- Reddedilmiş başvuru uyarısı -->
+            {% if reddedilmis_basvuru %}
+            <div class="kullanici-uyari kullanici-uyari-uyari">
+                <div class="kullanici-uyari-ikon">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div class="kullanici-uyari-icerik">
+                    <h5>Önceki Başvurunuz Reddedildi</h5>
+                    <p>{{ reddedilmis_basvuru.degerlendirilme_tarihi|date:"d.m.Y H:i" }} tarihinde değerlendirilen başvurunuz reddedilmiştir.</p>
+                    <p><strong>Red sebebi:</strong> {{ reddedilmis_basvuru.red_sebebi }}</p>
+                    <p>Aşağıdaki formu doldurarak yeniden başvurabilirsiniz.</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!--- Eğitmen başvuru formu -->
+            <form method="post" class="kullanici-form">
+                {% csrf_token %}
+                
+                <!--- Form genel hataları -->
+                {% if form.non_field_errors %}
+                    <div class="kullanici-uyari kullanici-uyari-tehlike">
+                        <div class="kullanici-uyari-ikon">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                        </div>
+                        <div class="kullanici-uyari-icerik">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <!--- Eğitim Bilgileri alanı -->
+                <div class="kullanici-form-grup mb-4">
+                    <label for="{{ form.egitim_bilgileri.id_for_label }}" class="kullanici-form-etiket">{{ form.egitim_bilgileri.label }} <span class="text-danger">*</span></label>
+                    <div class="kullanici-form-kontrol-sarmalayici">
+                        {{ form.egitim_bilgileri }}
+                    </div>
+                    <!--- Eğitim Bilgileri alanı hataları -->
+                    {% if form.egitim_bilgileri.errors %}
+                        <div class="kullanici-form-hata-mesaji mt-1">
+                            {% for error in form.egitim_bilgileri.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <!--- Eğitim Bilgileri alanı yardım metni -->
+                    <div class="kullanici-form-yardim kullanici-metin-solan small">{{ form.egitim_bilgileri.help_text }}</div>
+                </div>
+                
+                <!--- Deneyim alanı -->
+                <div class="kullanici-form-grup mb-4">
+                    <label for="{{ form.deneyim.id_for_label }}" class="kullanici-form-etiket">{{ form.deneyim.label }} <span class="text-danger">*</span></label>
+                    <div class="kullanici-form-kontrol-sarmalayici">
+                        {{ form.deneyim }}
+                    </div>
+                    <!--- Deneyim alanı hataları -->
+                    {% if form.deneyim.errors %}
+                        <div class="kullanici-form-hata-mesaji mt-1">
+                            {% for error in form.deneyim.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <!--- Deneyim alanı yardım metni -->
+                    <div class="kullanici-form-yardim kullanici-metin-solan small">{{ form.deneyim.help_text }}</div>
+                </div>
+                
+                <!--- Uzmanlık Alanları alanı -->
+                <div class="kullanici-form-grup mb-4">
+                    <label for="{{ form.uzmanlik_alanlari.id_for_label }}" class="kullanici-form-etiket">{{ form.uzmanlik_alanlari.label }} <span class="text-danger">*</span></label>
+                    <div class="kullanici-form-kontrol-sarmalayici">
+                        {{ form.uzmanlik_alanlari }}
+                    </div>
+                    <!--- Uzmanlık Alanları alanı hataları -->
+                    {% if form.uzmanlik_alanlari.errors %}
+                        <div class="kullanici-form-hata-mesaji mt-1">
+                            {% for error in form.uzmanlik_alanlari.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <!--- Uzmanlık Alanları alanı yardım metni -->
+                    <div class="kullanici-form-yardim kullanici-metin-solan small">{{ form.uzmanlik_alanlari.help_text }}</div>
+                </div>
+                
+                <!--- Motivasyon alanı -->
+                <div class="kullanici-form-grup mb-4">
+                    <label for="{{ form.motivasyon.id_for_label }}" class="kullanici-form-etiket">{{ form.motivasyon.label }} <span class="text-danger">*</span></label>
+                    <div class="kullanici-form-kontrol-sarmalayici">
+                        {{ form.motivasyon }}
+                    </div>
+                    <!--- Motivasyon alanı hataları -->
+                    {% if form.motivasyon.errors %}
+                        <div class="kullanici-form-hata-mesaji mt-1">
+                            {% for error in form.motivasyon.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <!--- Motivasyon alanı yardım metni -->
+                    <div class="kullanici-form-yardim kullanici-metin-solan small">{{ form.motivasyon.help_text }}</div>
+                </div>
+                
+                <!--- Form alt kısmı ve gönder butonu -->
+                <div class="kullanici-form-alt">
+                    <button type="submit" class="kullanici-buton kullanici-buton-birincil">
+                        <i class="fa-solid fa-paper-plane"></i> Başvuruyu Gönder
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!--- Eğitmen rolü hakkında bilgilendirme kartı -->
+    <div class="kullanici-kart-kapsayici">
+        <!--- Kart başlığı -->
+        <div class="kullanici-kart-baslik">
+            <h5>Eğitmen Rolü Hakkında</h5>
+        </div>
+        <!--- Kart içeriği -->
+        <div class="kullanici-kart-icerik">
+            <!--- Yapabilecekler listesi başlığı -->
+            <div class="egitmen-bolum-baslik">Eğitmen olarak yapabilecekleriniz:</div>
+            <!--- Yapabilecekler listesi -->
+            <ul class="egitmen-bolum-liste mb-4">
+                <li><i class="fa-solid fa-check text-success me-2"></i> Öğrencilerin oluşturduğu ders isteklerine başvurabilirsiniz</li>
+                <li><i class="fa-solid fa-check text-success me-2"></i> Bilgi ve deneyimlerinizi diğer öğrencilerle paylaşabilirsiniz</li>
+                <li><i class="fa-solid fa-check text-success me-2"></i> Kendi uzmanlık alanlarınızda bilgi aktarımı yapabilirsiniz</li>
+                <li><i class="fa-solid fa-check text-success me-2"></i> Ders verdiğiniz öğrencilerden değerlendirme alabilir ve kendi puanınızı oluşturabilirsiniz</li>
+            </ul>
+            
+            <!--- Sorumluluklar listesi başlığı -->
+            <div class="egitmen-bolum-baslik">Eğitmen sorumluluklarınız:</div>
+            <!--- Sorumluluklar listesi -->
+            <ul class="egitmen-bolum-liste">
+                <li><i class="fa-solid fa-info-circle text-info me-2"></i> Başvurduğunuz ve kabul edildiğiniz derslerde öğrencilere yardımcı olmak</li>
+                <li><i class="fa-solid fa-info-circle text-info me-2"></i> Topluluk kurallarına uymak ve diğer kullanıcılara saygılı davranmak</li>
+                <li><i class="fa-solid fa-info-circle text-info me-2"></i> Düzenli olarak platform üzerinden iletişimde kalmak</li>
+                <li><i class="fa-solid fa-info-circle text-info me-2"></i> Eğitim kalitesini yüksek tutmak ve öğrencilere elinden gelen en iyi yardımı sunmak</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

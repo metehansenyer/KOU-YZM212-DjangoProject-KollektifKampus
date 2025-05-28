@@ -1,0 +1,14 @@
+{% autoescape off %}
+Merhaba {{ user.get_username }},
+
+Kollektif Kampüs hesabınız için şifre sıfırlama talebinde bulundunuz. Şifrenizi sıfırlamak için aşağıdaki bağlantıya tıklayın:
+
+{{ protocol }}://{{ domain }}{% url 'kullanicilar:sifre_sifirla_onay' uidb64=uid token=token %}
+
+Bu bağlantı, güvenlik nedeniyle yalnızca bir kez kullanılabilir ve belirli bir süre sonra geçerliliğini yitirecektir.
+
+Eğer bu talebi siz yapmadıysanız, lütfen bu e-postayı dikkate almayın.
+
+Saygılarımızla,
+Kollektif Kampüs Ekibi
+{% endautoescape %} 

@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Sohbetlerim - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/iletisim.css' %}">
+{% endblock %}
+
+{% block content %}
+<!--- Sayfa başlığı bölümü -->
+<div class="iletisim-baslik">
+    <div class="iletisim-feed-baslik-kapsayici">
+        <span class="iletisim-feed-baslik-adi">Sohbetler</span>
+    </div>
+</div>
+
+<!--- Sohbet listesi veya boş durum mesajı için ana içerik alanı -->
+<div class="iletisim-kart-icerik">
+    <!--- Sohbetler varsa listeyi göster -->
+    {% if sohbetler %}
+        <!--- Sohbet listesi için kapsayıcı -->
+        <div class="iletisim-liste-grup">
+            <!--- Her bir sohbet için döngü -->
+            {% for sohbet in sohbetler %}
+                <!--- Sohbet detay sayfasına giden link -->
+                <a href="{% url 'iletisim:sohbet_detay' sohbet_id=sohbet.id %}" class="iletisim-liste-element-link">
+                    <!--- Sohbet öğesinin içeriğini düzenlemek için esnek kapsayıcı -->
+                    <div class="iletisim-esnek">
+                        <!--- Karşı tarafı bulma (kendimiz dışındaki katılımcı) -->
+                        {% with karsi_taraf=sohbet.katilimcilar.all|dictsort:"user.username"|first %}
+                            <!--- Eğer karşı taraf varsa (kendimiz değilse) avatarı göster -->
+                            {% if karsi_taraf != kullanici_profili %}
+                                <!-- Sohbet avatarı alanı -->
+                                <div class="iletisim-sohbet-avatar">
+                                    <!--- Karşı tarafın profil fotoğrafı varsa göster -->
+                                    {% if karsi_taraf.profil_fotografi_index > 0 %}
+                                    <img src="{% static 'img/profil_fotografi_' %}{{ karsi_taraf.profil_fotografi_index }}.png" alt="{{ karsi_taraf.user.username }}">
+                                    <!--- Profil fotoğrafı yoksa baş harfini göster -->
+                                    {% else %}
+                                        <div class="iletisim-sohbet-avatar-placeholder">{{ karsi_taraf.user.username|first|upper }}</div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+
+                        <!--- Sohbet içeriği alanı (başlık, katılımcılar, son mesaj) -->
+                        <div class="iletisim-sohbet-icerik">
+                            <!--- Başlık, katılımcılar ve tarih/okunmamış mesaj sayısı için esnek kapsayıcı -->
+                            <div class="iletisim-esnek iletisim-esnek-yatay-ara">
+                                <!-- Sohbet başlığı ve katılımcılar -->
+                                <div>
+                                    <!--- Ders isteği başlığı -->
+                                    <h5>{{ sohbet.ders_istegi.talep_basligi }}</h5>
+                                    <!--- Sohbet katılımcılarının listesi (kendimiz hariç) -->
+                                    <p class="iletisim-metin-solan mb-1">
+                                        {% for katilimci in sohbet.katilimcilar.all %}
+                                            {% if katilimci != kullanici_profili %}
+                                                {{ katilimci.user.get_full_name|default:katilimci.user.username }}
+                                                {% if not forloop.last %} {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                                <!-- Son mesaj tarihi ve okunmamış mesaj sayısı -->
+                                <div class="iletisim-metin-sag">
+                                    <!--- Son mesaj veya oluşturulma tarihi -->
+                                    <span class="iletisim-metin-solan">
+                                        {% if sohbet.son_mesaj_tarihi %}
+                                            {{ sohbet.son_mesaj_tarihi|date:"d.m.Y H:i" }}
+                                        {% else %}
+                                            {{ sohbet.olusturulma_tarihi|date:"d.m.Y H:i" }}
+                                        {% endif %}
+                                    </span>
+                                    
+                                    <!--- Okunmamış mesaj sayısı varsa rozeti göster -->
+                                    {% if sohbet.okunmayan_mesaj_sayisi > 0 %}
+                                        <span class="iletisim-rozet iletisim-rozet-birincil">{{ sohbet.okunmayan_mesaj_sayisi }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!--- Sohbetin son mesajını al -->
+                            {% with son_mesaj=sohbet.mesajlar.last %}
+                                 <!-- Son mesaj varsa içeriğini göster -->
+                                {% if son_mesaj %}
+                                    <p class="mb-0 iletisim-metin-solan">
+                                        <!--- Mesajı gönderenin kim olduğunu belirt -->
+                                        {% if son_mesaj.gonderen_kullanici %}
+                                            {% if son_mesaj.gonderen_kullanici == kullanici_profili %}
+                                                <strong>Sen:</strong>
+                                            {% else %}
+                                                <strong>{{ son_mesaj.gonderen_kullanici.user.get_full_name|default:son_mesaj.gonderen_kullanici.user.username }}:</strong>
+                                            {% endif %}
+                                        {% else %}
+                                            <strong>Sistem:</strong>
+                                        {% endif %}
+                                        <!--- Son mesaj içeriğini kısaltarak göster -->
+                                        {{ son_mesaj.icerik|truncatechars:80 }}
+                                    </p>
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    <!--- Sohbet yoksa boş durum mesajını göster -->
+    {% else %}
+        <!--- Boş sohbet listesi mesajı -->
+        <div class="iletisim-bos-mesaj">
+            <p>Henüz hiç sohbet bulunmuyor.</p>
+            <p>Bir ders istediğinde eğitmen olarak kabul edildiğinizde veya ders talebine eğitmen atandığında otomatik olarak sohbet başlatılır.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

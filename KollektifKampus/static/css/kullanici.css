@@ -1,0 +1,1200 @@
+/* Kullanıcı sayfaları genel stilleri */
+
+/* Kullanıcı kapsayıcısı */
+.kullanici-kapsayici {
+    width: 100%;
+    color: var(--white-color);
+}
+
+/* Kullanıcı sayfası başlığı */
+.kullanici-baslik {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1.25rem;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    background-color: rgba(21, 24, 28, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+/* Kullanıcı ana içerik kapsayıcısı */
+.kullanici-ana-kapsayici {
+    padding: 1rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Kullanıcı kart kapsayıcısı */
+.kullanici-kart-kapsayici {
+    background-color: var(--content-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+/* Kullanıcı kart başlığı */
+.kullanici-kart-baslik {
+    background-color: rgba(29, 161, 242, 0.1);
+    border-bottom: 1px solid var(--border-color);
+    padding: 15px 20px;
+}
+
+/* Kullanıcı kart içeriği */
+.kullanici-kart-icerik {
+    padding: 20px;
+}
+
+/* Kullanıcı formu */
+.kullanici-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Kullanıcı form grubu */
+.kullanici-form-grup {
+    margin-bottom: 20px;
+}
+
+/* Kullanıcı form etiketi */
+.kullanici-form-etiket {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--light-color);
+    display: block;
+}
+
+/* Kullanıcı form kontrol elemanı (input, textarea vb.) */
+.kullanici-form-kontrol {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: var(--extra-light-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--white-color);
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+/* Kullanıcı form kontrol elemanı focus durumu */
+.kullanici-form-kontrol:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(29, 161, 242, 0.3);
+}
+
+/* Kullanıcı form kontrol sarmalayıcısı */
+.kullanici-form-kontrol-sarmalayici {
+    position: relative;
+}
+
+/* Kullanıcı form yardım metni */
+.kullanici-form-yardim {
+    font-size: 0.875rem;
+    margin-top: 6px;
+    color: var(--secondary-color);
+}
+
+/* Kullanıcı form hata mesajı */
+.kullanici-form-hata-mesaji {
+    color: var(--danger-color);
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+/* Kullanıcı form alt bölümü */
+.kullanici-form-alt {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.5rem;
+}
+
+/* Kullanıcı butonu */
+.kullanici-buton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+/* Kullanıcı butonu içindeki ikon */
+.kullanici-buton i {
+    margin-right: 8px;
+}
+
+/* Kullanıcı birincil buton */
+.kullanici-buton-birincil {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+}
+
+/* Kullanıcı birincil buton hover durumu */
+.kullanici-buton-birincil:hover {
+    background-color: var(--primary-hover);
+    color: var(--white-color);
+    text-decoration: none;
+}
+
+/* Kullanıcı ikincil buton */
+.kullanici-buton-ikincil {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+/* Kullanıcı ikincil buton hover durumu */
+.kullanici-buton-ikincil:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+/* Kullanıcı uyarı kutusu */
+.kullanici-uyari {
+    padding: 15px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+}
+
+/* Kullanıcı uyarı ikonu */
+.kullanici-uyari-ikon {
+    margin-right: 12px;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+/* Kullanıcı uyarı içeriği */
+.kullanici-uyari-icerik {
+    flex: 1;
+}
+
+/* Kullanıcı uyarı (warning) tipi */
+.kullanici-uyari-uyari {
+    background-color: rgba(255, 193, 7, 0.2);
+    border: 1px solid rgba(255, 193, 7, 0.4);
+    color: #ffd24c;
+}
+
+/* Kullanıcı uyarı (danger) tipi */
+.kullanici-uyari-tehlike {
+    background-color: rgba(220, 53, 69, 0.2);
+    border: 1px solid rgba(220, 53, 69, 0.4);
+    color: #ff6b6b;
+}
+
+/* Kullanıcı uyarı (info) tipi */
+.kullanici-uyari-bilgi {
+    background-color: rgba(29, 161, 242, 0.2);
+    border: 1px solid rgba(29, 161, 242, 0.3);
+    color: #1da1f2;
+}
+
+/* Kullanıcı uyarı (success) tipi */
+.kullanici-uyari-basari {
+    background-color: rgba(0, 186, 124, 0.2);
+    border: 1px solid rgba(0, 186, 124, 0.3);
+    color: #00ba7c;
+}
+
+/* Kullanıcı soluk metin */
+.kullanici-metin-solan {
+    color: var(--secondary-color);
+}
+
+/* Eğitmen başvuru durumu rozeti */
+.egitmen-durum-rozet {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Eğitmen başvuru beklemede durumu */
+.egitmen-durum-beklemede {
+    background-color: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.4);
+}
+
+/* Eğitmen başvuru onaylandı durumu */
+.egitmen-durum-onaylandi {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.4);
+}
+
+/* Eğitmen başvuru reddedildi durumu */
+.egitmen-durum-reddedildi {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.4);
+}
+
+/* Eğitmen detay bölümü */
+.egitmen-detay-bolum {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+/* Eğitmen detay öğesi */
+.egitmen-detay-item {
+    flex: 1 0 calc(50% - 15px);
+}
+
+/* Eğitmen detay etiketi */
+.egitmen-detay-etiket {
+    font-weight: 600;
+    color: var(--light-color);
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+/* Eğitmen detay değeri */
+.egitmen-detay-deger {
+    color: var(--secondary-color);
+}
+
+/* Eğitmen durum mesajı */
+.egitmen-durum-mesaj {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+    border-radius: 16px;
+    margin: 20px 0;
+}
+
+/* Eğitmen durum mesajı beklemede tipi */
+.egitmen-durum-mesaj-beklemede {
+    background-color: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+/* Eğitmen durum mesajı onaylandı tipi */
+.egitmen-durum-mesaj-onaylandi {
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+/* Eğitmen durum mesajı reddedildi tipi */
+.egitmen-durum-mesaj-reddedildi {
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+/* Eğitmen durum mesajı ikonu */
+.egitmen-durum-mesaj-ikon {
+    font-size: 30px;
+    margin-right: 20px;
+}
+
+/* Eğitmen durum mesajı beklemede ikonu rengi */
+.egitmen-durum-mesaj-beklemede .egitmen-durum-mesaj-ikon {
+    color: #ffc107;
+}
+
+/* Eğitmen durum mesajı onaylandı ikonu rengi */
+.egitmen-durum-mesaj-onaylandi .egitmen-durum-mesaj-ikon {
+    color: #28a745;
+}
+
+/* Eğitmen durum mesajı reddedildi ikonu rengi */
+.egitmen-durum-mesaj-reddedildi .egitmen-durum-mesaj-ikon {
+    color: #dc3545;
+}
+
+/* Eğitmen durum mesajı içeriği başlığı */
+.egitmen-durum-mesaj-icerik h6 {
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+/* Eğitmen durum mesajı beklemede başlık rengi */
+.egitmen-durum-mesaj-beklemede .egitmen-durum-mesaj-icerik h6 {
+    color: #ffc107;
+}
+
+/* Eğitmen durum mesajı onaylandı başlık rengi */
+.egitmen-durum-mesaj-onaylandi .egitmen-durum-mesaj-icerik h6 {
+    color: #28a745;
+}
+
+/* Eğitmen durum mesajı reddedildi başlık rengi */
+.egitmen-durum-mesaj-reddedildi .egitmen-durum-mesaj-icerik h6 {
+    color: #dc3545;
+}
+
+/* Eğitmen bölüm başlığı */
+.egitmen-bolum-baslik {
+    font-weight: 600;
+    font-size: 18px;
+    margin: 30px 0 20px;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+}
+
+/* Eğitmen bölüm listesi */
+.egitmen-bolum-liste {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+/* Eğitmen bölüm liste öğesi */
+.egitmen-bolum-liste li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    color: var(--light-color);
+}
+
+/* Eğitmen detay paneli */
+.egitmen-detay-panel {
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Eğitmen detay panel başlığı */
+.egitmen-detay-panel-baslik {
+    background-color: rgba(29, 161, 242, 0.05);
+    padding: 12px 15px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--light-color);
+    display: flex;
+    align-items: center;
+}
+
+/* Eğitmen detay panel içeriği */
+.egitmen-detay-panel-icerik {
+    padding: 15px;
+    color: var(--secondary-color);
+}
+
+/* Profil kapsayıcısı */
+.profil-kapsayici {
+    width: 100%;
+    color: var(--white-color);
+}
+
+/* Profil banner alanı */
+.profil-banner {
+    background-color: var(--extra-light-color);
+    padding: 20px 0;
+    position: relative;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Profil banner içeriği */
+.profil-banner-icerik {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Profil banner başlığı */
+.profil-banner h2 {
+    font-size: 26px;
+    font-weight: bold;
+    margin: 0;
+    color: var(--white-color);
+}
+
+/* Profil ana içerik alanı */
+.profil-ana-icerik {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Profil kartı */
+.profil-kart {
+    background-color: var(--content-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    padding: 30px;
+}
+
+.profil-alan {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    align-content: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* Profil avatar bölümü */
+.profil-avatar-bolum {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.profil-sol-alan {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    flex: 1;
+    justify-content: flex-start;
+}
+
+.profil-sag-alan {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 15px;
+    flex: 1;
+    margin-top: 15px;
+}
+
+/* Profil avatar resmi */
+.profil-avatar-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid var(--primary-color);
+    object-fit: cover;
+}
+
+/* Profil avatar yer tutucu */
+.profil-avatar-placeholder {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Profil isim alanı */
+.profil-isim {
+    text-align: left;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+/* Profil isim başlığı */
+.profil-isim h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+}
+
+/* Profil kullanıcı adı */
+.profil-kullanici-adi {
+    font-size: 16px;
+    color: var(--secondary-color);
+}
+
+/* Profil butonları kapsayıcısı */
+.profil-butonlar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+/* Profil butonu */
+.profil-buton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.profil-buton-degerlendirme {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Profil butonu içindeki ikon */
+.profil-buton i {
+    margin-right: 6px;
+}
+
+/* Profil butonu hover durumu */
+.profil-buton:hover {
+    background-color: #1a91da;
+    text-decoration: none;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Profil ikincil buton */
+.profil-buton-ikincil {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+/* Profil ikincil buton hover durumu */
+.profil-buton-ikincil:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+/* Profil başarı butonu */
+.profil-buton-basari {
+    background-color: #28a745;
+    color: white;
+}
+
+/* Profil başarı butonu hover durumu */
+.profil-buton-basari:hover {
+    background-color: #218838;
+    color: white;
+}
+
+/* Profil tehlike butonu */
+.profil-buton-tehlike {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Profil tehlike butonu hover durumu */
+.profil-buton-tehlike:hover {
+    background-color: #c82333;
+    color: white;
+}
+
+/* Profil küçük buton */
+.profil-buton-sm {
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+/* Profil pasif buton */
+.profil-buton-pasif {
+    background-color: #6E767D;
+    cursor: default;
+    opacity: 0.8;
+}
+
+/* Profil pasif buton hover durumu */
+.profil-buton-pasif:hover {
+    background-color: #6E767D;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Profil bilgi kartları kapsayıcısı */
+.profil-bilgi-kartlari {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Profil bilgi kartı */
+.profil-bilgi-kart {
+    flex: 1;
+    min-width: 300px;
+    background-color: var(--extra-light-color);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 10px;
+}
+
+/* Profil bilgi kartı başlığı */
+.profil-bilgi-baslik {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+/* Profil bilgi satırı */
+.profil-bilgi-satir {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+/* Profil bilgi etiketi */
+.profil-bilgi-etiket {
+    font-weight: 500;
+    width: 100px;
+    color: var(--secondary-color);
+}
+
+/* Profil bilgi değeri */
+.profil-bilgi-deger {
+    flex: 1;
+}
+
+/* Profil değerlendirme bölümü */
+.profil-degerlendirme {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0;
+}
+
+/* Profil puanı */
+.profil-puan {
+    font-size: 40px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Profil yıldızları */
+.profil-yildizlar {
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+/* Dolu yıldız */
+.yildiz-dolu {
+    color: #FFAD1F;
+}
+
+/* Boş yıldız */
+.yildiz-bos {
+    color: var(--border-color);
+}
+
+/* Profil değerlendirme sayısı */
+.profil-degerlendirme-sayisi {
+    color: var(--secondary-color);
+    font-size: 14px;
+}
+
+/* Profil değerlendirme yok mesajı */
+.profil-degerlendirme-yok {
+    color: var(--secondary-color);
+    margin: 20px 0;
+    text-align: center;
+}
+
+/* Profil sekmeleri kapsayıcısı */
+.profil-sekmeler {
+    margin-top: 30px;
+}
+
+/* Profil sekme başlıkları kapsayıcısı */
+.profil-sekme-basliklar {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+
+/* Profil sekme başlığı */
+.profil-sekme-baslik {
+    padding: 15px 20px;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    color: var(--secondary-color);
+    transition: color 0.2s;
+}
+
+/* Profil sekme başlığı hover durumu */
+.profil-sekme-baslik:hover {
+    color: var(--white-color);
+}
+
+/* Profil sekme başlığı aktif durumu */
+.profil-sekme-baslik.active {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+/* Profil sekme başlığı aktif durumu alt çizgisi */
+.profil-sekme-baslik.active:after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 3px 3px 0 0;
+}
+
+/* Profil sekme başlığı içindeki ikon */
+.profil-sekme-baslik i {
+    margin-right: 8px;
+}
+
+/* Profil sekme içeriği */
+.profil-sekme-icerik {
+    display: none;
+}
+
+/* Profil sekme içeriği aktif durumu */
+.profil-sekme-icerik.active {
+    display: block;
+}
+
+/* Profil liste kapsayıcısı */
+.profil-liste {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Profil liste öğesi */
+.profil-liste-item {
+    background-color: var(--content-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s;
+}
+
+/* Profil liste öğesi hover durumu */
+.profil-liste-item:hover {
+    background-color: var(--extra-light-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Profil liste başlığı */
+.profil-liste-baslik {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Profil liste başlığı h4 etiketi */
+.profil-liste-baslik h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Profil liste tarihi */
+.profil-liste-tarih {
+    font-size: 14px;
+    color: var(--secondary-color);
+}
+
+/* Profil liste metni */
+.profil-liste-metin {
+    margin-bottom: 15px;
+    color: var(--light-color);
+}
+
+/* Profil liste etiketi */
+.profil-liste-etiket {
+    font-weight: 500;
+    color: var(--secondary-color);
+}
+
+/* Profil liste alt bölümü */
+.profil-liste-alt {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Profil liste butonları kapsayıcısı */
+.profil-liste-butonlar {
+    display: flex;
+    gap: 8px;
+}
+
+/* Profil liste boş durumu */
+.profil-liste-bos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    color: var(--secondary-color);
+    text-align: center;
+}
+
+/* Profil liste boş durumu ikonu */
+.profil-liste-bos i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+/* Profil durum rozeti */
+.profil-durum-rozet {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Durum aktif rozeti */
+.durum-aktif {
+    background-color: #17BF63;
+    color: white;
+}
+
+/* Durum kapalı rozeti */
+.durum-kapali {
+    background-color: #E0245E;
+    color: white;
+}
+
+/* Durum atandı rozeti */
+.durum-atandi {
+    background-color: #1DA1F2;
+    color: white;
+}
+
+/* Durum tamamlandı rozeti */
+.durum-tamamlandi {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Durum beklemede rozeti */
+.durum-beklemede {
+    background-color: #FFAD1F;
+    color: black;
+}
+
+/* Profil mini puan göstergesi */
+.profil-mini-puan {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1DA1F2;
+    color: white;
+    border-radius: 30px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Profil rol rozetleri kapsayıcısı */
+.profil-rozetler {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+/* Profil rol rozeti */
+.profil-rozet {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+/* Profil rol rozeti hover durumu */
+.profil-rozet:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Profil rol rozeti içindeki ikon */
+.profil-rozet i {
+    margin-right: 5px;
+    font-size: 11px;
+}
+
+/* Normal kullanıcı rol rozeti */
+.profil-rozet-normal {
+    background-color: #6c757d;
+}
+
+/* Eğitmen rol rozeti */
+.profil-rozet-egitmen {
+    background-color: #28a745;
+}
+
+/* Moderatör rol rozeti */
+.profil-rozet-moderator {
+    background-color: #007bff;
+}
+
+/* Admin rol rozeti */
+.profil-rozet-admin {
+    background-color: #dc3545;
+}
+
+/* Engelli kullanıcı rol rozeti */
+.profil-rozet-engelli {
+    background-color: #e83e8c;
+}
+
+/* Profil güncelleme form bölümü */
+.profil-form-bolum {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Profil güncelleme form son bölümü */
+.profil-form-bolum:last-of-type {
+    border-bottom: none;
+}
+
+/* Profil güncelleme form başlığı */
+.profil-form-baslik {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: var(--white-color);
+}
+
+/* Profil güncelleme form grubu */
+.profil-form-grup {
+    margin-bottom: 20px;
+}
+
+/* Profil güncelleme form grubu etiketi */
+.profil-form-grup label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--white-color);
+}
+
+/* Profil güncelleme form input ve textarea stilleri */
+.profil-form-grup input[type="text"],
+.profil-form-grup input[type="url"],
+.profil-form-grup input[type="email"],
+.profil-form-grup textarea {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 15px;
+    background-color: var(--extra-light-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--white-color);
+    transition: all 0.2s ease;
+}
+
+/* Profil güncelleme form input ve textarea focus durumu */
+.profil-form-grup input:focus,
+.profil-form-grup textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(29, 161, 242, 0.3);
+    background-color: rgba(21, 24, 28, 0.9);
+}
+
+/* Profil güncelleme form textarea yüksekliği */
+.profil-form-grup textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Profil güncelleme form yardım metni */
+.profil-form-yardim {
+    font-size: 13px;
+    color: var(--secondary-color);
+    margin-top: 5px;
+}
+
+/* Profil güncelleme form hata kutusu */
+.profil-form-hata {
+    display: flex;
+    align-items: center;
+    background-color: rgba(224, 36, 94, 0.1);
+    border: 1px solid var(--danger-color);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    color: var(--danger-color);
+}
+
+/* Profil güncelleme form hata ikonu */
+.profil-form-hata i {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+/* Profil güncelleme form hata mesajı metni */
+.profil-form-hata-mesaji {
+    color: var(--danger-color);
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+/* Profil güncelleme formu */
+.profil-guncelleme-form {
+    width: 100%;
+}
+
+/* Profil güncelleme form butonları */
+.profil-form-butonlar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Rol değiştirme formu */
+.rol-degistir-form {
+    margin-top: 5px;
+}
+
+/* Profil select kutusu */
+.profil-select {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background-color: var(--extra-light-color);
+    color: var(--white-color);
+    margin-right: 10px;
+}
+
+/* Engelleme input grubu */
+.engelleme-input-group {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+/* Profil input alanı */
+.profil-input {
+    width: 60px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background-color: var(--extra-light-color);
+    color: var(--white-color);
+    text-align: center;
+}
+
+/* Engelleme birimi metni */
+.engelleme-birim {
+    margin-left: 5px;
+    color: var(--secondary-color);
+}
+
+/* Profil birincil buton */
+.profil-buton-primary {
+    background-color: #1DA1F2;
+    color: white;
+}
+
+/* Profil birincil buton hover durumu */
+.profil-buton-primary:hover {
+    background-color: #1a91da;
+}
+
+/* Ban aktif durumu metni */
+.ban-aktif {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+/* Profil fotoğrafı seçim alanı için stiller */
+.profil-foto-secim {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.profil-foto-secim label {
+    cursor: pointer;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.profil-foto-secim label:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.profil-foto-secim input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.profil-foto-secim img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: none;
+}
+
+.profil-foto-secim input[type="radio"]:checked + img {
+    border: 5px solid #3498db;
+    box-shadow: none;
+    transform: none;
+}
+
+.profil-foto-secim .varsayilan-avatar {
+    background-color: #3498db;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+/* Varsayılan avatar seçildiğinde beyaz çerçeve */
+.profil-foto-secim input[type="radio"]:checked + .varsayilan-avatar {
+    border: 5px solid white;
+    box-shadow: none;
+    transform: none;
+    border-radius: 50%;
+}

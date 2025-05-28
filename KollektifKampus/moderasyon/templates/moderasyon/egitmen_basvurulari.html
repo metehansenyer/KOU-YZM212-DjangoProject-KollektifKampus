@@ -1,0 +1,165 @@
+{% extends 'moderasyon/panel_temel.html' %}
+
+{% load static %}
+
+{% block panel_content %}
+<!--- Ana moderasyon kartı -->
+<div class="mod-card">
+    <!--- Kart başlığı alanı -->
+    <div class="mod-card-title">
+        <!--- Başlık metni ve ikonu -->
+        <span><i class="fa-solid fa-clipboard-check"></i> Bekleyen Eğitmen Başvuruları</span>
+    </div>
+
+    <!--- Arama ve filtreleme formu -->
+    <form method="get" class="mod-filter-form">
+        <!--- Arama giriş alanı -->
+        <input type="text" name="arama" placeholder="Başvuran veya ders isteği ara..." class="mod-input" value="{{ arama }}">
+
+        <!--- Durum filtreleme seçeneği -->
+        <select name="durum" class="mod-select">
+            <option value="">Tüm Durumlar</option>
+            <option value="BEKLEMEDE" {% if durum == 'BEKLEMEDE' %}selected{% endif %}>Beklemede</option>
+            <option value="KABUL_EDILDI" {% if durum == 'KABUL_EDILDI' %}selected{% endif %}>Kabul Edildi</option>
+            <option value="REDDEDILDI" {% if durum == 'REDDEDILDI' %}selected{% endif %}>Reddedildi</option>
+        </select>
+
+        <!--- Sıralama seçeneği -->
+        <select name="siralama" class="mod-select">
+            <option value="tarih_yeni" {% if siralama == 'tarih_yeni' %}selected{% endif %}>En Yeni</option>
+            <option value="tarih_eski" {% if siralama == 'tarih_eski' %}selected{% endif %}>En Eski</option>
+        </select>
+
+        <!--- Arama butonu -->
+        <button type="submit" class="mod-btn mod-btn-primary">
+            <i class="fa-solid fa-search"></i> Ara
+        </button>
+    </form>
+
+    <!--- Eğitmen başvuruları tablosu için duyarlı kapsayıcı -->
+    <div class="mod-table-responsive">
+        <!--- Eğitmen başvuruları tablosu -->
+        <table class="mod-table">
+            <!--- Tablo başlığı -->
+            <thead>
+                <tr>
+                    <th>Başvuran</th>
+                    <th class="d-none-sm">Ders İsteği</th>
+                    <th class="d-none-md">Talep Eden</th>
+                    <th class="d-none-md">Tarih</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <!--- Tablo içeriği -->
+            <tbody>
+                <!--- Her bir başvuru için döngü -->
+                {% for basvuru in basvurular %}
+                <tr>
+                    <td>
+                        <!--- Başvuran kullanıcı bilgisi -->
+                        <div class="basvuran-info">
+                            <!--- Kullanıcı profili bağlantısı -->
+                            <a href="{% url 'kullanicilar:profil_detay' username=basvuru.basvuran_egitmen.user.username %}">
+                                {{ basvuru.basvuran_egitmen.user.username }}
+                            </a>
+                            <!--- Küçük ekranlarda gösterilen ders isteği bilgisi -->
+                            <div class="istek-bilgi d-sm-only">
+                                {{ basvuru.ders_istegi.talep_basligi|truncatechars:25 }}
+                            </div>
+                        </div>
+                    </td>
+                    <!--- Küçük ekranlarda gizlenen ders isteği başlığı -->
+                    <td class="d-none-sm">{{ basvuru.ders_istegi.talep_basligi }}</td>
+                    <!--- Orta ekranlarda gizlenen talep eden kullanıcı -->
+                    <td class="d-none-md">
+                        <!--- Talep eden kullanıcı profili bağlantısı -->
+                        <a href="{% url 'kullanicilar:profil_detay' username=basvuru.ders_istegi.talep_eden_kullanici.user.username %}">
+                            {{ basvuru.ders_istegi.talep_eden_kullanici.user.username }}
+                        </a>
+                    </td>
+                    <!--- Orta ekranlarda gizlenen başvuru tarihi -->
+                    <td class="d-none-md">{{ basvuru.basvuru_tarihi|date:"d.m.Y" }}</td>
+                    <td>
+                        <!--- İnceleme butonu -->
+                        <a href="{% url 'moderasyon:ders_istegi_incele' ders_istegi_id=basvuru.ders_istegi.id %}" class="mod-btn mod-btn-primary mod-btn-sm buton-esit">
+                            <i class="fa-solid fa-eye"></i> <span class="d-none-sm">İncele</span>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <!--- Başvuru bulunamadığında gösterilecek satır -->
+                <tr>
+                    <td colspan="5" class="text-center">Bekleyen eğitmen başvurusu bulunamadı.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!--- Sayfalama alanı -->
+    {% if is_paginated %}
+    <div class="mod-pagination">
+        <!--- Önceki sayfa varsa -->
+        {% if page_obj.has_previous %}
+            <!--- İlk sayfa bağlantısı -->
+            <a href="?page=1{% if arama %}&arama={{ arama }}{% endif %}{% if durum %}&durum={{ durum }}{% endif %}{% if siralama %}&siralama={{ siralama }}{% endif %}" class="page-link">İlk</a>
+            <!--- Önceki sayfa bağlantısı -->
+            <a href="?page={{ page_obj.previous_page_number }}{% if arama %}&arama={{ arama }}{% endif %}{% if durum %}&durum={{ durum }}{% endif %}{% if siralama %}&siralama={{ siralama }}{% endif %}" class="page-link">Önceki</a>
+        {% endif %}
+
+        <!--- Mevcut sayfa bilgisi -->
+        <span class="page-link current">
+            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+
+        <!--- Sonraki sayfa varsa -->
+        {% if page_obj.has_next %}
+            <!--- Sonraki sayfa bağlantısı -->
+            <a href="?page={{ page_obj.next_page_number }}{% if arama %}&arama={{ arama }}{% endif %}{% if durum %}&durum={{ durum }}{% endif %}{% if siralama %}&siralama={{ siralama }}{% endif %}" class="page-link">Sonraki</a>
+            <!--- Son sayfa bağlantısı -->
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if arama %}&arama={{ arama }}{% endif %}{% if durum %}&durum={{ durum }}{% endif %}{% if siralama %}&siralama={{ siralama }}{% endif %}" class="page-link">Son</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+<!--- Panel içeriği bloğu biter -->
+
+<!--- Ek CSS bloğu başlar -->
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* Başvuran bilgisi kapsayıcısı stilleri */
+    .basvuran-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Başvuran kullanıcı adı bağlantısı stilleri */
+    .basvuran-info a {
+        font-weight: 500;
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+
+    /* Küçük ekranlarda gösterilen istek bilgisi stilleri */
+    .istek-bilgi {
+        font-size: 12px;
+        color: var(--secondary-color);
+        margin-top: 4px;
+    }
+
+    /* Küçük ekranlarda sadece gösterilecek elementler için stil */
+    .d-sm-only {
+        display: none;
+    }
+
+    /* Butonların eşit yükseklikte olması için stil */
+    .buton-esit {
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+    }
+</style>
+{% endblock %}
+<!--- Ek CSS bloğu biter -->

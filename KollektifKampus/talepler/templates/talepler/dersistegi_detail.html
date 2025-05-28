@@ -1,0 +1,446 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title|default:"Ders İsteği Detayı" }} - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/talep.css' %}">
+{% endblock %}
+
+{% block content %}
+<!--- Talep detay sayfasının ana kapsayıcısı -->
+<div class="talep-detay-kapsayici">
+    <!--- Sayfa başlığı banner alanı -->
+    <div class="talep-banner">
+        <div class="talep-banner-icerik">
+            <h2>Ders İsteği Detayı</h2>
+        </div>
+    </div>
+    
+    <!--- Talep ana içerik alanı -->
+    <div class="talep-ana-icerik">
+        <!--- Talep bilgilerini gösteren kart -->
+        <div class="talep-kart">
+            <!--- Talep başlığı ve durum rozeti bölümü -->
+            <div class="talep-baslik-bolum">
+                <!--- Talep başlığı ve talep eden kullanıcı bilgisi -->
+                <div class="talep-baslik-sol">
+                    <h3>{{ ders_istegi.talep_basligi }}</h3>
+                    <!--- Talep meta bilgileri (talep eden kullanıcı) -->
+                    <div class="talep-meta">
+                        <span class="talep-meta-etiket">Talep Eden:</span> 
+                        <a href="{% url 'kullanicilar:profil_detay' username=ders_istegi.talep_eden_kullanici.user.username %}" class="talep-meta-link">
+                            {{ ders_istegi.talep_eden_kullanici.user.username }}
+                        </a>
+                    </div>
+                </div>
+                <!--- Talep durumunu gösteren rozet -->
+                <div class="talep-durum-rozet {% if ders_istegi.talep_durumu == 'AKTIF' %}durum-aktif{% elif ders_istegi.talep_durumu == 'KAPALI' %}durum-kapali{% elif ders_istegi.talep_durumu == 'EGITMEN_ATANDI' %}durum-atandi{% elif ders_istegi.talep_durumu == 'TAMAMLANDI' %}durum-tamamlandi{% endif %}">
+                    {{ ders_istegi.get_talep_durumu_display }}
+                </div>
+            </div>
+            
+            <!--- Talep detay bilgilerinin gösterildiği bölüm -->
+            <div class="talep-detay-bolum">
+                <!--- Ders bilgisi -->
+                <div class="talep-bilgi-grup">
+                    <span class="talep-bilgi-etiket">Ders:</span>
+                    <span class="talep-bilgi-deger">{{ ders_istegi.ders.ders_adi|default:"Belirtilmemiş" }} ({{ ders_istegi.ders.kategori|default:"-" }})</span>
+                </div>
+                
+                <!--- Beklenen seviye bilgisi -->
+                <div class="talep-bilgi-grup">
+                    <span class="talep-bilgi-etiket">Beklenen Seviye:</span>
+                    <span class="talep-bilgi-deger">{{ ders_istegi.get_beklenen_seviye_display }}</span>
+                </div>
+                
+                <!--- Teklif Edilen Karşılık -->
+                {% if ders_istegi.teklif_edilen_karsilik %}
+                <div class="talep-bilgi-detay">
+                    <div class="talep-bilgi-baslik">
+                        <i class="fa-solid fa-handshake"></i> Teklif Edilen Karşılık:
+                    </div>
+                    <div class="talep-bilgi-icerik">{{ ders_istegi.teklif_edilen_karsilik|linebreaksbr }}</div>
+                </div>
+                {% endif %}
+                
+                <!--- Mekan Tercihi -->
+                {% if ders_istegi.mekan_tercihi %}
+                <div class="talep-bilgi-detay">
+                    <div class="talep-bilgi-baslik">
+                        <i class="fa-solid fa-location-dot"></i> Mekan Tercihi:
+                    </div>
+                    <div class="talep-bilgi-icerik">{{ ders_istegi.mekan_tercihi|linebreaksbr }}</div>
+                </div>
+                {% endif %}
+                
+                <!--- Zaman Tercihi -->
+                {% if ders_istegi.zaman_tercihi %}
+                <div class="talep-bilgi-detay">
+                    <div class="talep-bilgi-baslik">
+                        <i class="fa-solid fa-clock"></i> Zaman Tercihi:
+                    </div>
+                    <div class="talep-bilgi-icerik">{{ ders_istegi.zaman_tercihi|linebreaksbr }}</div>
+                </div>
+                {% endif %}
+                
+                <!--- Detaylı Açıklama -->
+                <div class="talep-aciklama">
+                    <div class="talep-aciklama-baslik">
+                        <i class="fa-solid fa-file-text"></i> Detaylı Açıklama:
+                    </div>
+                    <div class="talep-aciklama-icerik">{{ ders_istegi.detayli_aciklama|linebreaksbr }}</div>
+                </div>
+                
+                <!--- Atanan Eğitmen Bilgisi -->
+                {% if ders_istegi.atanan_egitmen %}
+                <div class="talep-bilgi-grup">
+                    <span class="talep-bilgi-etiket">Atanan Eğitmen:</span>
+                    <span class="talep-bilgi-deger">
+                        <a href="{% url 'kullanicilar:profil_detay' username=ders_istegi.atanan_egitmen.user.username %}" class="talep-meta-link">
+                            {{ ders_istegi.atanan_egitmen.user.username }}
+                        </a>
+                    </span>
+                </div>
+                {% endif %}
+                
+                <!--- Tarih bilgileri grubu -->
+                <div class="talep-tarih-grup">
+                    <!--- Oluşturulma tarihi bilgisi -->
+                    <div class="talep-bilgi-grup">
+                        <span class="talep-bilgi-etiket">Oluşturulma Tarihi:</span>
+                        <span class="talep-bilgi-deger">{{ ders_istegi.olusturulma_tarihi|date:"d F Y H:i" }}</span>
+                    </div>
+                    
+                    <!--- Son güncellenme tarihi bilgisi -->
+                    <div class="talep-bilgi-grup">
+                        <span class="talep-bilgi-etiket">Son Güncellenme:</span>
+                        <span class="talep-bilgi-deger">{{ ders_istegi.guncellenme_tarihi|date:"d F Y H:i" }}</span>
+                    </div>
+                    
+                    <!--- Öğrenci tamamlama tarihi -->
+                    {% if ders_istegi.ogrenci_tamamlama_tarihi %}
+                    <div class="talep-bilgi-grup">
+                        <span class="talep-bilgi-etiket">Öğrenci Tamamlama:</span>
+                        <span class="talep-bilgi-deger">{{ ders_istegi.ogrenci_tamamlama_tarihi|date:"d F Y H:i" }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    <!--- Eğitmen tamamlama tarihi -->
+                    {% if ders_istegi.egitmen_tamamlama_tarihi %}
+                    <div class="talep-bilgi-grup">
+                        <span class="talep-bilgi-etiket">Eğitmen Tamamlama:</span>
+                        <span class="talep-bilgi-deger">{{ ders_istegi.egitmen_tamamlama_tarihi|date:"d F Y H:i" }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!--- Kullanıcı giriş yapmışsa gösterilecek butonlar ve formlar -->
+            {% if user.is_authenticated %}
+                <!--- Kullanıcıya özel aksiyon butonları -->
+                <div class="talep-butonlar">
+                    <!--- Kullanıcı talep sahibi ise gösterilecek butonlar -->
+                    {% if is_talep_sahibi %}
+                        <!--- Talep aktif ve başvuru yoksa güncelle butonu -->
+                        {% if ders_istegi.talep_durumu == 'AKTIF' and not gelen_basvurular.exists %}
+                        <a href="{% url 'talepler:ders_istegi_guncelle' pk=ders_istegi.pk %}" class="talep-buton talep-buton-uyari">
+                            <i class="fa-solid fa-pen"></i> Bu Talebi Güncelle
+                        </a>
+                        <!--- Talep aktif değilse veya başvuru varsa düzenlenemez butonu -->
+                        {% elif ders_istegi.talep_durumu != 'AKTIF' or gelen_basvurular.exists %}
+                        <span class="talep-buton talep-buton-pasif">
+                            <i class="fa-solid fa-pen"></i> Düzenlenemez
+                        </span>
+                        {% endif %}
+                        <!--- Talep aktif ve eğitmen atanmamışsa sil butonu -->
+                        {% if ders_istegi.talep_durumu == 'AKTIF' and not ders_istegi.atanan_egitmen %}
+                        <a href="{% url 'talepler:ders_istegi_sil' pk=ders_istegi.pk %}" class="talep-buton talep-buton-tehlike">
+                            <i class="fa-solid fa-trash"></i> Bu Talebi Sil
+                        </a>
+                        <!--- Talep aktif değilse veya eğitmen atanmışsa silinemez butonu -->
+                        {% else %}
+                        <span class="talep-buton talep-buton-pasif">
+                            <i class="fa-solid fa-trash-slash"></i> Silinemez
+                        </span>
+                        {% endif %}
+                        
+                        <!--- Talep durumu 'Eğitmen Atandı' ise tamamla ve sohbet başlat butonları -->
+                        {% if ders_istegi.talep_durumu == 'EGITMEN_ATANDI' %}
+                            <a href="{% url 'talepler:ders_istegi_tamamla' ders_istegi_id=ders_istegi.pk %}" class="talep-buton talep-buton-basari">
+                                <i class="fa-solid fa-check"></i> Dersi Tamamlandı Olarak İşaretle
+                            </a>
+                            <a href="{% url 'iletisim:sohbet_baslat' ders_istegi_id=ders_istegi.pk %}" class="talep-buton talep-buton-birincil">
+                                <i class="fa-solid fa-comments"></i> Sohbet Başlat / Mesajlara Git
+                            </a>
+                        <!--- Talep durumu 'Öğrenci Tamamladı' ise uyarı ve sohbet başlat butonu -->
+                        {% elif ders_istegi.talep_durumu == 'OGRENCI_TAMAMLADI' %}
+                            <div class="talep-uyari talep-uyari-uyari">
+                                <i class="fa-solid fa-circle-info"></i> Bu dersi tamamlandı olarak işaretlediniz. Dersin tamamen tamamlanmış sayılabilmesi için eğitmenin de onaylaması gerekiyor.
+                            </div>
+                            <a href="{% url 'iletisim:sohbet_baslat' ders_istegi_id=ders_istegi.pk %}" class="talep-buton talep-buton-birincil">
+                                <i class="fa-solid fa-comments"></i> Sohbet Başlat / Mesajlara Git
+                            </a>
+                        <!--- Talep durumu 'Eğitmen Tamamladı' ise uyarı, tamamla ve sohbet başlat butonları -->
+                        {% elif ders_istegi.talep_durumu == 'EGITMEN_TAMAMLADI' %}
+                            <div class="talep-uyari talep-uyari-uyari">
+                                <i class="fa-solid fa-circle-info"></i> Eğitmen bu dersi tamamlandı olarak işaretledi. Lütfen sizin de dersi tamamlandı olarak işaretlemeniz gerekiyor.
+                            </div>
+                            <a href="{% url 'talepler:ders_istegi_tamamla' ders_istegi_id=ders_istegi.pk %}" class="talep-buton talep-buton-basari">
+                                <i class="fa-solid fa-check"></i> Dersi Tamamlandı Olarak İşaretle
+                            </a>
+                            <a href="{% url 'iletisim:sohbet_baslat' ders_istegi_id=ders_istegi.pk %}" class="talep-buton talep-buton-birincil">
+                                <i class="fa-solid fa-comments"></i> Sohbet Başlat / Mesajlara Git
+                            </a>
+                        {% endif %}
+                        
+                        <!--- Talep tamamlandıysa ve eğitmen atanmışsa değerlendirme butonu -->
+                        {% if ders_istegi.talep_durumu == 'TAMAMLANDI' and ders_istegi.atanan_egitmen %}
+                            <!--- Kullanıcı değerlendirme yapabilirse değerlendir butonu -->
+                            {% if ogrenci_degerlendirme_yapabilir %}
+                                <a href="{% url 'geribildirim:degerlendirme_olustur' ders_istegi_id=ders_istegi.pk %}" class="talep-buton talep-buton-basari">
+                                    <i class="fa-solid fa-star"></i> Eğitmeni Değerlendir
+                                </a>
+                            <!--- Kullanıcı değerlendirme yapmışsa pasif değerlendirildi butonu -->
+                            {% else %}
+                                <span class="talep-buton talep-buton-pasif">
+                                    <i class="fa-solid fa-check-circle"></i> Değerlendirildi
+                                </span>
+                            {% endif %}
+                        {% endif %}
+                    <!--- Kullanıcı eğitmen ise, daha önce başvurmadıysa ve talep aktifse başvuru formu -->
+                    {% elif user.profil.is_egitmen and not kullanici_daha_once_basvurdu and ders_istegi.talep_durumu == 'AKTIF' %}
+                        <!--- Eğitmen başvuru bölümü -->
+                        <div class="talep-basvuru-bolum">
+                            <!--- Başvuru bölümü başlığı -->
+                            <div class="talep-basvuru-baslik">
+                                <i class="fa-solid fa-clipboard-check"></i> Eğitmen Olarak Başvur
+                            </div>
+                            <!--- Eğitmen başvuru formu -->
+                            <form method="post" action="{% url 'talepler:egitmen_basvurusu_yap' ders_istegi_id=ders_istegi.pk %}" class="talep-basvuru-form">
+                                {% csrf_token %}
+                                {% for field in egitmen_basvuru_formu %}
+                                    <!--- Form alanı grubu -->
+                                    <div class="talep-form-grup">
+                                        {{ field.label_tag }}
+                                        {{ field }}
+                                        {% if field.errors %}
+                                            <!--- Form alanı hata mesajı -->
+                                            <div class="talep-form-hata">{{ field.errors.0 }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                                <!--- Başvuruyu gönder butonu -->
+                                <button type="submit" class="talep-buton talep-buton-birincil">
+                                    <i class="fa-solid fa-paper-plane"></i> Başvuruyu Gönder
+                                </button>
+                            </form>
+                        </div>
+                    <!--- Kullanıcı eğitmen değilse, talep aktifse ve talep sahibi değilse bilgi mesajı -->
+                    {% elif not user.profil.is_egitmen and ders_istegi.talep_durumu == 'AKTIF' and not is_talep_sahibi %}
+                        <!--- Eğitmen olmayan kullanıcılar için bilgi uyarısı -->
+                        <div class="talep-uyari talep-uyari-bilgi">
+                            <i class="fa-solid fa-info-circle"></i> Ders isteklerine sadece eğitmen rolüne sahip kullanıcılar başvurabilir.
+                        </div>
+                    <!--- Kullanıcı atanan eğitmen ise bilgi mesajı ve aksiyon butonları -->
+                    {% elif is_atanan_egitmen %}
+                        <!--- Atanan eğitmen için başarı uyarısı -->
+                        <div class="talep-uyari talep-uyari-basari">
+                            <i class="fa-solid fa-user-check"></i> Bu dersin atanmış eğitmeni sizsiniz.
+                        </div>
+                        
+                        <!--- Talep durumu 'Eğitmen Atandı' ise tamamla ve sohbet başlat butonları -->
+                        {% if ders_istegi.talep_durumu == 'EGITMEN_ATANDI' %}
+                            <a href="{% url 'talepler:ders_istegi_tamamla' ders_istegi_id=ders_istegi.pk %}" class="talep-buton talep-buton-basari">
+                                <i class="fa-solid fa-check"></i> Dersi Tamamlandı Olarak İşaretle
+                            </a>
+                            <a href="{% url 'iletisim:sohbet_baslat' ders_istegi_id=ders_istegi.pk %}" class="talep-buton talep-buton-birincil">
+                                <i class="fa-solid fa-comments"></i> Sohbet Başlat / Mesajlara Git
+                            </a>
+                        <!--- Talep durumu 'Eğitmen Tamamladı' ise uyarı ve sohbet başlat butonu -->
+                        {% elif ders_istegi.talep_durumu == 'EGITMEN_TAMAMLADI' %}
+                            <div class="talep-uyari talep-uyari-uyari">
+                                <i class="fa-solid fa-circle-info"></i> Bu dersi tamamlandı olarak işaretlediniz. Dersin tamamen tamamlanmış sayılabilmesi için öğrencinin de onaylaması gerekiyor.
+                            </div>
+                            <a href="{% url 'iletisim:sohbet_baslat' ders_istegi_id=ders_istegi.pk %}" class="talep-buton talep-buton-birincil">
+                                <i class="fa-solid fa-comments"></i> Sohbet Başlat / Mesajlara Git
+                            </a>
+                        <!--- Talep durumu 'Öğrenci Tamamladı' ise uyarı, tamamla ve sohbet başlat butonları -->
+                        {% elif ders_istegi.talep_durumu == 'OGRENCI_TAMAMLADI' %}
+                            <div class="talep-uyari talep-uyari-uyari">
+                                <i class="fa-solid fa-circle-info"></i> Öğrenci bu dersi tamamlandı olarak işaretledi. Lütfen sizin de dersi tamamlandı olarak işaretlemeniz gerekiyor.
+                            </div>
+                            <a href="{% url 'talepler:ders_istegi_tamamla' ders_istegi_id=ders_istegi.pk %}" class="talep-buton talep-buton-basari">
+                                <i class="fa-solid fa-check"></i> Dersi Tamamlandı Olarak İşaretle
+                            </a>
+                            <a href="{% url 'iletisim:sohbet_baslat' ders_istegi_id=ders_istegi.pk %}" class="talep-buton talep-buton-birincil">
+                                <i class="fa-solid fa-comments"></i> Sohbet Başlat / Mesajlara Git
+                            </a>
+                        {% endif %}
+                        
+                        <!--- Talep tamamlandıysa değerlendirme butonu -->
+                        {% if ders_istegi.talep_durumu == 'TAMAMLANDI' %}
+                            <!--- Kullanıcı değerlendirme yapabilirse değerlendir butonu -->
+                            {% if egitmen_degerlendirme_yapabilir %}
+                                <a href="{% url 'geribildirim:degerlendirme_olustur' ders_istegi_id=ders_istegi.pk %}" class="talep-buton talep-buton-basari">
+                                    <i class="fa-solid fa-star"></i> Öğrenciyi Değerlendir
+                                </a>
+                            <!--- Kullanıcı değerlendirme yapmışsa pasif değerlendirildi butonu -->
+                            {% else %}
+                                <span class="talep-buton talep-buton-pasif">
+                                    <i class="fa-solid fa-check-circle"></i> Değerlendirildi
+                                </span>
+                            {% endif %}
+                        {% endif %}
+                    <!--- Kullanıcı daha önce başvurduysa bilgi mesajı -->
+                    {% elif kullanici_daha_once_basvurdu %}
+                        <!--- Daha önce başvuran eğitmenler için bilgi uyarısı -->
+                        <div class="talep-uyari talep-uyari-bilgi">
+                            <i class="fa-solid fa-info-circle"></i> Bu ders isteğine daha önce eğitmen olarak başvurdunuz.
+                        </div>
+                    <!--- Talep aktif değilse başvuru yapılamayacağına dair uyarı -->
+                    {% elif ders_istegi.talep_durumu != 'AKTIF' %}
+                        <!--- Aktif olmayan talepler için uyarı -->
+                        <div class="talep-uyari talep-uyari-uyari">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Bu ders isteği aktif olmadığı için eğitmen başvurusu yapılamaz.
+                        </div>
+                    {% endif %}
+                </div>
+            <!--- Kullanıcı giriş yapmamışsa giriş yapma yönlendirmesi -->
+            {% else %}
+                <!--- Giriş yapmayan kullanıcılar için yönlendirme -->
+                <div class="talep-giris-yonlendirme">
+                    <i class="fa-solid fa-user-lock"></i>
+                    <p>Eğitmen olarak başvurmak için <a href="{% url 'kullanicilar:giris' %}?next={{ request.path }}" class="talep-giris-link">giriş yapın</a>.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!--- Talep sahibi ise gelen eğitmen başvuruları kartı -->
+        {% if is_talep_sahibi %}
+        <div class="talep-kart mt-4">
+            <!--- Başvurular kartı başlığı -->
+            <div class="talep-kart-baslik">
+                <h4>
+                    <i class="fa-solid fa-users"></i> Gelen Eğitmen Başvuruları <span class="talep-badge">{{ gelen_basvurular.count|default:0 }}</span>
+                </h4>
+            </div>
+            <!--- Başvuru listesi -->
+            <div class="talep-liste">
+                {% for basvuru in gelen_basvurular %}
+                    <!--- Her bir başvuru öğesi -->
+                    <div class="talep-liste-item">
+                        <!--- Başvuru başlığı ve durumu -->
+                        <div class="talep-liste-baslik">
+                            <!--- Başvuran eğitmen bilgisi -->
+                            <div class="talep-liste-baslik-sol">
+                                <h5>{{ basvuru.basvuran_egitmen.user.username }}</h5>
+                                <span class="talep-liste-meta">{{ basvuru.basvuru_tarihi|timesince }} önce</span>
+                            </div>
+                            <!--- Başvuru durumu rozeti -->
+                            <div class="talep-durum-rozet talep-rozet-sm {% if basvuru.basvuru_durumu == 'BEKLEMEDE' %}durum-beklemede{% elif basvuru.basvuru_durumu == 'KABUL_EDILDI' %}durum-aktif{% elif basvuru.basvuru_durumu == 'REDDEDILDI' %}durum-kapali{% elif basvuru.basvuru_durumu == 'GERI_CEKILDI' %}durum-geri-cekildi{% endif %}">
+                                {{ basvuru.get_basvuru_durumu_display }}
+                            </div>
+                        </div>
+                        
+                        <!--- Talep aktif ve başvuru beklemedeyse kabul/reddet butonları -->
+                        {% if ders_istegi.talep_durumu == 'AKTIF' and basvuru.basvuru_durumu == 'BEKLEMEDE' %}
+                            <!--- Başvuru yönetim butonları -->
+                            <div class="talep-liste-butonlar">
+                                <!--- Kabul et formu -->
+                                <form method="POST" action="{% url 'talepler:egitmen_basvuru_yonet' basvuru_id=basvuru.id %}" class="talep-inline-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="kabul">
+                                    <button type="submit" class="talep-buton talep-buton-sm talep-buton-basari">
+                                        <i class="fa-solid fa-check"></i> Kabul Et
+                                    </button>
+                                </form>
+                                <!--- Reddet formu -->
+                                <form method="POST" action="{% url 'talepler:egitmen_basvuru_yonet' basvuru_id=basvuru.id %}" class="talep-inline-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="reddet">
+                                    <button type="submit" class="talep-buton talep-buton-sm talep-buton-tehlike">
+                                        <i class="fa-solid fa-xmark"></i> Reddet
+                                    </button>
+                                </form>
+                            </div>
+                        <!--- Başvuru kabul edildiyse bilgi mesajı -->
+                        {% elif basvuru.basvuru_durumu == 'KABUL_EDILDI' %}
+                            <!--- Kabul edildi mesajı -->
+                            <div class="talep-liste-mesaj talep-liste-mesaj-basari">
+                                <i class="fa-solid fa-circle-check"></i> Bu başvuru tarafınızca kabul edilmiştir. İlgili eğitmen: {{ ders_istegi.atanan_egitmen.user.username }}
+                            </div>
+                        <!--- Başvuru reddedildiyse bilgi mesajı -->
+                        {% elif basvuru.basvuru_durumu == 'REDDEDILDI' %}
+                            <!--- Reddedildi mesajı -->
+                            <div class="talep-liste-mesaj talep-liste-mesaj-tehlike">
+                                <i class="fa-solid fa-circle-xmark"></i> Bu başvuru tarafınızca reddedilmiştir.
+                            </div>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <!--- Başvuru yoksa gösterilecek mesaj -->
+                    <div class="talep-liste-bos">
+                        <i class="fa-solid fa-search"></i>
+                        <p>Bu ders isteğine henüz eğitmen başvurusu yapılmamış.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!--- Talep tamamlandıysa değerlendirme bilgileri kartı -->
+        {% if ders_istegi.talep_durumu == 'TAMAMLANDI' %}
+        <div class="talep-kart mt-4">
+            <!--- Değerlendirmeler kartı başlığı -->
+            <div class="talep-kart-baslik">
+                <h4><i class="fa-solid fa-star"></i> Değerlendirmeler</h4>
+            </div>
+            <!--- Değerlendirme listesi -->
+            <div class="talep-liste">
+                {% if ders_istegi.degerlendirmeleri.exists %}
+                    {% for degerlendirme in ders_istegi.degerlendirmeleri.all %}
+                        <!--- Her bir değerlendirme öğesi -->
+                        <div class="talep-liste-item">
+                            <!--- Değerlendirme başlığı ve puanı -->
+                            <div class="talep-liste-baslik">
+                                <!--- Değerlendiren ve değerlendirilen kullanıcı bilgisi -->
+                                <div class="talep-liste-baslik-sol">
+                                    <h5>
+                                        <a href="{% url 'kullanicilar:profil_detay' username=degerlendirme.degerlendiren_kullanici.user.username %}" class="talep-meta-link">
+                                            {{ degerlendirme.degerlendiren_kullanici.user.username }}
+                                        </a>
+                                        →
+                                        <a href="{% url 'kullanicilar:profil_detay' username=degerlendirme.degerlendirilen_kullanici.user.username %}" class="talep-meta-link">
+                                            {{ degerlendirme.degerlendirilen_kullanici.user.username }}
+                                        </a>
+                                    </h5>
+                                    <span class="talep-liste-meta">{{ degerlendirme.degerlendirme_tarihi|date:"d F Y H:i" }}</span>
+                                </div>
+                                <!--- Puan rozeti -->
+                                <div class="talep-puan-rozet {% if degerlendirme.puan >= 4 %}puan-yuksek{% elif degerlendirme.puan >= 3 %}puan-orta{% elif degerlendirme.puan >= 2 %}puan-dusuk{% else %}puan-cok-dusuk{% endif %}">
+                                    {{ degerlendirme.puan }}/5
+                                </div>
+                            </div>
+                            
+                            <!--- Değerlendirme yorumu -->
+                            {% if degerlendirme.yorum %}
+                                <div class="talep-liste-icerik">
+                                    {{ degerlendirme.yorum }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <!--- Değerlendirme yoksa gösterilecek mesaj -->
+                    <div class="talep-liste-bos">
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                        <p>Bu ders için henüz değerlendirme yapılmamış.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

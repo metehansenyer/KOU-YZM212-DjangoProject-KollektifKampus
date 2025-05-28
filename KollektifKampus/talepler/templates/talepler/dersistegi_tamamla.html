@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Ders Talebini Tamamla | {{ ders_istegi.talep_basligi }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/talep.css' %}">
+{% endblock %}
+
+{% block content %}
+<!--- Talep tamamlama sayfasının ana kapsayıcısı -->
+<div class="talep-detay-kapsayici">
+    <!--- Başlık banner alanı -->
+    <div class="talep-banner">
+        <div class="talep-banner-icerik">
+            <h2>Ders Talebini Tamamla</h2>
+        </div>
+    </div>
+
+    <!--- Tamamlama ana içerik alanı -->
+    <div class="talep-ana-icerik">
+        <!--- Tamamlama bilgilerini gösteren kart -->
+        <div class="talep-kart">
+            <!--- Kart başlığı ve durum rozeti bölümü -->
+            <div class="talep-baslik-bolum">
+                <!--- Talep başlığı ve ilgili kullanıcı bilgisi (Öğrenci/Eğitmen) -->
+                <div class="talep-baslik-sol">
+                    <!--- Talep başlığı -->
+                    <h3>{{ ders_istegi.talep_basligi }}</h3>
+                    <!--- İlgili kullanıcı (Öğrenci veya Eğitmen) bilgisi -->
+                    <div class="talep-meta">
+                        {% if is_ogrenci %}
+                            <span class="talep-meta-etiket">Eğitmen:</span>
+                            <a href="{% url 'kullanicilar:profil_detay' username=ders_istegi.atanan_egitmen.user.username %}" class="talep-meta-link">
+                                {{ ders_istegi.atanan_egitmen.user.get_full_name|default:ders_istegi.atanan_egitmen.user.username }}
+                            </a>
+                        {% else %}
+                            <span class="talep-meta-etiket">Öğrenci:</span>
+                            <a href="{% url 'kullanicilar:profil_detay' username=ders_istegi.talep_eden_kullanici.user.username %}" class="talep-meta-link">
+                                {{ ders_istegi.talep_eden_kullanici.user.get_full_name|default:ders_istegi.talep_eden_kullanici.user.username }}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <!--- Talep durumunu gösteren rozet -->
+                <div class="talep-durum-rozet {% if durum == 'OGRENCI_TAMAMLADI' %}durum-beklemede{% elif durum == 'EGITMEN_TAMAMLADI' %}durum-beklemede{% else %}durum-atandi{% endif %}">
+                    {{ ders_istegi.get_talep_durumu_display }}
+                </div>
+            </div>
+
+            <!--- Tamamlama bilgi veya uyarı kutusu -->
+            {% if is_ogrenci and durum == 'EGITMEN_TAMAMLADI' %}
+                <!--- Eğitmen tamamladıysa öğrenciye gösterilen uyarı -->
+                <div class="talep-uyari talep-uyari-uyari">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <div>
+                        <p class="talep-uyari-baslik">Eğitmen dersi tamamlandı olarak işaretledi.</p>
+                        <p>Onayınızla birlikte ders süreci tamamlanmış olacak ve karşılıklı değerlendirme yapabileceksiniz.</p>
+                    </div>
+                </div>
+            {% elif is_egitmen and durum == 'OGRENCI_TAMAMLADI' %}
+                <!--- Öğrenci tamamladıysa eğitmene gösterilen uyarı -->
+                <div class="talep-uyari talep-uyari-uyari">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <div>
+                        <p class="talep-uyari-baslik">Öğrenci dersi tamamlandı olarak işaretledi.</p>
+                        <p>Onayınızla birlikte ders süreci tamamlanmış olacak ve karşılıklı değerlendirme yapabileceksiniz.</p>
+                    </div>
+                </div>
+            {% else %}
+                <!--- İlk kez tamamlama işlemi yapılıyorsa gösterilen bilgi kutusu -->
+                <div class="talep-uyari talep-uyari-bilgi">
+                    <i class="fa-solid fa-info-circle"></i>
+                    <div>
+                        <p class="talep-uyari-baslik">Bu işlem, durumu değiştirecektir.</p>
+                        <ul class="talep-uyari-liste">
+                            <li>Sizin tarafınızdan "Tamamlandı Olarak İşaretlendi" şeklinde kaydedilecek</li>
+                            <li>Karşı taraf da onayladığında ders tamamlanmış sayılacak</li>
+                            <li>Her iki taraf da "Tamamlandı" olarak işaretledikten sonra karşılıklı değerlendirme yapabileceksiniz</li>
+                            <li>Bu işlem geri alınamaz</li>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!--- Tamamlama formu ve butonları -->
+            <div class="talep-butonlar">
+                <!--- Tamamlama işlemi için POST formu -->
+                <form method="POST" class="tamamlama-form">
+                    {% csrf_token %}
+                    <!--- Buton grubunu hizalamak için kapsayıcı -->
+                    <div class="talep-buton-grubu">
+                        <!--- İptal butonu (detay sayfasına geri döner) -->
+                        <a href="{% url 'talepler:ders_istegi_detay' pk=ders_istegi.pk %}" class="talep-buton talep-buton-tehlike">
+                            <i class="fa-solid fa-arrow-left"></i> İptal
+                        </a>
+                        <!--- Tamamlama/Onaylama butonu -->
+                        <button type="submit" class="talep-buton talep-buton-basari">
+                            <i class="fa-solid fa-check-circle"></i>
+                            {% if durum == 'OGRENCI_TAMAMLADI' or durum == 'EGITMEN_TAMAMLADI' %}
+                                Ders Tamamlamayı Onaylıyorum
+                            {% else %}
+                                Dersi Tamamlandı Olarak İşaretle
+                            {% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

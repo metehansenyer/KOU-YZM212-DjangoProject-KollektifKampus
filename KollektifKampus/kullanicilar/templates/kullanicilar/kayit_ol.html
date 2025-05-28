@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+<!--- Sayfa başlığını ayarla -->
+{% block title %}Yeni Kullanıcı Kaydı - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+<!--- Ana içerik bloğu -->
+{% block content %}
+<!--- Sayfa başlığı bölümü -->
+<div class="auth-baslik">
+    <h1>Hesap Oluştur</h1>
+</div>
+
+<!--- Kimlik doğrulama kapsayıcısı -->
+<div class="auth-ana-kapsayici">
+    <!--- Kimlik doğrulama kartı -->
+    <div class="auth-kart">
+        <!--- Form genel hataları varsa hata mesajını göster -->
+        {% if form.errors %}
+            <div class="auth-uyari auth-uyari-tehlike">
+                <div class="auth-uyari-ikon">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <div class="auth-uyari-icerik">
+                    <p>Formu doldururken bir hata oluştu. Lütfen aşağıdaki hataları düzeltin.</p>
+                </div>
+            </div>
+        {% endif %}
+
+        <!--- Kayıt formu -->
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            
+            <!--- Kullanıcı adı alanı -->
+            <div class="auth-form-grup">
+                <label for="id_username">Kullanıcı Adı</label>
+                <!--- Kullanıcı adı alanı hatalarını göster -->
+                {% if form.username.errors %}
+                    <div class="auth-uyari auth-uyari-tehlike">
+                        <div class="auth-uyari-ikon">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                        </div>
+                        <div class="auth-uyari-icerik">
+                            <p>{{ form.username.errors.0 }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                <input type="text" name="username" id="id_username" class="auth-form-kontrol" autocomplete="username" required>
+                <!--- Kullanıcı adı için yardım metni -->
+                <small class="auth-yardim-metni">150 karakter ya da daha az olmalı. Sadece harfler, rakamlar ve @/./+/-/_ karakterleri kullanılabilir.</small>
+            </div>
+            
+            <!--- Ad alanı -->
+            <div class="auth-form-grup">
+                <label for="id_first_name">Ad</label>
+                <!--- Ad alanı hatalarını göster -->
+                {% if form.first_name.errors %}
+                    <div class="auth-uyari auth-uyari-tehlike">
+                        <div class="auth-uyari-ikon">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                        </div>
+                        <div class="auth-uyari-icerik">
+                            <p>{{ form.first_name.errors.0 }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                <input type="text" name="first_name" id="id_first_name" class="auth-form-kontrol" required>
+            </div>
+            
+            <!--- Soyad alanı -->
+            <div class="auth-form-grup">
+                <label for="id_last_name">Soyad</label>
+                <!--- Soyad alanı hatalarını göster -->
+                {% if form.last_name.errors %}
+                    <div class="auth-uyari auth-uyari-tehlike">
+                        <div class="auth-uyari-ikon">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                        </div>
+                        <div class="auth-uyari-icerik">
+                            <p>{{ form.last_name.errors.0 }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                <input type="text" name="last_name" id="id_last_name" class="auth-form-kontrol" required>
+            </div>
+            
+            <!--- E-posta alanı -->
+            <div class="auth-form-grup">
+                <label for="id_email">E-posta Adresi</label>
+                <!--- E-posta alanı hatalarını göster -->
+                {% if form.email.errors %}
+                    <div class="auth-uyari auth-uyari-tehlike">
+                        <div class="auth-uyari-ikon">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                        </div>
+                        <div class="auth-uyari-icerik">
+                            <p>{{ form.email.errors.0 }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                <input type="email" name="email" id="id_email" class="auth-form-kontrol" autocomplete="email" required>
+                <!--- E-posta için yardım metni -->
+                <small class="auth-yardim-metni">.edu uzantılı bir e-posta adresi giriniz.</small>
+            </div>
+            
+            <!--- Şifre alanı -->
+            <div class="auth-form-grup">
+                <label for="id_password1">Şifre</label>
+                <!--- Şifre alanı hatalarını göster -->
+                {% if form.password1.errors %}
+                    <div class="auth-uyari auth-uyari-tehlike">
+                        <div class="auth-uyari-ikon">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                        </div>
+                        <div class="auth-uyari-icerik">
+                            <p>{{ form.password1.errors.0 }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                <input type="password" name="password1" id="id_password1" class="auth-form-kontrol" autocomplete="new-password" required>
+                <!--- Şifre için yardım metni ve kuralları -->
+                <small class="auth-yardim-metni">
+                    <ul>
+                        <li>Şifreniz diğer kişisel bilgileriniz ile çok benzer olmamalıdır.</li>
+                        <li>Şifreniz en az 8 karakter içermek zorundadır.</li>
+                        <li>Şifreniz yaygın olarak kullanılan bir parola olmamalıdır.</li>
+                        <li>Şifreniz tamamen sayısal olmamalıdır.</li>
+                    </ul>
+                </small>
+            </div>
+            
+            <!--- Şifre onayı alanı -->
+            <div class="auth-form-grup">
+                <label for="id_password2">Şifre Onayı</label>
+                <!--- Şifre onayı alanı hatalarını göster -->
+                {% if form.password2.errors %}
+                    <div class="auth-uyari auth-uyari-tehlike">
+                        <div class="auth-uyari-ikon">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                        </div>
+                        <div class="auth-uyari-icerik">
+                            <p>{{ form.password2.errors.0 }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                <input type="password" name="password2" id="id_password2" class="auth-form-kontrol" autocomplete="new-password" required>
+                <!--- Şifre onayı için yardım metni -->
+                <small class="auth-yardim-metni">Doğrulama için önceki gibi aynı parolayı girin.</small>
+            </div>
+            
+            <!--- Hesap oluştur butonu -->
+            <button type="submit" class="auth-buton auth-buton-birincil auth-w-100">
+                <i class="fa-solid fa-user-plus"></i> Hesap Oluştur
+            </button>
+        </form>
+        
+        <!--- Giriş yap bağlantısı bölümü -->
+        <div class="auth-baglantilar">
+            <!--- Giriş yap sayfasına yönlendiren bağlantı -->
+            <a href="{% url 'kullanicilar:giris' %}" class="auth-baglanti">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <span>Zaten bir hesabınız var mı? Giriş Yapın</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

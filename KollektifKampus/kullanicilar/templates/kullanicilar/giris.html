@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+<!--- Sayfa başlığını ayarla -->
+{% block title %}Giriş Yap - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+<!--- Ana içerik bloğu -->
+{% block content %}
+<!--- Sayfa başlığı bölümü -->
+<div class="auth-baslik">
+    <h1>Giriş Yap</h1>
+</div>
+
+<!--- Kimlik doğrulama kapsayıcısı -->
+<div class="auth-ana-kapsayici">
+    <!--- Kimlik doğrulama kartı -->
+    <div class="auth-kart">
+        <!--- Form hataları varsa hata mesajını göster -->
+        {% if form.errors %}
+            <div class="auth-uyari auth-uyari-tehlike">
+                <div class="auth-uyari-ikon">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <div class="auth-uyari-icerik">
+                    <p>Kullanıcı adı veya şifreniz doğru değil. Lütfen tekrar deneyin.</p>
+                </div>
+            </div>
+        {% endif %}
+
+        <!--- 'next' parametresi varsa bilgilendirme mesajını göster -->
+        {% if next %}
+            <!--- Kullanıcı zaten giriş yapmışsa uyarı mesajı -->
+            {% if user.is_authenticated %}
+                <div class="auth-uyari auth-uyari-uyari">
+                    <div class="auth-uyari-ikon">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div class="auth-uyari-icerik">
+                        <p>Hesabınızın bu sayfaya erişim izni yok. Devam etmek için lütfen farklı bir hesapla giriş yapın.</p>
+                    </div>
+                </div>
+            <!--- Kullanıcı giriş yapmamışsa bilgi mesajı -->
+            {% else %}
+                <div class="auth-uyari auth-uyari-bilgi">
+                    <div class="auth-uyari-ikon">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </div>
+                    <div class="auth-uyari-icerik">
+                        <p>Lütfen devam etmek için giriş yapın.</p>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <!--- Giriş formu -->
+        <form method="post" action="{% url 'kullanicilar:giris' %}" class="auth-form">
+            {% csrf_token %}
+            <!--- Kullanıcı adı alanı -->
+            <div class="auth-form-grup">
+                <label for="id_username">Kullanıcı Adı</label>
+                <input type="text" name="username" id="id_username" class="auth-form-kontrol" autocomplete="username" required>
+            </div>
+            
+            <!--- Şifre alanı -->
+            <div class="auth-form-grup">
+                <label for="id_password">Şifre</label>
+                <input type="password" name="password" id="id_password" class="auth-form-kontrol" autocomplete="current-password" required>
+            </div>
+            
+            <!--- Giriş yap butonu -->
+            <button type="submit" class="auth-buton auth-buton-birincil auth-w-100">
+                <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
+            </button>
+            <!--- 'next' URL'sini gizli alan olarak ekle -->
+            <input type="hidden" name="next" value="{{ next }}"/>
+        </form>
+        
+        <!--- Yardımcı bağlantılar (Şifremi unuttum, Yeni hesap oluştur) -->
+        <div class="auth-baglantilar">
+            <!--- Şifre sıfırlama bağlantısı -->
+            <a href="{% url 'kullanicilar:sifre_sifirla' %}" class="auth-baglanti">
+                <i class="fa-solid fa-key"></i>
+                <span>Şifremi unuttum</span>
+            </a>
+            <!--- Kayıt olma bağlantısı -->
+            <a href="{% url 'kullanicilar:kayit_ol' %}" class="auth-baglanti">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>Yeni hesap oluştur</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

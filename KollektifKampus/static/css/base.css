@@ -1,0 +1,1021 @@
+/* Kollektif Kampüs Temel CSS Stilleri */
+
+/* CSS Değişkenleri */
+:root {
+    --primary-color: #1DA1F2;
+    --primary-hover: #1a91da;
+    --dark-color: #e7e9ea;
+    --secondary-color: #71767b;
+    --light-color: #AAB8C2;
+    --extra-light-color: #2f3336;
+    --background-color: #000000;
+    --container-bg: #000000;
+    --content-bg: #15181c;
+    --sidebar-bg: hsl(0, 0.00%, 0.00%);
+    --border-color: #2f3336;
+    --hover-color: #080808;
+    --hover-light: rgba(239, 243, 244, 0.1);
+    --white-color: #e7e9ea;
+    --danger-color: #E0245E;
+    --success-color: #17BF63;
+    --warning-color: #FFAD1F;
+    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --input-bg: var(--extra-light-color);
+    --medium-color: var(--secondary-color);
+    --muted-color: var(--secondary-color);
+}
+
+/* Temel Reset Stilleri */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Body Stilleri */
+body {
+    font-family: var(--font-family);
+    color: var(--dark-color);
+    background-color: var(--background-color);
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+/* Link Stilleri */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+/* Link Hover Stilleri */
+a:hover {
+    text-decoration: none;
+    color: var(--primary-hover);
+}
+
+/* Liste Stilleri */
+ul {
+    list-style-type: none;
+}
+
+/* Textarea Stilleri */
+textarea {
+    background-color: var(--content-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 16px !important;
+    color: var(--white-color) !important;
+    padding: 12px 15px !important;
+    font-size: 16px !important;
+    transition: all 0.2s ease !important;
+    width: 100% !important;
+    min-height: 100px !important;
+    resize: vertical !important;
+}
+
+/* Textarea Focus Stilleri */
+textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 2px rgba(29, 161, 242, 0.2) !important;
+    outline: none !important;
+}
+
+/* Ana Layout Kapsayıcısı */
+.ana-kapsayici {
+    max-width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 275px minmax(500px, 1fr) 320px;
+    grid-gap: 0;
+    height: 100vh;
+    background-color: var(--background-color);
+}
+
+/* Sol Kenar Çubuğu */
+.sol-kenar-cubugu {
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    padding: 0 12px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* Kenar Çubuğu Marka Alanı */
+.kenar-cubugu-marka {
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: 12px 12px;
+    margin: 10px 0;
+}
+
+/* Kenar Çubuğu Marka Metni */
+.kenar-cubugu-marka-metin {
+    font-size: 1.1rem;
+}
+
+/* Kenar Çubuğu Navigasyon Alanı */
+.kenar-cubugu-navigasyon {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Kenar Çubuğu Navigasyon Öğesi */
+.kenar-cubugu-nav-oge {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* Kenar Çubuğu Navigasyon Öğesi Hover Stili */
+.kenar-cubugu-nav-oge:hover {
+    background-color: var(--hover-light);
+}
+
+/* Kenar Çubuğu Navigasyon Aktif Öğesi */
+.kenar-cubugu-nav-oge.active {
+    font-weight: bold;
+}
+
+/* Kenar Çubuğu İkon Stili */
+.kenar-cubugu-ikon {
+    margin-right: 16px;
+    font-size: 1.25rem;
+}
+
+/* Kenar Çubuğu Profil Alanı */
+.kenar-cubugu-profil {
+    display: flex;
+    align-items: center;
+    margin-top: auto;
+    padding: 12px;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* Kenar Çubuğu Profil Hover Stili */
+.kenar-cubugu-profil:hover {
+    background-color: var(--hover-light);
+}
+
+/* Profil Avatarı */
+.profil-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 12px;
+    border: 1px solid var(--border-color);
+}
+
+/* Profil Avatar Resmi */
+.profil-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Profil Bilgi Alanı */
+.profil-bilgi {
+    /* Profil bilgi kapsayıcısı */
+}
+
+/* Profil İsim */
+.profil-isim-kenar-cubugu {
+    font-weight: bold;
+}
+
+/* Profil Kullanıcı Adı */
+.profil-kullanici-adi {
+    color: var(--secondary-color);
+}
+
+/* Profil Rol Alanı */
+.profil-rol {
+    margin-top: 3px;
+}
+
+/* Profil Rol Rozeti */
+.profil-rol-rozeti {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 6px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 500;
+    color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+/* Profil Rol Rozeti Hover Stili */
+.profil-rol-rozeti:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+/* Profil Rol Rozeti İkonu */
+.profil-rol-rozeti i {
+    margin-right: 3px;
+    font-size: 9px;
+}
+
+/* Normal Rol Rozeti */
+.profil-rol-rozeti-normal {
+    background-color: #6c757d;
+}
+
+/* Eğitmen Rol Rozeti */
+.profil-rol-rozeti-egitmen {
+    background-color: #28a745;
+}
+
+/* Moderatör Rol Rozeti */
+.profil-rol-rozeti-moderator {
+    background-color: #007bff;
+}
+
+/* Admin Rol Rozeti */
+.profil-rol-rozeti-admin {
+    background-color: #dc3545;
+}
+
+/* Ana İçerik Alanı */
+.ana-icerik-alani {
+    background-color: var(--content-bg);
+    min-height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Sağ Kenar Çubuğu */
+.sag-kenar-cubugu {
+    padding: 0;
+    overflow-y: auto;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    background-color: var(--sidebar-bg);
+    width: 100%;
+}
+
+/* Kenar Çubuğu Bölümü */
+.kenar-cubugu-bolum {
+    background-color: var(--extra-light-color);
+    border-radius: 16px;
+    margin: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+/* Kenar Çubuğu Bölüm Başlığı */
+.kenar-cubugu-bolum-baslik {
+    padding: 12px 16px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Kenar Çubuğu Liste */
+.kenar-cubugu-liste {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Kenar Çubuğu Liste Öğesi */
+.kenar-cubugu-liste-oge {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+/* Kenar Çubuğu Liste Öğesi Hover Stili */
+.kenar-cubugu-liste-oge:hover {
+    background-color: var(--hover-light);
+}
+
+/* Kenar Çubuğu Liste Son Öğesi */
+.kenar-cubugu-liste-oge:last-child {
+    border-bottom: none;
+}
+
+/* Kenar Çubuğu Öğesi İçeriği */
+.kenar-cubugu-oge-icerik {
+    flex: 1;
+}
+
+/* Kenar Çubuğu Öğesi Başlığı */
+.kenar-cubugu-oge-baslik {
+    font-weight: bold;
+    color: var(--white-color);
+}
+
+/* Kenar Çubuğu Öğesi Alt Başlığı */
+.kenar-cubugu-oge-alt-baslik {
+    color: var(--secondary-color);
+    font-size: 0.875rem;
+}
+
+/* Kenar Çubuğu Öğesi Aksiyon Alanı */
+.kenar-cubugu-oge-aksiyon {
+    margin-left: 12px;
+}
+
+.kenar-cubugu-reklam {
+    
+}
+
+/* Mesajlar Kapsayıcısı */
+.messages-container {
+    margin: 10px;
+}
+
+/* Uyarı Kutuları */
+.alert {
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+}
+
+/* Uyarı Kutusu - Warning */
+.alert-warning {
+    background-color: rgba(255, 193, 7, 0.2);
+    border: 1px solid rgba(255, 193, 7, 0.4);
+    color: #ffd24c;
+}
+
+/* Uyarı Kutusu - Danger */
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.2);
+    border: 1px solid rgba(220, 53, 69, 0.4);
+    color: #ff6b6b;
+}
+
+/* Rozetler */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    background-color: var(--extra-light-color);
+    color: var(--secondary-color);
+    line-height: 1;
+}
+
+/* Derecelendirme Rozeti */
+.badge-rating {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    min-width: 32px;
+    text-align: center;
+}
+
+/* Uyarı Rozeti */
+.badge-warning {
+    background-color: var(--warning-color);
+    color: var(--dark-color);
+}
+
+/* Tehlike Rozeti */
+.badge-danger {
+    background-color: var(--danger-color);
+    color: var(--white-color);
+}
+
+/* Butonlar */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* Birincil Buton */
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+}
+
+/* Birincil Buton Hover Stili */
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    color: var(--white-color);
+}
+
+/* Çerçeveli Buton */
+.btn-outline {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+/* Çerçeveli Buton Hover Stili */
+.btn-outline:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+}
+
+/* Avatar Yer Tutucu */
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-radius: 50%;
+    text-transform: uppercase;
+}
+
+/* Profil Sırası/Derecesi */
+.profile-rank {
+    background-color: var(--extra-light-color);
+    color: var(--white-color);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-right: 8px;
+    border: 1px solid var(--border-color);
+}
+
+/* HOME SAYFASI CSS'LERİ */
+
+/* İçerik Arama Alanı */
+.icerik-arama {
+    padding: 12px 16px;
+    position: sticky;
+    top: 0;
+    background-color: rgba(21, 24, 28, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 9;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Arama Kapsayıcısı */
+.arama-kapsayici {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Arama Formu */
+.arama-formu {
+    display: flex;
+    align-items: center;
+    background-color: var(--extra-light-color);
+    height: 50px;
+    border-radius: 30px;
+    padding: 0px 15px;
+    flex: 1;
+}
+
+/* Arama Giriş Alanı */
+.arama-girisi {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    margin-left: 8px;
+    color: var(--white-color);
+}
+
+/* Filtre Aç/Kapat Butonu */
+.filtre-ac-kapat-buton {
+    background-color: var(--extra-light-color);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    color: var(--white-color);
+}
+
+/* Filtre Aç/Kapat Butonu Hover Stili */
+.filtre-ac-kapat-buton:hover {
+    background-color: var(--hover-light);
+}
+
+/* Gelişmiş Filtreler Alanı */
+.gelismis-filtreler {
+    background-color: var(--content-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+/* Filtre Bölümü */
+.filtre-bolum {
+    margin-bottom: 15px;
+}
+
+/* Filtre Başlığı */
+.filtre-baslik {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--white-color);
+}
+
+/* Filtre Butonları Kapsayıcısı */
+.filtre-butonlar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+/* Filtre Radyo Butonu Kapsayıcısı */
+.filtre-radyo {
+    position: relative;
+    display: inline-block;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+/* Filtre Radyo Girişi */
+.filtre-radyo input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Filtre Butonu */
+.filtre-buton {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: var(--content-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    color: var(--secondary-color);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* Filtre Butonu Hover Stili */
+.filtre-buton:hover {
+    background-color: var(--hover-light);
+    color: var(--white-color);
+}
+
+/* Filtre Butonu Aktif Stili */
+.filtre-radyo input:checked + .filtre-buton,
+.filtre-buton.active {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border-color: var(--primary-color);
+}
+
+/* Tarih Filtreleri Alanı */
+.tarih-filtre {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Tarih Giriş Grubu */
+.tarih-giris-grup {
+    flex: 1;
+    min-width: 140px;
+}
+
+/* Tarih Giriş Grubu Etiketi */
+.tarih-giris-grup label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: var(--secondary-color);
+}
+
+/* Tarih Giriş Alanı */
+.tarih-giris {
+    width: 100%;
+    padding: 8px 12px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    color: var(--white-color);
+}
+
+/* Filtre Seçim Alanı */
+.filtre-secim {
+    width: 100%;
+    padding: 8px 12px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    color: var(--white-color);
+}
+
+/* Filtre Aksiyon Butonları Alanı */
+.filtre-aksiyonlar {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Filtre Uygula Butonu */
+.filtre-uygula-btn {
+    padding: 8px 16px;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border: none;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-decoration: none;
+    flex: 1;
+}
+
+/* Filtre Uygula Butonu Hover Stili */
+.filtre-uygula-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Filtre Sıfırla Butonu */
+.filtre-sifirla-btn {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    text-align: center;
+    flex: 1;
+}
+
+/* Filtre Sıfırla Butonu Hover Stili */
+.filtre-sifirla-btn:hover {
+    background-color: var(--hover-light);
+    color: var(--white-color);
+    text-decoration: none;
+}
+
+/* İçerik Akışı Alanı */
+.icerik-akis {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    flex: 1;
+    overflow-y: auto;
+    align-items: center;
+}
+
+/* Akış Öğesi */
+.akis-oge {
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    transition: background-color 0.2s;
+    width: 150%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Akış Öğesi Hover Stili */
+.akis-oge:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Akış Öğesi Avatarı */
+.akis-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-right: 12px;
+    border: 1px solid var(--border-color);
+}
+
+/* Akış Öğesi Avatar Resmi */
+.akis-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Akış Öğesi İçeriği */
+.akis-icerik {
+    flex: 1;
+    margin-left: 12px;
+}
+
+/* Akış Öğesi Başlığı */
+.akis-baslik {
+    display: flex;
+    margin-bottom: 4px;
+}
+
+/* Akış Öğesi Kullanıcı Bilgi Alanı */
+.akis-kullanici-bilgi {
+    /* Kullanıcı bilgi kapsayıcısı */
+}
+
+/* Akış Öğesi İsim */
+.akis-isim {
+    font-weight: bold;
+    margin-right: 4px;
+}
+
+/* Akış Öğesi Kullanıcı Adı ve Zaman */
+.akis-kullanici-adi,
+.akis-zaman {
+    color: var(--secondary-color);
+}
+
+/* Akış Öğesi Başlık Metni */
+.akis-baslik-metin {
+    margin: 5px 0 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+/* Akış Öğesi Başlık Metni Linki */
+.akis-baslik-metin a {
+    color: var(--white-color);
+    text-decoration: none;
+}
+
+/* Akış Öğesi Başlık Metni Linki Hover Stili */
+.akis-baslik-metin a:hover {
+    text-decoration: underline;
+    color: var(--primary-color);
+}
+
+/* Akış Öğesi Metni */
+.akis-metin {
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+}
+
+/* Akış Öğesi Meta Bilgileri */
+.akis-meta {
+    margin-bottom: 10px;
+    font-size: 0.875rem;
+    color: var(--secondary-color);
+}
+
+/* Akış Öğesi Kategori */
+.akis-kategori {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Akış Öğesi Kategori İkonu */
+.akis-kategori i {
+    color: var(--primary-color);
+}
+
+/* Akış Öğesi Seviye */
+.akis-seviye {
+    margin-left: 10px;
+    color: var(--secondary-color);
+    font-size: 13px;
+}
+
+/* Akış Öğesi Aksiyon Butonları Alanı */
+.akis-aksiyonlar {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+    margin-top: 5px;
+}
+
+/* Akış Öğesi Aksiyon Butonu */
+.akis-aksiyon {
+    display: flex;
+    align-items: center;
+    color: var(--secondary-color);
+    transition: color 0.2s;
+    padding: 8px;
+    border-radius: 50px;
+}
+
+/* Akış Öğesi Aksiyon Butonu Hover Stili */
+.akis-aksiyon:hover {
+    color: var(--primary-color);
+    background-color: var(--hover-light);
+}
+
+/* Akış Öğesi Aksiyon Sayacı */
+.akis-aksiyon-sayac {
+    margin-left: 4px;
+    font-size: 0.875rem;
+}
+
+/* Boş İçerik Mesajı */
+.bos-akis-mesaj {
+    padding: 30px;
+    text-align: center;
+    color: var(--secondary-color);
+    background-color: transparent;
+    border-radius: 8px;
+    margin: 20px auto;
+    border: 1px solid var(--border-color);
+    max-width: 500px;
+}
+
+/* Sayfalama Kapsayıcısı */
+.sayfalama-kapsayici {
+    padding: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Sayfalama Kontrolleri */
+.sayfalama-kontroller {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Sayfalama Butonu */
+.sayfalama-buton {
+    padding: 8px 16px;
+    border-radius: 30px;
+    background-color: var(--extra-light-color);
+    color: var(--white-color);
+    transition: background-color 0.2s;
+}
+
+/* Sayfalama Butonu Hover Stili */
+.sayfalama-buton:hover {
+    background-color: var(--hover-light);
+    text-decoration: none;
+}
+
+/* Sayfalama Durum Metni */
+.sayfalama-durum {
+    color: var(--secondary-color);
+}
+
+/* Form Elemanları (input, textarea, select) */
+input, textarea, select {
+    font-family: var(--font-family);
+    font-size: 1rem;
+    color: var(--white-color);
+    background-color: var(--content-bg);
+}
+
+/* Textarea Stilleri (Genel) */
+textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 80px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 8px;
+}
+
+/* Yardımcı Sınıflar */
+
+/* Pozisyon Göreceli */
+.position-relative {
+    position: relative;
+}
+
+/* Görsel Olarak Gizlenmiş */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Flex Display */
+.d-flex {
+    display: flex;
+}
+
+/* Öğeleri Ortala */
+.align-center {
+    align-items: center;
+}
+
+/* Öğeleri Arasında Boşluk Bırak */
+.justify-between {
+    justify-content: space-between;
+}
+
+/* Flex Yönü Sütun */
+.flex-column {
+    flex-direction: column;
+}
+
+/* 8px Boşluk */
+.gap-2 {
+    gap: 8px;
+}
+
+/* 12px Boşluk */
+.gap-3 {
+    gap: 12px;
+}
+
+/* %100 Genişlik */
+.w-100 {
+    width: 100%;
+}
+
+/* Metni Ortala */
+.text-center {
+    text-align: center;
+}
+
+/* Üstten 4px Boşluk */
+.mt-1 {
+    margin-top: 4px;
+}
+
+/* Üstten 8px Boşluk */
+.mt-2 {
+    margin-top: 8px;
+}
+
+/* Üstten 12px Boşluk */
+.mt-3 {
+    margin-top: 12px;
+}
+
+/* Üstten 16px Boşluk */
+.mt-4 {
+    margin-top: 16px;
+}
+
+/* Alttan 4px Boşluk */
+.mb-1 {
+    margin-bottom: 4px;
+}
+
+/* Alttan 8px Boşluk */
+.mb-2 {
+    margin-bottom: 8px;
+}
+
+/* Alttan 12px Boşluk */
+.mb-3 {
+    margin-bottom: 12px;
+}
+
+/* Alttan 16px Boşluk */
+.mb-4 {
+    margin-bottom: 16px;
+}

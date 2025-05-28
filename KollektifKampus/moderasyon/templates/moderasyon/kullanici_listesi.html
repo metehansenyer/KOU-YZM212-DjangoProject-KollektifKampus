@@ -1,0 +1,163 @@
+{% extends 'moderasyon/panel_temel.html' %}
+
+{% load static %}
+
+{% block panel_content %}
+<!--- Ana moderasyon kartı --->
+<div class="mod-card">
+    <!--- Kart başlığı alanı --->
+    <div class="mod-card-title">
+        <!--- Başlık metni ve ikonu --->
+        <span><i class="fa-solid fa-users"></i> Kullanıcı Yönetimi</span>
+    </div>
+
+    <!--- Arama ve filtreleme formu --->
+    <form method="get" class="mod-filter-form">
+        <!--- Arama giriş alanı --->
+        <input type="text" name="arama" placeholder="Kullanıcı ara..." class="mod-input" value="{{ arama }}">
+
+        <!--- Rol filtreleme seçeneği --->
+        <select name="rol" class="mod-select">
+            <option value="">Tüm Roller</option>
+            {% for rol_kod, rol_ad in kullanici_roller %}
+                <option value="{{ rol_kod }}" {% if rol == rol_kod %}selected{% endif %}>{{ rol_ad }}</option>
+            {% endfor %}
+        </select>
+
+        <!--- Engel durumu filtreleme seçeneği --->
+        <select name="engel_durumu" class="mod-select">
+            <option value="">Tüm Engel Durumları</option>
+            <option value="engelli" {% if engel_durumu == 'engelli' %}selected{% endif %}>Engelli</option>
+            <option value="engelsiz" {% if engel_durumu == 'engelsiz' %}selected{% endif %}>Engelli Değil</option>
+        </select>
+
+        <!--- Arama butonu --->
+        <button type="submit" class="mod-btn mod-btn-primary">
+            <i class="fa-solid fa-search"></i> Ara
+        </button>
+    </form>
+
+    <!--- Kullanıcı tablosu için duyarlı kapsayıcı --->
+    <div class="mod-table-responsive">
+        <!--- Kullanıcı tablosu --->
+        <table class="mod-table">
+            <!--- Tablo başlığı --->
+            <thead>
+                <tr>
+                    <th>Kullanıcı</th>
+                    <!--- Küçük ekranlarda gizlenen e-posta sütunu --->
+                    <th class="d-none-sm">E-posta</th>
+                    <th>Rol</th>
+                    <!--- Orta ekranlarda gizlenen kayıt tarihi sütunu --->
+                    <th class="d-none-md">Kayıt Tarihi</th>
+                    <th>Durum</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <!--- Tablo içeriği --->
+            <tbody>
+                <!--- Her bir kullanıcı için döngü --->
+                {% for kullanici in kullanicilar %}
+                <tr>
+                    <td>
+                        <!--- Kullanıcı bilgisi kapsayıcısı --->
+                        <div class="user-info">
+                            <!--- Kullanıcı adı --->
+                            <span class="username">{{ kullanici.username }}</span>
+                            <!--- Tam ad (küçük ekranlarda gizlenir) --->
+                            <span class="fullname d-none-sm">{{ kullanici.get_full_name|default:"-" }}</span>
+                        </div>
+                    </td>
+                    <!--- E-posta adresi (küçük ekranlarda gizlenir) --->
+                    <td class="d-none-sm">{{ kullanici.email }}</td>
+                    <td>
+                        <!--- Kullanıcı rolü rozeti --->
+                        {% if kullanici.profil.kullanici_rolu == 'NORMAL' %}
+                            <span class="mod-badge mod-badge-info">Normal</span>
+                        {% elif kullanici.profil.kullanici_rolu == 'EGITMEN' %}
+                            <span class="mod-badge mod-badge-success">Eğitmen</span>
+                        {% elif kullanici.profil.kullanici_rolu == 'MODERATOR' %}
+                            <span class="mod-badge mod-badge-warning">Mod</span>
+                        {% elif kullanici.profil.kullanici_rolu == 'ADMIN' %}
+                            <span class="mod-badge mod-badge-danger">Admin</span>
+                        {% endif %}
+                    </td>
+                    <!--- Kayıt tarihi (orta ekranlarda gizlenir) --->
+                    <td class="d-none-md">{{ kullanici.date_joined|date:"d.m.Y" }}</td>
+                    <td>
+                        <!--- Engel durumu rozeti --->
+                        {% if kullanici.profil.ban_durumu %}
+                            <span class="mod-badge mod-badge-danger">Engelli</span>
+                        {% else %}
+                            <span class="mod-badge mod-badge-success">Aktif</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <!--- Kullanıcı profili görüntüleme butonu --->
+                        <a href="{% url 'kullanicilar:profil_detay' username=kullanici.username %}" class="mod-btn mod-btn-primary mod-btn-sm buton-esit">
+                            <i class="fa-solid fa-eye"></i> <span class="d-none-sm">Görüntüle</span>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <!--- Kullanıcı bulunamadığında gösterilecek satır --->
+                <tr>
+                    <td colspan="6" class="text-center">Kullanıcı bulunamadı.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!--- Sayfalama bölümü --->
+    {% if is_paginated %}
+    <div class="mod-pagination">
+        <!--- Önceki sayfa bağlantıları --->
+        {% if page_obj.has_previous %}
+            <a href="?page=1{% if arama %}&arama={{ arama }}{% endif %}{% if rol %}&rol={{ rol }}{% endif %}{% if engel_durumu %}&engel_durumu={{ engel_durumu }}{% endif %}" class="page-link">İlk</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if arama %}&arama={{ arama }}{% endif %}{% if rol %}&rol={{ rol }}{% endif %}{% if engel_durumu %}&engel_durumu={{ engel_durumu }}{% endif %}" class="page-link">Önceki</a>
+        {% endif %}
+
+        <!--- Mevcut sayfa bilgisi --->
+        <span class="page-link current">
+            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+
+        <!--- Sonraki sayfa bağlantıları --->
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if arama %}&arama={{ arama }}{% endif %}{% if rol %}&rol={{ rol }}{% endif %}{% if engel_durumu %}&engel_durumu={{ engel_durumu }}{% endif %}" class="page-link">Sonraki</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if arama %}&arama={{ arama }}{% endif %}{% if rol %}&rol={{ rol }}{% endif %}{% if engel_durumu %}&engel_durumu={{ engel_durumu }}{% endif %}" class="page-link">Son</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* Kullanıcı bilgisi kapsayıcısı stilleri */
+    .user-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Kullanıcı adı stilleri */
+    .user-info .username {
+        font-weight: 500;
+    }
+
+    /* Tam ad stilleri */
+    .user-info .fullname {
+        font-size: 12px;
+        color: var(--secondary-color);
+    }
+
+    /* Butonların eşit yükseklikte olması için stiller */
+    .buton-esit {
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+    }
+</style>
+{% endblock %}

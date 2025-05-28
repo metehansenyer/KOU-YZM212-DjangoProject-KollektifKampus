@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!--- Sayfa başlığını ayarla -->
+{% block title %}Eğitmen Başvuru Detayı - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/kullanici.css' %}">
+{% endblock %}
+
+<!--- Ana içerik bloğu -->
+{% block content %}
+<!--- Sayfa başlığı bölümü -->
+<div class="kullanici-baslik">
+    <h1>Eğitmen Başvuru Detayı</h1>
+</div>
+
+<!--- İçerik kapsayıcısı -->
+<div class="kullanici-ana-kapsayici">
+    <!--- İçerik kartı kapsayıcısı -->
+    <div class="kullanici-kart-kapsayici">
+        <!--- Kart başlığı - Başvuru Durumu -->
+        <div class="kullanici-kart-baslik d-flex justify-content-between align-items-center">
+            <h5>Başvuru Durumu</h5>
+            
+            <!--- Başvuru durumuna göre rozet göster -->
+            {% if basvuru.basvuru_durumu == 'BEKLEMEDE' %}
+                <!--- Beklemede durumu rozeti -->
+                <span class="egitmen-durum-rozet egitmen-durum-beklemede">
+                    <i class="fa-solid fa-clock me-1"></i>
+                    {{ basvuru.get_basvuru_durumu_display }}
+                </span>
+            {% elif basvuru.basvuru_durumu == 'ONAYLANDI' %}
+                <!--- Onaylandı durumu rozeti -->
+                <span class="egitmen-durum-rozet egitmen-durum-onaylandi">
+                    <i class="fa-solid fa-check me-1"></i>
+                    {{ basvuru.get_basvuru_durumu_display }}
+                </span>
+            {% elif basvuru.basvuru_durumu == 'REDDEDILDI' %}
+                <!--- Reddedildi durumu rozeti -->
+                <span class="egitmen-durum-rozet egitmen-durum-reddedildi">
+                    <i class="fa-solid fa-times me-1"></i>
+                    {{ basvuru.get_basvuru_durumu_display }}
+                </span>
+            {% endif %}
+        </div>
+        <!--- Kart içeriği bölümü -->
+        <div class="kullanici-kart-icerik">
+            <!--- Detay bölümü - Tarihler -->
+            <div class="egitmen-detay-bolum">
+                <!--- Başvuru tarihi öğesi -->
+                <div class="egitmen-detay-item">
+                    <span class="egitmen-detay-etiket"><i class="fa-solid fa-calendar-alt text-primary me-2"></i> Başvuru Tarihi:</span>
+                    <span class="egitmen-detay-deger">{{ basvuru.basvuru_tarihi|date:"d.m.Y H:i" }}</span>
+                </div>
+                
+                <!--- Başvuru beklemede değilse değerlendirilme tarihini göster -->
+                {% if basvuru.basvuru_durumu != 'BEKLEMEDE' %}
+                <!--- Değerlendirilme tarihi öğesi -->
+                <div class="egitmen-detay-item">
+                    <span class="egitmen-detay-etiket"><i class="fa-solid fa-calendar-check text-primary me-2"></i> Değerlendirilme Tarihi:</span>
+                    <span class="egitmen-detay-deger">{{ basvuru.degerlendirilme_tarihi|date:"d.m.Y H:i" }}</span>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!--- Başvuru durumuna göre bilgilendirme mesajı göster -->
+            {% if basvuru.basvuru_durumu == 'BEKLEMEDE' %}
+                <!--- Beklemede durumu mesajı -->
+                <div class="egitmen-durum-mesaj egitmen-durum-mesaj-beklemede">
+                    <div class="egitmen-durum-mesaj-ikon">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                    </div>
+                    <div class="egitmen-durum-mesaj-icerik">
+                        <h6>Başvurunuz Değerlendirme Aşamasında</h6>
+                        <p>Başvurunuz moderatörler tarafından incelendikten sonra sonuç size bildirilecektir. Teşekkür ederiz.</p>
+                    </div>
+                </div>
+            {% elif basvuru.basvuru_durumu == 'ONAYLANDI' %}
+                <!--- Onaylandı durumu mesajı -->
+                <div class="egitmen-durum-mesaj egitmen-durum-mesaj-onaylandi">
+                    <div class="egitmen-durum-mesaj-ikon">
+                        <i class="fa-solid fa-check-circle"></i>
+                    </div>
+                    <div class="egitmen-durum-mesaj-icerik">
+                        <h6>Başvurunuz Onaylandı!</h6>
+                        <p>Tebrikler! Eğitmen başvurunuz onaylanmıştır. Artık Kollektif Kampüs'te eğitmen olarak ders verebilirsiniz.</p>
+                        <p>Eğitmen paneline erişebilir ve öğrencilerin ders isteklerini görüntüleyebilirsiniz.</p>
+                    </div>
+                </div>
+            {% elif basvuru.basvuru_durumu == 'REDDEDILDI' %}
+                <!--- Reddedildi durumu mesajı -->
+                <div class="egitmen-durum-mesaj egitmen-durum-mesaj-reddedildi">
+                    <div class="egitmen-durum-mesaj-ikon">
+                        <i class="fa-solid fa-times-circle"></i>
+                    </div>
+                    <div class="egitmen-durum-mesaj-icerik">
+                        <h6>Başvurunuz Reddedildi</h6>
+                        <p><strong>Red sebebi:</strong> {{ basvuru.red_sebebi }}</p>
+                        <p>Belirtilen geri bildirimleri dikkate alarak yeni bir başvuru yapabilirsiniz.</p>
+                    </div>
+                </div>
+            {% endif %}
+            
+            <!--- Başvuru detayları başlığı -->
+            <div class="egitmen-bolum-baslik">
+                <i class="fa-solid fa-list-ul me-2"></i> Başvuru Detayları
+            </div>
+            
+            <!--- Detay paneli - Eğitim Bilgileri -->
+            <div class="egitmen-detay-panel">
+                <div class="egitmen-detay-panel-baslik">
+                    <i class="fa-solid fa-graduation-cap text-primary me-2"></i> Eğitim Bilgileri
+                </div>
+                <div class="egitmen-detay-panel-icerik">
+                    {{ basvuru.egitim_bilgileri|linebreaks }}
+                </div>
+            </div>
+            
+            <!--- Detay paneli - Deneyim -->
+            <div class="egitmen-detay-panel">
+                <div class="egitmen-detay-panel-baslik">
+                    <i class="fa-solid fa-briefcase text-primary me-2"></i> Deneyim
+                </div>
+                <div class="egitmen-detay-panel-icerik">
+                    {{ basvuru.deneyim|linebreaks }}
+                </div>
+            </div>
+            
+            <!--- Detay paneli - Uzmanlık Alanları -->
+            <div class="egitmen-detay-panel">
+                <div class="egitmen-detay-panel-baslik">
+                    <i class="fa-solid fa-star text-primary me-2"></i> Uzmanlık Alanları
+                </div>
+                <div class="egitmen-detay-panel-icerik">
+                    {{ basvuru.uzmanlik_alanlari|linebreaks }}
+                </div>
+            </div>
+            
+            <!--- Detay paneli - Motivasyon -->
+            <div class="egitmen-detay-panel">
+                <div class="egitmen-detay-panel-baslik">
+                    <i class="fa-solid fa-lightbulb text-primary me-2"></i> Motivasyon
+                </div>
+                <div class="egitmen-detay-panel-icerik">
+                    {{ basvuru.motivasyon|linebreaks }}
+                </div>
+            </div>
+            
+            <!--- Alt kısım - Yeniden Başvur butonu -->
+            <div class="kullanici-form-alt">
+                <!--- Başvuru reddedildiyse yeniden başvur butonunu göster -->
+                {% if basvuru.basvuru_durumu == 'REDDEDILDI' %}
+                    <a href="{% url 'kullanicilar:egitmen_basvurusu' %}" class="kullanici-buton kullanici-buton-birincil">
+                        <i class="fa-solid fa-redo"></i> Yeniden Başvur
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

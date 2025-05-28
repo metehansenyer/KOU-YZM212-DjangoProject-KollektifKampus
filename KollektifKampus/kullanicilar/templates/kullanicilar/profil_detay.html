@@ -1,0 +1,471 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title|default:"Profilim" }} - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/kullanici.css' %}">
+{% endblock %}
+
+{% block content %}
+<!--- Profil sayfasının ana kapsayıcısı -->
+<div class="profil-kapsayici">
+    <!--- Profil başlık alanı -->
+    <div class="profil-banner">
+        <div class="profil-banner-icerik">
+            <!--- Kullanıcının tam adını veya kullanıcı adını gösteren başlık -->
+            <h2>{{ profil.user.get_full_name|default:profil.user.username }} Profili</h2>
+        </div>
+    </div>
+    
+    <!--- Profil ana içerik alanı - Kart ve Sekmeler -->
+    <div class="profil-ana-icerik">
+        <!--- Profil kartı (avatar, isim, bilgiler) -->
+        <div class="profil-kart">
+            <!--- Profil alanı (sol ve sağ alanları içerir) -->
+            <div class="profil-alan">
+                <!--- Sol alan (Avatar ve isim bölümü) -->
+                <div class="profil-sol-alan">
+                    <!--- Avatar bölümü -->
+                    <div class="profil-avatar-bolum">
+                        <!--- Profil fotoğrafı varsa göster -->
+                        {% if profil.profil_fotografi_index > 0 %}
+                        <img src="{% static 'img/profil_fotografi_' %}{{ profil.profil_fotografi_index }}.png" alt="{{ profil.user.username }}" class="profil-avatar-img">
+                        {% else %}
+                            <!--- Profil fotoğrafı yoksa placeholder göster (kullanıcı adının ilk harfi) -->
+                            <div class="profil-avatar-placeholder">{{ profil.user.username|first|upper }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!--- Kullanıcı adı ve tam ad -->
+                    <div class="profil-isim">
+                        <!--- Tam ad veya kullanıcı adı -->
+                        <h3>{{ profil.user.get_full_name|default:profil.user.username }}</h3>
+                        <!--- Kullanıcı adı (@ formatında) -->
+                        <span class="profil-kullanici-adi">@{{ profil.user.username }}</span>
+                        
+                        <!--- Kullanıcı rolü ve ban durumu rozetleri -->
+                        <div class="profil-rozetler">
+                            <!--- Kullanıcı rolü rozeti -->
+                            <span class="profil-rozet profil-rozet-{{ profil.kullanici_rolu|lower }}">
+                                <!--- Rol ikonları -->
+                                {% if profil.kullanici_rolu == 'NORMAL' %}
+                                    <i class="fa-solid fa-user"></i>
+                                {% elif profil.kullanici_rolu == 'EGITMEN' %}
+                                    <i class="fa-solid fa-chalkboard-user"></i>
+                                {% elif profil.kullanici_rolu == 'MODERATOR' %}
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                {% elif profil.kullanici_rolu == 'ADMIN' %}
+                                    <i class="fa-solid fa-user-shield"></i>
+                                {% endif %}
+                                <!--- Rol adının görünen hali -->
+                                {{ profil.get_kullanici_rolu_display }}
+                            </span>
+                            
+                            <!--- Ban durumu rozeti (eğer kullanıcı engelliyse) -->
+                            {% if profil.ban_durumu %}
+                                <span class="profil-rozet profil-rozet-engelli">
+                                    <i class="fa-solid fa-ban"></i> Engelli
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!--- Sağ alan (Butonlar bölümü) -->
+                <div class="profil-sag-alan">
+                    <!--- Kendi profiliyse düzenleme butonu -->
+                    {% if user.is_authenticated and user == profil.user %}
+                    <div class="profil-butonlar">
+                        <a href="{% url 'kullanicilar:profil_guncelle' %}" class="profil-buton">
+                            <i class="fa-solid fa-pen"></i> Profili Düzenle
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!--- Profil Bilgileri Kartları -->
+            <div class="profil-bilgi-kartlari">
+                <!--- Kullanıcı temel bilgileri kartı -->
+                <div class="profil-bilgi-kart">
+                    <div class="profil-bilgi-baslik">Kullanıcı Bilgileri</div>
+                    <!--- Üniversite bilgisi -->
+                    <div class="profil-bilgi-satir">
+                        <span class="profil-bilgi-etiket">Üniversite:</span>
+                        <span class="profil-bilgi-deger">{{ profil.universite|default:"Belirtilmemiş" }}</span>
+                    </div>
+                    <!--- Bölüm bilgisi -->
+                    <div class="profil-bilgi-satir">
+                        <span class="profil-bilgi-etiket">Bölüm:</span>
+                        <span class="profil-bilgi-deger">{{ profil.bolum|default:"Belirtilmemiş" }}</span>
+                    </div>
+                    <!--- Sınıf bilgisi -->
+                    <div class="profil-bilgi-satir">
+                        <span class="profil-bilgi-etiket">Sınıf:</span>
+                        <span class="profil-bilgi-deger">{{ profil.sinif|default:"Belirtilmemiş" }}</span>
+                    </div>
+                    <!--- Hakkında bilgisi -->
+                    <div class="profil-bilgi-satir">
+                        <span class="profil-bilgi-etiket">Hakkında:</span>
+                        <span class="profil-bilgi-deger">{{ profil.hakkinda|default:"Belirtilmemiş"|linebreaks }}</span>
+                    </div>
+                </div>
+                
+                <!--- Değerlendirme Kartı -->
+                <div class="profil-bilgi-kart">
+                    <div class="profil-bilgi-baslik">Değerlendirme</div>
+                    <!--- Kullanıcının aldığı değerlendirme sayısını hesapla -->
+                    {% if degerlendirme_sayisi > 0 and ortalama_puan %}
+                        <div class="profil-degerlendirme">
+                            <!--- Puanı göster -->
+                            <div class="profil-puan">{{ ortalama_puan }}</div>
+                            <!--- Yıldızları göster (dolu/boş) -->
+                            <div class="profil-yildizlar">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= ortalama_puan|floatformat:0|add:"0" %}
+                                        <span class="yildiz-dolu">★</span>
+                                    {% else %}
+                                        <span class="yildiz-bos">☆</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <!--- Değerlendirme sayısını göster -->
+                            <div class="profil-degerlendirme-sayisi">
+                                {{ degerlendirme_sayisi }} değerlendirme
+                            </div>
+                        </div>
+                    {% else %}
+                        <!--- Değerlendirme yoksa mesaj göster -->
+                        <div class="profil-degerlendirme">
+                            <div class="profil-degerlendirme-yok">Henüz değerlendirme yok</div>
+                        </div>
+                    {% endif %}
+                    
+                    <!--- Tüm değerlendirmeleri gör butonu -->
+                    <div class="profil-buton-degerlendirme mt-3">
+                        <a href="{% url 'geribildirim:kullanici_degerlendirmeleri' username=profil.user.username %}" class="profil-buton profil-buton-sm">
+                            <i class="fa-solid fa-star"></i> Tüm Değerlendirmeler
+                        </a>
+                    </div>
+                </div>
+
+                <!--- Admin yetkileri ile rol değiştirme ve engelleme bölümü -->
+                <!--- Sadece giriş yapmış admin kullanıcı kendi profilini görüntülemiyorsa görünür -->
+                {% if user.is_authenticated and user.profil.is_admin and user != profil.user %}
+                <div class="profil-bilgi-kart">
+                    <div class="profil-bilgi-baslik">Yönetici İşlemleri</div>
+                    
+                    <!--- Rol değiştirme formu -->
+                    <form method="post" action="{% url 'kullanicilar:kullanici_rolu_degistir' username=profil.user.username %}" class="rol-degistir-form">
+                        {% csrf_token %}
+                        <div class="profil-bilgi-satir">
+                            <span class="profil-bilgi-etiket">Kullanıcı Rolü:</span>
+                            <div class="profil-bilgi-deger">
+                                <!--- Rol seçimi dropdown -->
+                                <select name="kullanici_rolu" id="kullanici_rolu" class="profil-select">
+                                    {% for rol_kod, rol_ad in kullanici_roller %}
+                                    <option value="{{ rol_kod }}" {% if profil.kullanici_rolu == rol_kod %}selected{% endif %}>{{ rol_ad }}</option>
+                                    {% endfor %}
+                                </select>
+                                <!--- Rol değiştirme butonu -->
+                                <button type="submit" class="profil-buton profil-buton-sm profil-buton-primary">
+                                    <i class="fa-solid fa-user-check"></i> Rolü Değiştir
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <!--- Engel durumu ve kaldırma formu -->
+                    {% if profil.ban_durumu %}
+                    <!--- Engel durumu aktifse göster -->
+                    <div class="profil-bilgi-satir">
+                        <span class="profil-bilgi-etiket">Engel Durumu:</span>
+                        <span class="profil-bilgi-deger ban-aktif">Engelli</span>
+                    </div>
+                    <!--- Engel bitiş tarihi -->
+                    <div class="profil-bilgi-satir">
+                        <span class="profil-bilgi-etiket">Engel Bitiş:</span>
+                        <span class="profil-bilgi-deger">{{ profil.ban_bitis_tarihi|date:"d.m.Y H:i" }}</span>
+                    </div>
+                    
+                    <!--- Engeli kaldırma formu -->
+                    <div class="profil-bilgi-satir">
+                        <span class="profil-bilgi-etiket">İşlemler:</span>
+                        <div class="profil-bilgi-deger">
+                            <form method="post" action="{% url 'moderasyon:kullanici_engel_kaldir' user_id=profil.user.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="profil-buton profil-buton-sm profil-buton-basari">
+                                    <i class="fa-solid fa-user-check"></i> Engeli Kaldır
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    {% else %}
+                    <!--- Kullanıcı engelli değilse engelleme formu -->
+                    <form method="post" action="{% url 'moderasyon:kullanici_engelle' user_id=profil.user.id %}" class="rol-degistir-form">
+                        {% csrf_token %}
+                        <div class="profil-bilgi-satir">
+                            <span class="profil-bilgi-etiket">Engelleme:</span>
+                            <div class="profil-bilgi-deger">
+                                <!--- Engelleme süresi inputu -->
+                                <div class="engelleme-input-group">
+                                    <input type="number" name="engelleme_suresi" id="engelleme_suresi" min="1" max="30" value="7" class="profil-input">
+                                    <span class="engelleme-birim">gün</span>
+                                </div>
+                                <!--- Engelleme butonu -->
+                                <button type="submit" class="profil-buton profil-buton-sm profil-buton-tehlike">
+                                    <i class="fa-solid fa-user-slash"></i> Kullanıcıyı Engelle
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!--- Sekmeler (Ders Talepleri, Verdiği Dersler, Eğitmen Başvuruları) -->
+        <div class="profil-sekmeler">
+            <!--- Sekme başlıkları -->
+            <div class="profil-sekme-basliklar">
+                <!--- Ders Talepleri sekme başlığı -->
+                <!--- Eğer kullanıcı kendi profilini görüntülemiyorsa bu sekme varsayılan olarak aktif olur -->
+                <div class="profil-sekme-baslik {% if not user.is_authenticated or user != profil.user %}active{% endif %}" data-tab="ders-talepleri">
+                    <i class="fa-solid fa-list-ul"></i> {% if user.is_authenticated and user == profil.user %}Ders Taleplerim{% else %}Ders Talepleri{% endif %}
+                </div>
+                <!--- Verdiği Dersler sekme başlığı -->
+                <div class="profil-sekme-baslik" data-tab="verdigi-dersler">
+                    <i class="fa-solid fa-chalkboard-user"></i> {% if user.is_authenticated and user == profil.user %}Verdiğim Dersler{% else %}Verdiği Dersler{% endif %}
+                </div>
+                <!--- Eğitmen Başvuruları sekme başlığı -->
+                <!--- Sadece kullanıcı kendi profilini görüntülüyorsa ve eğitmen rolüne sahipse görünür -->
+                {% if user.is_authenticated and user == profil.user and user.profil.is_egitmen %}
+                <div class="profil-sekme-baslik {% if user.is_authenticated and user == profil.user %}active{% endif %}" data-tab="egitmen-basvurulari">
+                    <i class="fa-solid fa-clipboard-check"></i> Eğitmen Başvurularım
+                </div>
+                {% endif %}
+            </div>
+            
+            <!--- Ders Talepleri Sekmesi İçeriği -->
+            <!--- Eğer kullanıcı kendi profilini görüntülemiyorsa bu sekme içeriği varsayılan olarak aktif olur -->
+            <div class="profil-sekme-icerik {% if not user.is_authenticated or user != profil.user %}active{% endif %}" id="ders-talepleri">
+                {% if ders_istekleri %}
+                    <!--- Ders talepleri listesi -->
+                    <div class="profil-liste">
+                        {% for istek in ders_istekleri %}
+                            <div class="profil-liste-item">
+                                <div class="profil-liste-baslik">
+                                    <!--- Talep başlığı -->
+                                    <h4>{{ istek.talep_basligi }}</h4>
+                                    <!--- Oluşturulma tarihi -->
+                                    <span class="profil-liste-tarih">{{ istek.olusturulma_tarihi|date:"d F Y" }}</span>
+                                </div>
+                                <!--- Detaylı açıklamanın kısaltılmış hali -->
+                                <div class="profil-liste-metin">
+                                    {{ istek.detayli_aciklama|truncatechars:100 }}
+                                </div>
+                                <div class="profil-liste-alt">
+                                    <!--- Talep durumu rozeti -->
+                                    <span class="profil-durum-rozet {% if istek.talep_durumu == 'AKTIF' %}durum-aktif{% elif istek.talep_durumu == 'KAPALI' %}durum-kapali{% elif istek.talep_durumu == 'EGITMEN_ATANDI' %}durum-atandi{% elif istek.talep_durumu == 'TAMAMLANDI' %}durum-tamamlandi{% endif %}">
+                                        {{ istek.get_talep_durumu_display }}
+                                    </span>
+                                    
+                                    <!--- Talep butonları (Detay, Tamamlandı, Değerlendir) -->
+                                    <div class="profil-liste-butonlar">
+                                        <!--- Detaylar butonu -->
+                                        {% if istek.pk %}
+                                        <a href="{% url 'talepler:ders_istegi_detay' pk=istek.pk %}" class="profil-buton profil-buton-sm">
+                                            <i class="fa-solid fa-eye"></i> Detaylar
+                                        </a>
+                                        {% endif %}
+                                        
+                                        <!--- Tamamlandı butonu (eğer eğitmen atandıysa ve kullanıcı kendi profiliyse) -->
+                                        {% if istek.talep_durumu == 'EGITMEN_ATANDI' and user.is_authenticated and user == profil.user and istek.pk %}
+                                            <a href="{% url 'talepler:ders_istegi_tamamla' ders_istegi_id=istek.pk %}" class="profil-buton profil-buton-sm profil-buton-basari">
+                                                <i class="fa-solid fa-check"></i> Tamamlandı
+                                            </a>
+                                        {% endif %}
+                                        
+                                        <!--- Değerlendir butonu (eğer tamamlandıysa, eğitmen atandıysa ve kullanıcı kendi profiliyse ve değerlendirme yapabilirse) -->
+                                        {% if istek.talep_durumu == 'TAMAMLANDI' and istek.atanan_egitmen and user.is_authenticated and user == profil.user and istek.pk %}
+                                            {% if istek.kullanici_degerlendirme_yapabilir %}
+                                                <a href="{% url 'geribildirim:degerlendirme_olustur' ders_istegi_id=istek.pk %}" class="profil-buton profil-buton-sm profil-buton-ikincil">
+                                                    <i class="fa-solid fa-star"></i> Değerlendir
+                                                </a>
+                                            {% else %}
+                                                <!--- Değerlendirme yapıldıysa pasif buton -->
+                                                <span class="profil-buton profil-buton-sm profil-buton-pasif">
+                                                    <i class="fa-solid fa-check-circle"></i> Değerlendirildi
+                                                </span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <!--- Ders talebi yoksa gösterilecek mesaj -->
+                    <div class="profil-liste-bos">
+                        <i class="fa-solid fa-search"></i>
+                        <p>{{ profil.user.username }} kullanıcısı henüz ders talebi oluşturmamış.</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!--- Verdiği Dersler Sekmesi İçeriği -->
+            <div class="profil-sekme-icerik" id="verdigi-dersler">
+                {% if verdigi_dersler_detayli %}
+                    <!--- Verdiği dersler listesi -->
+                    <div class="profil-liste">
+                        {% for ders_detay in verdigi_dersler_detayli %}
+                            <div class="profil-liste-item">
+                                <div class="profil-liste-baslik">
+                                    <!--- Ders talebi başlığı -->
+                                    <h4>{{ ders_detay.ders_istegi.talep_basligi }}</h4>
+                                    <!--- Oluşturulma tarihi -->
+                                    <span class="profil-liste-tarih">{{ ders_detay.ders_istegi.olusturulma_tarihi|date:"d F Y" }}</span>
+                                </div>
+                                <!--- Öğrenci bilgisi ve varsa değerlendirme puanı -->
+                                <div class="profil-liste-metin">
+                                    <span class="profil-liste-etiket">Öğrenci:</span> {{ ders_detay.ders_istegi.talep_eden_kullanici.user.username }}
+                                    {% if ders_detay.ortalama_puan %}
+                                        <br>
+                                        <span class="profil-liste-etiket">Değerlendirme:</span> 
+                                        <span class="profil-mini-puan">{{ ders_detay.ortalama_puan }}/5</span>
+                                    {% endif %}
+                                </div>
+                                <div class="profil-liste-alt">
+                                    <!--- Talep durumu rozeti -->
+                                    <span class="profil-durum-rozet {% if ders_detay.ders_istegi.talep_durumu == 'AKTIF' %}durum-aktif{% elif ders_detay.ders_istegi.talep_durumu == 'KAPALI' %}durum-kapali{% elif ders_detay.ders_istegi.talep_durumu == 'EGITMEN_ATANDI' %}durum-atandi{% elif ders_detay.ders_istegi.talep_durumu == 'TAMAMLANDI' %}durum-tamamlandi{% endif %}">
+                                        {{ ders_detay.ders_istegi.get_talep_durumu_display }}
+                                    </span>
+                                    
+                                    <!--- Talep butonları (Detay, Tamamlandı, Değerlendir) -->
+                                    <div class="profil-liste-butonlar">
+                                        <!--- Detaylar butonu -->
+                                        {% if ders_detay.ders_istegi.pk %}
+                                        <a href="{% url 'talepler:ders_istegi_detay' pk=ders_detay.ders_istegi.pk %}" class="profil-buton profil-buton-sm">
+                                            <i class="fa-solid fa-eye"></i> Detaylar
+                                        </a>
+                                        {% endif %}
+                                        
+                                        <!--- Tamamlandı butonu (eğer eğitmen atandıysa ve kullanıcı kendi profiliyse) -->
+                                        {% if ders_detay.ders_istegi.talep_durumu == 'EGITMEN_ATANDI' and user.is_authenticated and user == profil.user and ders_detay.ders_istegi.pk %}
+                                            <a href="{% url 'talepler:ders_istegi_tamamla' ders_istegi_id=ders_detay.ders_istegi.pk %}" class="profil-buton profil-buton-sm profil-buton-basari">
+                                                <i class="fa-solid fa-check"></i> Tamamlandı
+                                            </a>
+                                        {% endif %}
+                                        
+                                        <!--- Değerlendir butonu (eğer tamamlandıysa ve kullanıcı kendi profiliyse ve değerlendirme yapabilirse) -->
+                                        {% if ders_detay.ders_istegi.talep_durumu == 'TAMAMLANDI' and user.is_authenticated and user == profil.user and ders_detay.ders_istegi.pk %}
+                                            {% if ders_detay.kullanici_degerlendirme_yapabilir %}
+                                                <a href="{% url 'geribildirim:degerlendirme_olustur' ders_istegi_id=ders_detay.ders_istegi.pk %}" class="profil-buton profil-buton-sm profil-buton-ikincil">
+                                                    <i class="fa-solid fa-star"></i> Değerlendir
+                                                </a>
+                                            {% else %}
+                                                <!--- Değerlendirme yapıldıysa pasif buton -->
+                                                <span class="profil-buton profil-buton-sm profil-buton-pasif">
+                                                    <i class="fa-solid fa-check-circle"></i> Değerlendirildi
+                                                </span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <!--- Verdiği ders yoksa gösterilecek mesaj -->
+                    <div class="profil-liste-bos">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                        <p>{{ profil.user.username }} kullanıcısı henüz ders vermemiş.</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!--- Eğitmen Başvuruları Sekmesi İçeriği - Sadece kullanıcı kendi profilini görüntülüyorsa ve eğitmen rolüne sahipse görünür -->
+            {% if user.is_authenticated and user == profil.user and user.profil.is_egitmen %}
+            <div class="profil-sekme-icerik {% if user.is_authenticated and user == profil.user %}active{% endif %}" id="egitmen-basvurulari">
+                {% if egitmen_basvurulari %}
+                    <!--- Eğitmen başvuruları listesi -->
+                    <div class="profil-liste">
+                        {% for basvuru in egitmen_basvurulari %}
+                            <div class="profil-liste-item">
+                                <div class="profil-liste-baslik">
+                                    <!--- Başvuru başlığı (varsa talep başlığı) -->
+                                    <h4>{% if basvuru.ders_istegi %}{{ basvuru.ders_istegi.talep_basligi }}{% else %}Başvuru{% endif %}</h4>
+                                    <!--- Başvuru tarihi -->
+                                    <span class="profil-liste-tarih">{{ basvuru.basvuru_tarihi|date:"d F Y" }}</span>
+                                </div>
+                                <!--- Talep eden kullanıcı bilgisi -->
+                                <div class="profil-liste-metin">
+                                    <span class="profil-liste-etiket">Talep Eden:</span> 
+                                    {% if basvuru.ders_istegi and basvuru.ders_istegi.talep_eden_kullanici %}
+                                        {{ basvuru.ders_istegi.talep_eden_kullanici.user.username }}
+                                    {% else %}
+                                        Bilgi yok
+                                    {% endif %}
+                                </div>
+                                <div class="profil-liste-alt">
+                                    <!--- Başvuru durumu rozeti -->
+                                    <span class="profil-durum-rozet {% if basvuru.basvuru_durumu == 'BEKLEMEDE' %}durum-beklemede{% elif basvuru.basvuru_durumu == 'KABUL_EDILDI' %}durum-aktif{% elif basvuru.basvuru_durumu == 'REDDEDILDI' %}durum-kapali{% endif %}">
+                                        {{ basvuru.get_basvuru_durumu_display }}
+                                    </span>
+                                    
+                                    <!--- Başvuru butonları (Detay) -->
+                                    <div class="profil-liste-butonlar">
+                                        <!--- Detaylar butonu (varsa talep detayına gider) -->
+                                        {% if basvuru.ders_istegi and basvuru.ders_istegi.pk %}
+                                        <a href="{% url 'talepler:ders_istegi_detay' pk=basvuru.ders_istegi.pk %}" class="profil-buton profil-buton-sm">
+                                            <i class="fa-solid fa-eye"></i> Detaylar
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <!--- Eğitmen başvurusu yoksa gösterilecek mesaj -->
+                    <div class="profil-liste-bos">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                        <p>Henüz eğitmen başvurusu yapmamışsınız.</p>
+                    </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Sekmeler arası geçiş işlevselliği
+    const tabButtons = document.querySelectorAll('.profil-sekme-baslik');
+    const tabContents = document.querySelectorAll('.profil-sekme-icerik');
+    
+    // Her sekme başlığına tıklama olayı ekle
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Tüm sekme başlıklarından 'active' sınıfını kaldır
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            // Tüm sekme içeriklerinden 'active' sınıfını kaldır (gizle)
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Tıklanan sekme başlığına 'active' sınıfını ekle (aktif yap)
+            this.classList.add('active');
+            
+            // Tıklanan sekme başlığının 'data-tab' özelliğinden hedef içeriğin ID'sini al
+            const tabId = this.getAttribute('data-tab');
+            // İlgili içeriği bul ve 'active' sınıfını ekle (göster)
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+});
+</script>
+{% endblock %} 

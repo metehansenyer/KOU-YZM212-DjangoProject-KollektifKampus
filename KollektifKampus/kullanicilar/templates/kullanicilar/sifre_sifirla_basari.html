@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Şifre Sıfırlama Başarılı - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-baslik">
+    <h1>Şifre Sıfırlama Başarılı</h1>
+</div>
+
+<div class="auth-ana-kapsayici">
+    <div class="auth-kart">
+        <div class="auth-uyari auth-uyari-basari">
+            <div class="auth-uyari-ikon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div class="auth-uyari-icerik">
+                <p>Şifreniz başarıyla değiştirildi! Yeni şifrenizle giriş yapabilirsiniz.</p>
+            </div>
+        </div>
+
+        <div class="auth-baglantilar">
+            <a href="{% url 'kullanicilar:giris' %}" class="auth-baglanti">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <span>Giriş Yap</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

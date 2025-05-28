@@ -1,0 +1,145 @@
+{% extends 'moderasyon/panel_temel.html' %}
+
+{% block panel_content %}
+<!--- İstatistik kartları bölümü -->
+<div class="stat-cards">
+    <!--- Toplam kullanıcı sayısı kartı -->
+    <div class="stat-card">
+        <i class="fa-solid fa-users"></i>
+        <div class="stat-value">{{ kullanici_sayisi }}</div>
+        <div class="stat-label">Toplam Kullanıcı</div>
+    </div>
+
+    <!--- Aktif ders isteği sayısı kartı -->
+    <div class="stat-card">
+        <i class="fa-solid fa-list-check"></i>
+        <div class="stat-value">{{ aktif_ders_istegi_sayisi }}</div>
+        <div class="stat-label">Aktif Ders İsteği</div>
+    </div>
+
+    <!--- Tamamlanan ders sayısı kartı -->
+    <div class="stat-card">
+        <i class="fa-solid fa-check-circle"></i>
+        <div class="stat-value">{{ tamamlanan_ders_sayisi }}</div>
+        <div class="stat-label">Tamamlanan Ders</div>
+    </div>
+
+    <!--- Engelli kullanıcı sayısı kartı -->
+    <div class="stat-card">
+        <i class="fa-solid fa-user-slash"></i>
+        <div class="stat-value">{{ engelli_kullanici_sayisi }}</div>
+        <div class="stat-label">Engelli Kullanıcı</div>
+    </div>
+</div>
+
+<!--- Moderatör görevleri ve kuralları bölümü -->
+<div class="mod-panel-grid">
+    <!--- Moderatör görevleri kartı -->
+    <div class="mod-card">
+        <!--- Kart başlığı -->
+        <div class="mod-card-title">
+            <span><i class="fa-solid fa-shield-halved"></i> Moderatör Görevleri</span>
+        </div>
+
+        <!--- Görev listesi -->
+        <div class="mod-list">
+            <!--- Kullanıcı yönetimi görevi -->
+            <div class="mod-list-item">
+                <h3><i class="fa-solid fa-users"></i> Kullanıcı Yönetimi</h3>
+                <p>Kullanıcıları yönetebilir, rollerini değiştirebilir ve uygunsuz davranan kullanıcıları engelleyebilirsiniz.</p>
+            </div>
+
+            <!--- Ders istekleri görevi -->
+            <div class="mod-list-item">
+                <h3><i class="fa-solid fa-list-check"></i> Ders İstekleri</h3>
+                <p>Açılan ders isteklerini inceleyebilir ve uygunsuz içerikleri kaldırabilirsiniz.</p>
+            </div>
+
+            <!--- Eğitmen başvuruları görevi -->
+            <div class="mod-list-item">
+                <h3><i class="fa-solid fa-clipboard-check"></i> Eğitmen Başvuruları</h3>
+                <p>Bekleyen eğitmen başvurularını inceleyebilir ve onaylayabilirsiniz.</p>
+            </div>
+
+            <!--- İçerik denetimi görevi -->
+            <div class="mod-list-item">
+                <h3><i class="fa-solid fa-eye"></i> İçerik Denetimi</h3>
+                <p>Kullanıcı içeriklerini denetleyebilir ve kurallara uymayan içerikleri kaldırabilirsiniz.</p>
+            </div>
+        </div>
+    </div>
+
+    <!--- Moderasyon kuralları kartı -->
+    <div class="mod-card">
+        <!--- Kart başlığı -->
+        <div class="mod-card-title">
+            <span><i class="fa-solid fa-book"></i> Moderasyon Kuralları</span>
+        </div>
+
+        <!--- Kural listesi -->
+        <div class="mod-list">
+            <!--- Kural 1: Tarafsızlık -->
+            <div class="mod-list-item">
+                <h3>1. Tarafsızlık</h3>
+                <p>Tüm kullanıcılara eşit ve adil davranmalısınız.</p>
+            </div>
+
+            <!--- Kural 2: Gizlilik -->
+            <div class="mod-list-item">
+                <h3>2. Gizlilik</h3>
+                <p>Kullanıcı bilgilerini gizli tutmalı ve paylaşmamalısınız.</p>
+            </div>
+
+            <!--- Kural 3: Saygı -->
+            <div class="mod-list-item">
+                <h3>3. Saygı</h3>
+                <p>Tüm kullanıcılara karşı saygılı olmalısınız.</p>
+            </div>
+
+            <!--- Kural 4: Tutarlılık -->
+            <div class="mod-list-item">
+                <h3>4. Tutarlılık</h3>
+                <p>Kuralları tutarlı bir şekilde uygulamalısınız.</p>
+            </div>
+
+            <!--- Kural 5: İletişim -->
+            <div class="mod-list-item">
+                <h3>5. İletişim</h3>
+                <p>Engelleme veya içerik kaldırma işlemlerinde açık ve net bir şekilde nedeni açıklamalısınız.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<!--- Sayfaya özel CSS stilleri -->
+<style>
+    /* Moderatör paneli grid düzeni */
+    .mod-panel-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    /* Liste öğesi başlığı stilleri */
+    .mod-list-item h3 {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0 0 8px 0;
+        color: var(--white-color);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    /* Liste öğesi paragraf stilleri */
+    .mod-list-item p {
+        margin: 0;
+        color: var(--light-color);
+        font-size: 13px;
+        line-height: 1.4;
+    }
+</style>
+{% endblock %}

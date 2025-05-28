@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+<!--- Sayfa başlığını belirle -->
+{% block title %}Şifre Sıfırlama - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<!--- Sayfa başlığı alanı -->
+<div class="auth-baslik">
+    <h1>Şifre Sıfırlama</h1>
+</div>
+
+<!--- Kimlik doğrulama içeriği için ana kapsayıcı -->
+<div class="auth-ana-kapsayici">
+    <!--- Kimlik doğrulama kartı -->
+    <div class="auth-kart">
+        <!--- Bilgi mesajı için uyarı kutusu -->
+        <div class="auth-uyari auth-uyari-bilgi">
+            <!--- Uyarı ikonu alanı -->
+            <div class="auth-uyari-ikon">
+                <!--- Bilgi ikonu -->
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <!--- Uyarı içeriği alanı -->
+            <div class="auth-uyari-icerik">
+                <!--- Bilgi mesajı metni -->
+                <p>Kayıtlı e-posta adresinizi girin. Size şifrenizi sıfırlamanız için bir bağlantı göndereceğiz.</p>
+            </div>
+        </div>
+
+        <!--- Mesajlar varsa (örn. başarı/hata) -->
+        {% if messages %}
+            <!--- Mesajlar üzerinde döngü yap -->
+            {% for message in messages %}
+                <!--- Mesajlar için hata uyarı kutusu -->
+                <div class="auth-uyari auth-uyari-tehlike">
+                    <!--- Uyarı ikonu alanı -->
+                    <div class="auth-uyari-ikon">
+                        <!--- Hata ikonu -->
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                    </div>
+                    <!--- Uyarı içeriği alanı -->
+                    <div class="auth-uyari-icerik">
+                        <!--- Mesaj metni -->
+                        <p>{{ message }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        <!--- E-posta formu hataları varsa -->
+        {% elif form.email.errors %}
+            <!--- E-posta hataları için uyarı kutusu -->
+            <div class="auth-uyari auth-uyari-tehlike">
+                <!--- Uyarı ikonu alanı -->
+                <div class="auth-uyari-ikon">
+                    <!--- Hata ikonu -->
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <!--- Uyarı içeriği alanı -->
+                <div class="auth-uyari-icerik">
+                    <!--- Hata mesajı metni -->
+                    <p>Bu e-posta adresi ile ilişkili bir hesap bulunamadı.</p>
+                </div>
+            </div>
+        {% endif %}
+
+        <!--- Şifre sıfırlama formu -->
+        <form method="post" class="auth-form">
+            <!--- CSRF koruması için token -->
+            {% csrf_token %}
+            <!--- E-posta alanı grubu -->
+            <div class="auth-form-grup">
+                <!--- E-posta etiketi -->
+                <label for="id_email">E-posta Adresi</label>
+                <!--- E-posta giriş alanı -->
+                <input type="email" name="email" id="id_email" class="auth-form-kontrol" required>
+            </div>
+
+            <!--- Gönder butonu -->
+            <button type="submit" class="auth-buton auth-buton-birincil auth-w-100">
+                <!--- Buton ikonu -->
+                <i class="fa-solid fa-paper-plane"></i> Şifre Sıfırlama Bağlantısı Gönder
+            </button>
+        </form>
+
+        <!--- Kimlik doğrulama bağlantıları alanı -->
+        <div class="auth-baglantilar">
+            <!--- Giriş sayfasına dön bağlantısı -->
+            <a href="{% url 'kullanicilar:giris' %}" class="auth-baglanti">
+                <!--- Giriş ikonu -->
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <!--- Bağlantı metni -->
+                <span>Giriş sayfasına dön</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

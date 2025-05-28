@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ kullanici_profili.user.username }} Değerlendirmeleri - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/geribildirim.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Ana kapsayıcı div, tüm sayfa içeriğini içerir -->
+<div class="geribildirim-kapsayici">
+    <!-- Sayfa Başlığı Alanı (Banner) -->
+    <div class="geribildirim-banner">
+        <!-- Banner içeriğini ortalamak için kullanılan div -->
+        <div class="geribildirim-banner-icerik">
+            <!-- Kullanıcının tam adını veya kullanıcı adını gösteren başlık -->
+            <h2>{{ kullanici_profili.user.get_full_name|default:kullanici_profili.user.username }} Değerlendirmeleri</h2>
+        </div>
+    </div>
+    
+    <!-- Ana İçerik Bölümü -->
+    <div class="geribildirim-ana-icerik">
+        <!-- Kullanıcı Değerlendirme Özeti Kartı -->
+        <div class="geribildirim-kart">
+            <!-- Kart başlık bölümü -->
+            <div class="geribildirim-baslik-bolum">
+                <!-- Başlığın sol tarafı -->
+                <div class="geribildirim-baslik-sol">
+                    <!-- Özet başlığı -->
+                    <h3>Değerlendirme Özeti</h3>
+                </div>
+            </div>
+            
+            <!-- Değerlendirme özeti içeriği -->
+            <div class="geribildirim-ozet">
+                <!-- Eğer ortalama puan varsa özeti göster -->
+                {% if ortalama_puan %}
+                    <!-- Ortalama puan değeri -->
+                    <div class="geribildirim-ozet-puan">{{ ortalama_puan }}</div>
+                    <!-- Yıldız gösterimi -->
+                    <div class="geribildirim-ozet-yildizlar">
+                        <!-- 5 yıldızı döngü ile oluştur -->
+                        {% for i in "12345" %}
+                            <!-- Eğer döngüdeki yıldız sayısı ortalama puandan küçük veya eşitse dolu yıldız göster -->
+                            {% if forloop.counter <= ortalama_puan|floatformat:0|add:"0" %}
+                                <span class="yildiz-dolu">★</span>
+                            {% else %}
+                                <!-- Değilse boş yıldız göster -->
+                                <span class="yildiz-bos">☆</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <!-- Toplam değerlendirme sayısı -->
+                    <div class="geribildirim-ozet-sayac">
+                        Toplam {{ alinan_degerlendirmeler.count }} değerlendirme
+                    </div>
+                {% else %}
+                    <!-- Eğer ortalama puan yoksa (henüz değerlendirme yapılmamışsa) mesaj göster -->
+                    <div class="geribildirim-bos-mesaj">
+                        <!-- İkon -->
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                        <!-- Mesaj metni -->
+                        <p>Henüz değerlendirme yapılmamış.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Kullanıcı Değerlendirmeleri Listesi Kartı -->
+        <!-- Eğer alınmış değerlendirmeler varsa listeyi göster -->
+        {% if alinan_degerlendirmeler %}
+        <div class="geribildirim-kart mt-4">
+            <!-- Kart başlık bölümü -->
+            <div class="geribildirim-baslik-bolum">
+                <!-- Başlığın sol tarafı -->
+                <div class="geribildirim-baslik-sol">
+                    <!-- Liste başlığı -->
+                    <h3>Tüm Değerlendirmeler</h3>
+                </div>
+                <!-- Başlığın sağ tarafı (şu anda boş) -->
+                <!-- <div class="geribildirim-baslik-sag"></div> -->
+            </div>
+            
+            <!-- Değerlendirmelerin listelendiği alan -->
+            <div class="geribildirim-liste">
+                <!-- Her bir değerlendirme için döngü -->
+                {% for degerlendirme in alinan_degerlendirmeler %}
+                <!-- Her bir değerlendirme öğesi -->
+                <div class="geribildirim-liste-item">
+                    <!-- Değerlendirme öğesinin başlık bölümü (kullanıcı bilgisi ve puan) -->
+                    <div class="geribildirim-liste-baslik">
+                        <!-- Başlığın sol tarafı (kullanıcı bilgisi) -->
+                        <div class="geribildirim-liste-baslik-sol">
+                            <!-- Değerlendirmeyi yapan kullanıcının profiline link -->
+                            <a href="{% url 'kullanicilar:profil_detay' username=degerlendirme.degerlendiren_kullanici.user.username %}" class="geribildirim-kullanici-link">
+                                <!-- Kullanıcının profil fotoğrafı varsa göster -->
+                                {% if degerlendirme.degerlendiren_kullanici.profil_fotografi_index > 0 %}
+                                <img src="{% static 'img/profil_fotografi_' %}{{ degerlendirme.degerlendiren_kullanici.profil_fotografi_index }}.png" alt="{{ degerlendirme.degerlendiren_kullanici.user.username }}" class="geribildirim-kullanici-avatar">
+                                {% else %}
+                                    <!-- Profil fotoğrafı yoksa kullanıcı adının ilk harfini gösteren placeholder -->
+                                    <div class="geribildirim-kullanici-avatar-placeholder">{{ degerlendirme.degerlendiren_kullanici.user.username|first|upper }}</div>
+                                {% endif %}
+                                <!-- Değerlendirmeyi yapan kullanıcının kullanıcı adı -->
+                                <span class="geribildirim-kullanici-isim">{{ degerlendirme.degerlendiren_kullanici.user.username }}</span>
+                            </a>
+                            <!-- Değerlendirme tarihi -->
+                            <span class="geribildirim-tarih">{{ degerlendirme.degerlendirme_tarihi|date:"d F Y, H:i" }}</span>
+                        </div>
+                        <!-- Değerlendirme puanı ve renk sınıfı -->
+                        <div class="geribildirim-puan {% if degerlendirme.puan >= 4 %}puan-yuksek{% elif degerlendirme.puan >= 3 %}puan-orta{% elif degerlendirme.puan >= 2 %}puan-dusuk{% else %}puan-cok-dusuk{% endif %}">
+                            {{ degerlendirme.puan }}/5
+                        </div>
+                    </div>
+                    
+                    <!-- Değerlendirmenin yapıldığı ders bilgisi -->
+                    <div class="geribildirim-ders">
+                        <!-- Kitap ikonu -->
+                        <i class="fa-solid fa-book"></i>
+                        <!-- Ders isteği detay sayfasına link -->
+                        <a href="{% url 'talepler:ders_istegi_detay' pk=degerlendirme.ders_istegi.id %}" class="geribildirim-ders-link">
+                            {{ degerlendirme.ders_istegi.talep_basligi }}
+                        </a> 
+                        dersi için değerlendirme
+                    </div>
+                    
+                    <!-- Eğer değerlendirme yorumu varsa yorumu göster -->
+                    {% if degerlendirme.yorum %}
+                    <!-- Yorum bölümü -->
+                    <div class="geribildirim-yorum">
+                        <!-- Yorum içeriği -->
+                        <div class="geribildirim-yorum-icerik">
+                            {{ degerlendirme.yorum }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

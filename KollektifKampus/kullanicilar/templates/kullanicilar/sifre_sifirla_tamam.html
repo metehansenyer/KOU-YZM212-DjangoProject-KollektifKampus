@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+<!--- Sayfa başlığını belirle -->
+{% block title %}Şifre Sıfırlama Bağlantısı Gönderildi - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<!--- Sayfa başlığı alanı -->
+<div class="auth-baslik">
+    <h1>Şifre Sıfırlama E-postası Gönderildi</h1>
+</div>
+
+<!--- Kimlik doğrulama içeriği için ana kapsayıcı -->
+<div class="auth-ana-kapsayici">
+    <!--- Kimlik doğrulama kartı -->
+    <div class="auth-kart">
+        <!--- Başarı mesajı için uyarı kutusu -->
+        <div class="auth-uyari auth-uyari-basari">
+            <!--- Uyarı ikonu alanı -->
+            <div class="auth-uyari-ikon">
+                <!--- Başarı ikonu -->
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <!--- Uyarı içeriği alanı -->
+            <div class="auth-uyari-icerik">
+                <p>Şifre sıfırlama bağlantınızı içeren bir e-posta gönderildi.</p>
+                <p>Lütfen e-posta gelen kutunuzu ve spam klasörünüzü kontrol edin.</p>
+            </div>
+        </div>
+        
+        <!--- Kimlik doğrulama bağlantıları alanı -->
+        <div class="auth-baglantilar">
+            <!--- Giriş sayfasına dön bağlantısı -->
+            <a href="{% url 'kullanicilar:giris' %}" class="auth-baglanti">
+                <!--- Giriş ikonu -->
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <!--- Bağlantı metni -->
+                <span>Giriş sayfasına dön</span>
+            </a>
+            <!--- Tekrar şifre sıfırlama bağlantısı iste bağlantısı -->
+            <a href="{% url 'kullanicilar:sifre_sifirla' %}" class="auth-baglanti">
+                <!--- Anahtar ikonu -->
+                <i class="fa-solid fa-key"></i>
+                <!--- Bağlantı metni -->
+                <span>Tekrar şifre sıfırlama bağlantısı iste</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

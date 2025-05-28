@@ -1,0 +1,156 @@
+{% extends 'moderasyon/panel_temel.html' %}
+
+{% load static %}
+
+{% block panel_content %}
+
+<!--- Eğitmen rol başvuruları listesi için ana kart -->
+<div class="mod-card">
+    <!--- Kart başlığı alanı -->
+    <div class="mod-card-title">
+        <!--- Başlık metni ve ikonu -->
+        <span><i class="fa-solid fa-user-graduate"></i> Bekleyen Eğitmen Rol Başvuruları</span>
+    </div>
+
+    <!--- Arama formu -->
+    <form method="get" class="mod-filter-form">
+        <!--- Arama giriş alanı -->
+        <input type="text" name="arama" placeholder="Kullanıcı adı veya uzmanlık alanı ara..." class="mod-input" value="{{ arama }}">
+        <!--- Arama butonu -->
+        <button type="submit" class="mod-btn mod-btn-primary">
+            <i class="fa-solid fa-search"></i> Ara
+        </button>
+    </form>
+
+    <!--- Başvuru tablosu için duyarlı kapsayıcı -->
+    <div class="mod-table-responsive">
+        <!--- Başvuru tablosu -->
+        <table class="mod-table">
+            <!--- Tablo başlığı -->
+            <thead>
+                <tr>
+                    <th>Kullanıcı</th>
+                    <th>Başvuru Tarihi</th>
+                    <!--- Orta ekranlarda gizlenen uzmanlık alanları sütunu -->
+                    <th class="d-none-md">Uzmanlık Alanları</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <!--- Tablo içeriği -->
+            <tbody>
+                <!--- Her bir başvuru için döngü -->
+                {% for basvuru in basvurular %}
+                <tr>
+                    <td>
+                        <!--- Kullanıcı bilgisi kapsayıcısı -->
+                        <div class="user-info">
+                            <!--- Kullanıcı profili bağlantısı ve tam adı -->
+                            <a href="{% url 'kullanicilar:profil_detay' username=basvuru.kullanici.user.username %}" class="username">{{ basvuru.kullanici.user.get_full_name }}</a>
+                            <!--- Kullanıcı adı -->
+                            <span class="fullname">@{{ basvuru.kullanici.user.username }}</span>
+                        </div>
+                    </td>
+                    <!--- Başvuru tarihi -->
+                    <td>{{ basvuru.basvuru_tarihi|date:"d.m.Y H:i" }}</td>
+                    <!--- Orta ekranlarda gizlenen uzmanlık alanları önizlemesi -->
+                    <td class="d-none-md">
+                        <div class="expertise-preview">{{ basvuru.uzmanlik_alanlari|truncatechars:100 }}</div>
+                    </td>
+                    <td>
+                        <!--- İşlem butonları kapsayıcısı -->
+                        <div class="mod-actions">
+                            <!--- Başvuruyu inceleme butonu -->
+                            <a href="{% url 'moderasyon:egitmen_rol_basvurusu_degerlendir' basvuru_id=basvuru.id %}" class="mod-btn mod-btn-primary mod-btn-sm">
+                                <i class="fa-solid fa-eye"></i> İncele
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <!--- Başvuru bulunamadığında gösterilecek satır -->
+                <tr>
+                    <td colspan="4" class="text-center">
+                        {% if arama %}
+                            <!--- Arama sonucunda başvuru bulunamadı mesajı -->
+                            "{{ arama }}" için bekleyen eğitmen rol başvurusu bulunamadı.
+                        {% else %}
+                            <!--- Genel başvuru bulunamadı mesajı -->
+                            Bekleyen eğitmen rol başvurusu bulunmamaktadır.
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!--- Sayfalama alanı -->
+    {% if is_paginated %}
+    <div class="mod-pagination">
+        {% if page_obj.has_previous %}
+            <!--- İlk sayfa bağlantısı -->
+            <a href="?page=1{% if arama %}&arama={{ arama }}{% endif %}" class="page-link">İlk</a>
+            <!--- Önceki sayfa bağlantısı -->
+            <a href="?page={{ page_obj.previous_page_number }}{% if arama %}&arama={{ arama }}{% endif %}" class="page-link">Önceki</a>
+        {% endif %}
+
+        <!--- Mevcut sayfa bilgisi -->
+        <span class="page-link current">
+            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <!--- Sonraki sayfa bağlantısı -->
+            <a href="?page={{ page_obj.next_page_number }}{% if arama %}&arama={{ arama }}{% endif %}" class="page-link">Sonraki</a>
+            <!--- Son sayfa bağlantısı -->
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if arama %}&arama={{ arama }}{% endif %}" class="page-link">Son</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* Kullanıcı bilgisi kapsayıcısı stilleri */
+    .user-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Kullanıcı adı bağlantısı stilleri */
+    .user-info .username {
+        font-weight: 500;
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+
+    /* Kullanıcı adı bağlantısı hover stilleri */
+    .user-info .username:hover {
+        text-decoration: underline;
+    }
+
+    /* Tam ad/kullanıcı adı stilleri */
+    .user-info .fullname {
+        font-size: 12px;
+        color: var(--secondary-color);
+    }
+
+    /* Uzmanlık alanı önizlemesi stilleri */
+    .expertise-preview {
+        max-width: 300px;
+        font-size: 14px;
+        color: var(--secondary-color);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* İşlem butonları kapsayıcısı stilleri */
+    .mod-actions {
+        display: flex;
+        gap: 5px;
+    }
+</style>
+{% endblock %}

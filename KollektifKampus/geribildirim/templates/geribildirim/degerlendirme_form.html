@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Ders Değerlendirme - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/geribildirim.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Ana kapsayıcı div, içeriği ortalamak ve genişliği sınırlamak için -->
+<div class="geribildirim-kapsayici">
+    <!-- Başlık Banner Bölümü -->
+    <div class="geribildirim-banner">
+        <div class="geribildirim-banner-icerik">
+            <!-- Sayfa başlığı -->
+            <h2>Ders İçin Değerlendirme</h2>
+        </div>
+    </div>
+
+    <!-- Değerlendirme Formu Ana İçeriği -->
+    <div class="geribildirim-ana-icerik">
+        <!-- Formu ve ilgili bilgileri içeren kart görünümü -->
+        <div class="geribildirim-kart">
+            <!-- Değerlendirilen ders isteği ve kişi bilgilerinin olduğu bölüm -->
+            <div class="geribildirim-baslik-bolum">
+                <div class="geribildirim-baslik-sol">
+                    <!-- Ders isteğinin başlığı -->
+                    <h3>{{ ders_istegi.talep_basligi }}</h3>
+                    <!-- Değerlendirilen kişinin bilgisi -->
+                    <div class="geribildirim-meta">
+                        <span class="geribildirim-meta-etiket">Değerlendirilen Kişi:</span>
+                        <!-- Değerlendirilen kişinin profil sayfasına link -->
+                        <a href="{% url 'kullanicilar:profil_detay' username=degerlendirilen_kullanici.user.username %}" class="geribildirim-meta-link">
+                            <!-- Kullanıcının tam adı veya kullanıcı adı -->
+                            {{ degerlendirilen_kullanici.user.get_full_name|default:degerlendirilen_kullanici.user.username }}
+                        </a>
+                    </div>
+                    <!-- Eğer ders isteği bir dersle ilişkiliyse, ders bilgisini göster -->
+                    {% if ders_istegi.ders %}
+                    <div class="geribildirim-meta mt-2">
+                        <span class="geribildirim-meta-etiket">İlgili Ders:</span>
+                        <span class="geribildirim-meta-deger">{{ ders_istegi.ders.ders_adi }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Değerlendirme Bilgilendirme Kutusu -->
+            <div class="geribildirim-uyari geribildirim-uyari-bilgi">
+                <!-- Bilgi ikonu -->
+                <i class="fa-solid fa-info-circle"></i>
+                <div>
+                    <!-- Bilgilendirme başlığı -->
+                    <p class="geribildirim-uyari-baslik">Değerlendirme hakkında</p>
+                    <!-- Bilgilendirme metni -->
+                    <p>Değerlendirmeniz, diğer kullanıcıların eğitmen veya öğrenci seçiminde yardımcı olacaktır. Lütfen adil ve yapıcı geri bildirimler verin.</p>
+                </div>
+            </div>
+
+            <!-- Değerlendirme Gönderme Formu -->
+            <form method="post" class="geribildirim-form">
+                {% csrf_token %} {# CSRF koruması için token #}
+                <!-- Puanlama alanı -->
+                <div class="geribildirim-form-grup">
+                    <label class="geribildirim-form-etiket">Puan (1-5):</label>
+                    <!-- Puan seçeneklerini içeren div -->
+                    <div class="geribildirim-puan-secimi">
+                        <!-- 1'den 5'e kadar puan seçenekleri için döngü -->
+                        {% for i in "12345" %}
+                        <!-- Her bir puan seçeneği için div -->
+                        <div class="geribildirim-puan-secenegi">
+                            <!-- Radyo butonu inputu -->
+                            <input type="radio" name="puan" id="puan_{{ i }}" value="{{ i }}" required>
+                            <!-- Radyo butonu için görsel etiket -->
+                            <label for="puan_{{ i }}" class="geribildirim-puan-label">{{ i }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Yorum alanı -->
+                <div class="geribildirim-form-grup">
+                    <label for="yorum" class="geribildirim-form-etiket">Yorum (Opsiyonel):</label>
+                    <!-- Yorum için textarea -->
+                    <textarea name="yorum" id="yorum" class="geribildirim-form-kontrol" rows="4" placeholder="Ders ve kişi hakkında düşüncelerinizi yazabilirsiniz..."></textarea>
+                </div>
+
+                <!-- Form butonları bölümü -->
+                <div class="geribildirim-butonlar">
+                    <!-- İptal butonu (ders isteği detay sayfasına geri döner) -->
+                    <a href="{% url 'talepler:ders_istegi_detay' pk=ders_istegi.id %}" class="geribildirim-buton geribildirim-buton-tehlike">
+                        <i class="fa-solid fa-times"></i> İptal
+                    </a>
+                    <!-- Değerlendirmeyi gönderme butonu -->
+                    <button type="submit" class="geribildirim-buton geribildirim-buton-basari">
+                        <i class="fa-solid fa-paper-plane"></i> Değerlendirmeyi Gönder
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

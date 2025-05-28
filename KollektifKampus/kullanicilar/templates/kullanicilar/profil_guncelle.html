@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Profilini Güncelle - Kollektif Kampüs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/kullanici.css' %}">
+{% endblock %}
+
+{% block content %}
+<!--- Ana profil güncelleme kapsayıcısı -->
+<div class="profil-kapsayici">
+    <!--- Profil Başlık Alanı (Banner) -->
+    <div class="profil-banner">
+        <div class="profil-banner-icerik">
+            <!--- Başlık, varsayılan değer ile -->
+            <h2>{{ form_baslik|default:"Profil Bilgilerini Güncelle" }}</h2>
+        </div>
+    </div>
+    
+    <!--- Profil Güncelleme Formu Ana İçerik Alanı -->
+    <div class="profil-ana-icerik">
+        <!--- Formu içeren kart görünümü -->
+        <div class="profil-kart">
+            <!--- Profil güncelleme formu -->
+            <form method="post" enctype="multipart/form-data" class="profil-guncelleme-form">
+                {% csrf_token %}
+                
+                <!--- Formda hata varsa hata mesajlarını göster -->
+                {% if form.errors %}
+                <div class="profil-form-hata">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <p>Lütfen aşağıdaki hataları düzeltin:</p>
+                </div>
+                {% endif %}
+                
+                <!--- Profil Fotoğrafı Seçim Bölümü -->
+                <div class="profil-form-bolum">
+                    <h3 class="profil-form-baslik">Profil Fotoğrafı Seçin</h3>
+                    
+                    <!--- Profil fotoğrafı seçenekleri -->
+                    <div class="profil-foto-secim">
+                        <!--- Varsayılan seçenek (baş harf ile) -->
+                        <label for="foto-0">
+                            <input type="radio" name="profil_fotografi_index" id="foto-0" value="0" {% if user.profil.profil_fotografi_index == 0 %}checked{% endif %}>
+                            <div class="varsayilan-avatar">{{ user.first_name|slice:":1" }}</div>
+                        </label>
+                        
+                        <!--- Diğer profil fotoğrafı seçenekleri -->
+                        {% for i in "123456"|make_list %}
+                        <label for="foto-{{ i }}">
+                            <input type="radio" name="profil_fotografi_index" id="foto-{{ i }}" value="{{ i }}" {% if user.profil.profil_fotografi_index == i|add:"0" %}checked{% endif %}>
+                            <img src="{% static 'img/profil_fotografi_'|add:i|add:'.png' %}" alt="Profil Fotoğrafı {{ i }}">
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!--- Kullanıcı Temel Bilgileri Bölümü -->
+                <div class="profil-form-bolum">
+                    <h3 class="profil-form-baslik">Kişisel Bilgiler</h3>
+                    
+                    <!--- Ad alanı grubu -->
+                    <div class="profil-form-grup">
+                        <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+                        {{ form.first_name }}
+                        <!--- Ad alanı için hata mesajı -->
+                        {% if form.first_name.errors %}
+                        <div class="profil-form-hata-mesaji">{{ form.first_name.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!--- Soyad alanı grubu -->
+                    <div class="profil-form-grup">
+                        <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+                        {{ form.last_name }}
+                        <!--- Soyad alanı için hata mesajı -->
+                        {% if form.last_name.errors %}
+                        <div class="profil-form-hata-mesaji">{{ form.last_name.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!--- Eğitim Bilgileri Bölümü -->
+                <div class="profil-form-bolum">
+                    <h3 class="profil-form-baslik">Eğitim Bilgileri</h3>
+                    
+                    <!--- Üniversite alanı grubu -->
+                    <div class="profil-form-grup">
+                        <label for="{{ form.universite.id_for_label }}">{{ form.universite.label }}</label>
+                        {{ form.universite }}
+                        <!--- Üniversite alanı için hata mesajı -->
+                        {% if form.universite.errors %}
+                        <div class="profil-form-hata-mesaji">{{ form.universite.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!--- Bölüm alanı grubu -->
+                    <div class="profil-form-grup">
+                        <label for="{{ form.bolum.id_for_label }}">{{ form.bolum.label }}</label>
+                        {{ form.bolum }}
+                        <!--- Bölüm alanı için hata mesajı -->
+                        {% if form.bolum.errors %}
+                        <div class="profil-form-hata-mesaji">{{ form.bolum.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!--- Sınıf alanı grubu -->
+                    <div class="profil-form-grup">
+                        <label for="{{ form.sinif.id_for_label }}">{{ form.sinif.label }}</label>
+                        {{ form.sinif }}
+                        <!--- Sınıf alanı için hata mesajı -->
+                        {% if form.sinif.errors %}
+                        <div class="profil-form-hata-mesaji">{{ form.sinif.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!--- Hakkında Bölümü -->
+                <div class="profil-form-bolum">
+                    <h3 class="profil-form-baslik">Profil Bilgileri</h3>
+                    
+                    <!--- Hakkında alanı grubu -->
+                    <div class="profil-form-grup">
+                        <label for="{{ form.hakkinda.id_for_label }}">{{ form.hakkinda.label }}</label>
+                        {{ form.hakkinda }}
+                        <!--- Hakkında alanı için yardım metni -->
+                        {% if form.hakkinda.help_text %}
+                        <div class="profil-form-yardim">{{ form.hakkinda.help_text }}</div>
+                        {% endif %}
+                        <!--- Hakkında alanı için hata mesajı -->
+                        {% if form.hakkinda.errors %}
+                        <div class="profil-form-hata-mesaji">{{ form.hakkinda.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!--- Form Butonları Alanı -->
+                <div class="profil-form-butonlar">
+                    <!--- İptal butonu (link) -->
+                    <a href="{% url 'kullanicilar:profil_detay' username=user.username %}" class="profil-buton profil-buton-ikincil">
+                        <i class="fa-solid fa-xmark"></i> İptal
+                    </a>
+                    <!--- Kaydet butonu -->
+                    <button type="submit" class="profil-buton">
+                        <i class="fa-solid fa-floppy-disk"></i> Değişiklikleri Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

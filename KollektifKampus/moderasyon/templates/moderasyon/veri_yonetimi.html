@@ -1,0 +1,202 @@
+{% extends 'moderasyon/panel_temel.html' %}
+
+{% block panel_content %}
+<!--- Veri Yönetimi Başlığı Kartı -->
+<div class="mod-card">
+    <div class="mod-card-title">
+        <span><i class="fa-solid fa-database"></i> Veri Yönetimi</span>
+    </div>
+    <p class="mod-card-description">
+        Platformdaki veri modellerini toplu olarak içeri ve dışarı aktarabilirsiniz. Bu işlemler CSV formatında gerçekleştirilir.
+    </p>
+</div>
+
+<!--- Veri Dışarı Aktarma Kartı -->
+<div class="mod-card">
+    <div class="mod-card-title">
+        <span><i class="fa-solid fa-file-export"></i> Veri Dışarı Aktarma (Export)</span>
+    </div>
+
+    <p class="mb-3">Seçilen veri modelini CSV formatında dışarı aktarır. Bu dosya yedekleme veya başka sistemlere aktarma amacıyla kullanılabilir.</p>
+
+    <form action="{% url 'moderasyon:veri_disari_aktar' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+            <label for="model-secimi-export" class="form-label">Dışarı Aktarılacak Model:</label>
+            <select id="model-secimi-export" name="model_secimi" class="form-control" required>
+                <option value="">-- Model Seçiniz --</option>
+                {% for model in exportable_models %}
+                <option value="{{ model.id }}">{{ model.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="mod-btn mod-btn-primary">
+            <i class="fa-solid fa-download"></i> CSV Olarak İndir
+        </button>
+    </form>
+</div>
+
+<!--- Veri İçeri Aktarma Kartı -->
+<div class="mod-card">
+    <div class="mod-card-title">
+        <span><i class="fa-solid fa-file-import"></i> Veri İçeri Aktarma (Import)</span>
+    </div>
+
+    <p class="mb-3">CSV formatındaki verileri seçilen modele aktarır. Dikkatli kullanılmalıdır, veri kaybına veya tutarsızlığına yol açabilir.</p>
+
+    <form action="{% url 'moderasyon:veri_iceri_aktar' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+            <label for="model-secimi-import" class="form-label">İçeri Aktarılacak Model:</label>
+            <select id="model-secimi-import" name="model_secimi" class="form-control" required>
+                <option value="">-- Model Seçiniz --</option>
+                {% for model in exportable_models %}
+                <option value="{{ model.id }}">{{ model.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="csv-dosyasi" class="form-label">CSV Dosyası:</label>
+            <input type="file" id="csv-dosyasi" name="csv_dosyasi" class="form-control" accept=".csv" required>
+            <small class="form-text text-muted">
+                CSV dosyası, dışarı aktarma ile aynı sütun yapısına sahip olmalıdır.
+            </small>
+        </div>
+
+        <button type="submit" class="mod-btn mod-btn-warning">
+            <i class="fa-solid fa-upload"></i> Verileri İçeri Aktar
+        </button>
+    </form>
+</div>
+
+<!--- Önemli Uyarı Kartı -->
+<div class="mod-card bg-danger-subtle">
+    <div class="mod-card-title text-danger">
+        <span><i class="fa-solid fa-triangle-exclamation"></i> Önemli Uyarı</span>
+    </div>
+
+    <ul class="mod-list">
+        <li>İçeri aktarma işlemi mevcut verileri değiştirebilir veya silebilir.</li>
+        <li>İşlem öncesinde mutlaka bir yedek alın.</li>
+        <li>CSV dosyasının doğru formatta olduğundan emin olun.</li>
+        <li>İlişkisel alanlar (ForeignKey, ManyToMany) için ID değerleri kullanılır.</li>
+        <li>İçeri aktarmadan önce platformdaki faaliyetleri kısa süreliğine durdurmak faydalı olabilir.</li>
+    </ul>
+</div>
+
+<!--- CSV Format Bilgisi Kartı -->
+<div class="mod-card">
+    <div class="mod-card-title">
+        <span><i class="fa-solid fa-info-circle"></i> CSV Format Bilgisi</span>
+    </div>
+
+    <p>CSV dosyalarının formatı şu şekildedir:</p>
+
+    <ul>
+        <li>İlk satır, sütun başlıklarını içerir (model alanlarının adları).</li>
+        <li>Takip eden satırlar, her bir kaydın verilerini içerir.</li>
+        <li>Veriler virgülle ayrılır.</li>
+        <li>Metin içeriği tırnak işaretleri içinde olabilir.</li>
+    </ul>
+
+    <p>Örnek CSV formatı:</p>
+
+    <div class="code-example">
+        <pre><code>id,ders_adi,kategori,aciklama,olusturulma_tarihi,guncellenme_tarihi,aktif_mi
+1,"Matematik 101","Matematik","Temel matematik dersi","2023-05-15 10:00:00","2023-05-16 11:30:00",True
+2,"Python Programlama","Yazılım","Python programlama dili temelleri","2023-05-17 14:20:00","2023-05-18 09:15:00",True</code></pre>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .mod-card-description {
+        margin-bottom: 0;
+        color: var(--secondary-color);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+        color: var(--white-color);
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px 12px;
+        background-color: var(--input-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        color: var(--white-color);
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        outline: none;
+    }
+
+    .form-text {
+        display: block;
+        margin-top: 5px;
+        font-size: 12px;
+    }
+
+    .text-muted {
+        color: var(--secondary-color) !important;
+    }
+
+    .text-danger {
+        color: #ff6b6b !important;
+    }
+
+    .bg-danger-subtle {
+        background-color: rgba(255, 107, 107, 0.1);
+        border: 1px solid rgba(255, 107, 107, 0.3);
+    }
+
+    .mod-btn-warning {
+        background-color: #ffa94d;
+        color: #343a40;
+    }
+
+    .mod-btn-warning:hover {
+        background-color: #ff922b;
+    }
+
+    .mod-list {
+        padding-left: 20px;
+    }
+
+    .mod-list li {
+        margin-bottom: 8px;
+        color: var(--light-color);
+    }
+
+    .code-example {
+        background-color: #2a2e37;
+        border-radius: 4px;
+        padding: 15px;
+        margin-top: 10px;
+        overflow-x: auto;
+    }
+
+    .code-example pre {
+        margin: 0;
+    }
+
+    .code-example code {
+        color: #b3e6ff;
+        font-family: monospace;
+        font-size: 13px;
+    }
+</style>
+{% endblock %}

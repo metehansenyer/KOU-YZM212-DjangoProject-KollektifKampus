@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ana Sayfa - Kollektif Kampüs{% endblock %}
+
+{% block content %}
+<!--- Arama ve Filtreleme Alanı -->
+<div class="icerik-arama">
+    <!--- Arama Çubuğu ve Filtre Butonu Konteyneri -->
+    <div class="arama-kapsayici">
+        <!--- Arama Formu -->
+        <form method="get" class="arama-formu">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" name="arama" class="arama-girisi" placeholder="Ders talebi ara..." value="{{ request.GET.arama|default:'' }}">
+        </form>
+        <!--- Filtre Menüsünü Açıp Kapatan Buton -->
+        <button class="filtre-ac-kapat-buton" id="filter-toggle"><i class="fa-solid fa-filter"></i></button>
+    </div>
+    
+    <!--- Gelişmiş Filtre Menüsü -->
+    <div class="gelismis-filtreler" id="advanced-filters" style="display: none;">
+        <!--- Filtre Formu -->
+        <form method="get" class="filtre-formu">
+            <!--- Arama terimini filtrelerken korumak için gizli alan -->
+            {% if request.GET.arama %}
+            <input type="hidden" name="arama" value="{{ request.GET.arama }}">
+            {% endif %}
+            
+            <!--- Kategori Filtreleme Bölümü -->
+            <div class="filtre-bolum">
+                <h3 class="filtre-baslik">Kategori</h3>
+                <div class="filtre-butonlar">
+                    <!--- Tüm Kategoriler Seçeneği -->
+                    <label class="filtre-radyo">
+                        <input type="radio" name="kategori" value="" {% if not request.GET.kategori %}checked{% endif %}>
+                        <span class="filtre-buton {% if not request.GET.kategori %}active{% endif %}">Tümü</span>
+                    </label>
+                    <!--- Kategoriler Üzerinde Döngü -->
+                    {% for kategori in kategoriler %}
+                    <label class="filtre-radyo">
+                        <input type="radio" name="kategori" value="{{ kategori }}" {% if request.GET.kategori == kategori %}checked{% endif %}>
+                        <span class="filtre-buton {% if request.GET.kategori == kategori %}active{% endif %}">{{ kategori }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!--- Seviye Filtreleme Bölümü -->
+            <div class="filtre-bolum">
+                <h3 class="filtre-baslik">Seviye</h3>
+                <div class="filtre-butonlar">
+                    <!--- Tüm Seviyeler Seçeneği -->
+                    <label class="filtre-radyo">
+                        <input type="radio" name="seviye" value="" {% if not request.GET.seviye %}checked{% endif %}>
+                        <span class="filtre-buton {% if not request.GET.seviye %}active{% endif %}">Tümü</span>
+                    </label>
+                    <!--- Başlangıç Seviyesi Seçeneği -->
+                    <label class="filtre-radyo">
+                        <input type="radio" name="seviye" value="BASLANGIC" {% if request.GET.seviye == 'BASLANGIC' %}checked{% endif %}>
+                        <span class="filtre-buton {% if request.GET.seviye == 'BASLANGIC' %}active{% endif %}">Başlangıç</span>
+                    </label>
+                    <!--- Orta Seviye Seçeneği -->
+                    <label class="filtre-radyo">
+                        <input type="radio" name="seviye" value="ORTA" {% if request.GET.seviye == 'ORTA' %}checked{% endif %}>
+                        <span class="filtre-buton {% if request.GET.seviye == 'ORTA' %}active{% endif %}">Orta</span>
+                    </label>
+                    <!--- İleri Seviye Seçeneği -->
+                    <label class="filtre-radyo">
+                        <input type="radio" name="seviye" value="ILERI" {% if request.GET.seviye == 'ILERI' %}checked{% endif %}>
+                        <span class="filtre-buton {% if request.GET.seviye == 'ILERI' %}active{% endif %}">İleri</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!--- Tarih Aralığı Filtreleme Bölümü -->
+            <div class="filtre-bolum">
+                <h3 class="filtre-baslik">Tarih Aralığı</h3>
+                <div class="tarih-filtre">
+                    <!--- Başlangıç Tarihi Girişi -->
+                    <div class="tarih-giris-grup">
+                        <label for="tarih_baslangic">Başlangıç:</label>
+                        <input type="date" id="tarih_baslangic" name="tarih_baslangic" class="tarih-giris" value="{{ request.GET.tarih_baslangic|default:'' }}">
+                    </div>
+                    <!--- Bitiş Tarihi Girişi -->
+                    <div class="tarih-giris-grup">
+                        <label for="tarih_bitis">Bitiş:</label>
+                        <input type="date" id="tarih_bitis" name="tarih_bitis" class="tarih-giris" value="{{ request.GET.tarih_bitis|default:'' }}">
+                    </div>
+                </div>
+            </div>
+            
+            <!--- Sıralama Seçenekleri Bölümü -->
+            <div class="filtre-bolum">
+                <h3 class="filtre-baslik">Sıralama</h3>
+                <!--- Sıralama Seçim Kutusu -->
+                <select name="siralama" class="filtre-secim">
+                    <!--- En Yeni Seçeneği -->
+                    <option value="-olusturulma_tarihi" {% if request.GET.siralama == '-olusturulma_tarihi' or not request.GET.siralama %}selected{% endif %}>En Yeni</option>
+                    <!--- En Eski Seçeneği -->
+                    <option value="olusturulma_tarihi" {% if request.GET.siralama == 'olusturulma_tarihi' %}selected{% endif %}>En Eski</option>
+                </select>
+            </div>
+            
+            <!--- Filtre Uygulama ve Sıfırlama Butonları -->
+            <div class="filtre-aksiyonlar">
+                <button type="submit" class="filtre-uygula-btn">Filtreleri Uygula</button>
+                <a href="{% url 'home' %}" class="filtre-sifirla-btn">Filtreleri Sıfırla</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--- Ders Talepleri Akışı Alanı -->
+<div class="icerik-akis">
+    <!--- Ders Talepleri Üzerinde Döngü -->
+    {% for talep in ders_talepleri %}
+        <!--- Her Bir Ders Talebi Kartı -->
+        <div class="akis-oge">
+            <!--- Kullanıcı Avatarı -->
+            <div class="akis-avatar">
+                {% if talep.talep_eden_kullanici.profil_fotografi_index > 0 %}
+                    <img src="{% static 'img/profil_fotografi_' %}{{ talep.talep_eden_kullanici.profil_fotografi_index }}.png" alt="{{ talep.talep_eden_kullanici.user.username }}">
+                {% else %}
+                    <div class="avatar-placeholder">{{ talep.talep_eden_kullanici.user.username|first|upper }}</div>
+                {% endif %}
+            </div>
+            <!--- Talep İçeriği -->
+            <div class="akis-icerik">
+                <!--- Talep Başlığı ve Kullanıcı Bilgileri -->
+                <div class="akis-baslik">
+                    <div class="akis-kullanici-bilgi">
+                        <span class="akis-isim">{{ talep.talep_eden_kullanici.user.get_full_name|default:talep.talep_eden_kullanici.user.username }}</span>
+                        <span class="akis-kullanici-adi">@{{ talep.talep_eden_kullanici.user.username }}</span>
+                        <span class="akis-zaman">· {{ talep.olusturulma_tarihi|date:"d.m.Y" }}</span>
+                    </div>
+                </div>
+                <!--- Talep Başlığı Linki -->
+                <h3 class="akis-baslik-metin">
+                    <a href="{% url 'talepler:ders_istegi_detay' pk=talep.pk %}">{{ talep.talep_basligi }}</a>
+                </h3>
+                <!--- Talep Açıklaması (Kısaltılmış) -->
+                <div class="akis-metin">{{ talep.detayli_aciklama|truncatewords:30 }}</div>
+                <!--- Talep Meta Bilgileri (Ders, Kategori, Seviye) -->
+                <div class="akis-meta">
+                    <!--- Ders Adı ve Kategori -->
+                    <span class="akis-kategori">
+                        <i class="fa-solid fa-book"></i> {{ talep.ders.ders_adi|default:"Belirtilmemiş" }}
+                        {% if talep.ders.kategori %}
+                            <span class="badge">{{ talep.ders.kategori }}</span>
+                        {% endif %}
+                    </span>
+                    <!--- Beklenen Seviye (Eğer Farketmez Değilse) -->
+                    {% if talep.beklenen_seviye != 'FARKETMEZ' %}
+                        <span class="akis-seviye">
+                            <i class="fa-solid fa-signal"></i> 
+                            {% if talep.beklenen_seviye == 'BASLANGIC' %}
+                                Başlangıç
+                            {% elif talep.beklenen_seviye == 'ORTA' %}
+                                Orta
+                            {% elif talep.beklenen_seviye == 'ILERI' %}
+                                İleri
+                            {% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+                <!--- Talep Eylemleri (Detay Görüntüleme) -->
+                <div class="akis-aksiyonlar">
+                    <a href="{% url 'talepler:ders_istegi_detay' pk=talep.pk %}" class="akis-aksiyon">
+                        <i class="fa-solid fa-eye"></i>
+                        <span class="akis-aksiyon-sayac">Detaylar</span>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <!--- Hiç Talep Bulunmadığında Gösterilecek Mesaj -->
+        <div class="bos-akis-mesaj">
+            <p>Henüz hiç aktif ders talebi bulunmuyor.</p>
+            
+            <!--- Giriş Yapmış Kullanıcı İçin Talep Oluştur Butonu -->
+            {% if user.is_authenticated %}
+            <a href="{% url 'talepler:ders_istegi_olustur' %}" class="btn btn-primary mt-2">
+                <i class="fa-solid fa-plus"></i> Yeni Talep Oluştur
+            </a>
+            <!--- Giriş Yapmamış Kullanıcı İçin Giriş Yap Butonu -->
+            {% else %}
+            <a href="{% url 'kullanicilar:giris' %}?next={{ request.path }}" class="btn btn-primary mt-2">
+                <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap ve Talep Oluştur
+            </a>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <!--- Sayfalama Kontrolleri (Eğer Talep Varsa) -->
+    {% if ders_talepleri %}
+        <div class="sayfalama-kapsayici">
+            <div class="sayfalama-kontroller">
+                <!--- Önceki Sayfa Linki -->
+                {% if page_obj.has_previous %}
+                    <a href="?{% if request.GET.arama %}arama={{ request.GET.arama }}&{% endif %}{% if request.GET.kategori %}kategori={{ request.GET.kategori }}&{% endif %}{% if request.GET.seviye %}seviye={{ request.GET.seviye }}&{% endif %}{% if request.GET.tarih_baslangic %}tarih_baslangic={{ request.GET.tarih_baslangic }}&{% endif %}{% if request.GET.tarih_bitis %}tarih_bitis={{ request.GET.tarih_bitis }}&{% endif %}{% if request.GET.siralama %}siralama={{ request.GET.siralama }}&{% endif %}sayfa={{ page_obj.previous_page_number }}" class="sayfalama-buton">
+                        <i class="fa-solid fa-chevron-left"></i> Önceki
+                    </a>
+                {% endif %}
+                
+                <!--- Sayfa Durumu Metni -->
+                <span class="sayfalama-durum">Sayfa {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+                
+                <!--- Sonraki Sayfa Linki -->
+                {% if page_obj.has_next %}
+                    <a href="?{% if request.GET.arama %}arama={{ request.GET.arama }}&{% endif %}{% if request.GET.kategori %}kategori={{ request.GET.kategori }}&{% endif %}{% if request.GET.seviye %}seviye={{ request.GET.seviye }}&{% endif %}{% if request.GET.tarih_baslangic %}tarih_baslangic={{ request.GET.tarih_baslangic }}&{% endif %}{% if request.GET.tarih_bitis %}tarih_bitis={{ request.GET.tarih_bitis }}&{% endif %}{% if request.GET.siralama %}siralama={{ request.GET.siralama }}&{% endif %}sayfa={{ page_obj.next_page_number }}" class="sayfalama-buton">
+                        Sonraki <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Stil dosyası base.html'de dahil edilmiştir -->
+
+<script>
+    // DOM yüklendiğinde çalışacak kod
+    document.addEventListener('DOMContentLoaded', function() {
+        // Filtre menüsü açma/kapatma butonu ve filtre menüsü elementlerini al
+        const filterToggle = document.getElementById('filter-toggle');
+        const advancedFilters = document.getElementById('advanced-filters');
+        
+        // Filtre butonuna tıklama olay dinleyicisi ekle
+        filterToggle.addEventListener('click', function(e) {
+            e.preventDefault(); // Butonun varsayılan davranışını engelle
+            
+            // Filtre menüsünün görünürlüğünü değiştir
+            if (advancedFilters.style.display === 'none') {
+                advancedFilters.style.display = 'block';
+                filterToggle.classList.add('active'); // Butona aktif sınıfı ekle
+            } else {
+                advancedFilters.style.display = 'none';
+                filterToggle.classList.remove('active'); // Butondan aktif sınıfı kaldır
+            }
+        });
+        
+        // Sayfa yüklendiğinde herhangi bir filtre uygulanmışsa filtre menüsünü otomatik olarak göster
+        if (
+            '{{ request.GET.kategori }}' || 
+            '{{ request.GET.seviye }}' || 
+            '{{ request.GET.tarih_baslangic }}' || 
+            '{{ request.GET.tarih_bitis }}' || 
+            '{{ request.GET.siralama }}'
+        ) {
+            advancedFilters.style.display = 'block';
+            filterToggle.classList.add('active'); // Butona aktif sınıfı ekle
+        }
+        
+        // Filtre radyo butonlarının tıklama işlevselliğini ekle
+        const filterRadios = document.querySelectorAll('.filtre-radyo input[type="radio"]');
+        
+        filterRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Bu radyo butonunun ait olduğu grup adını al
+                const name = this.getAttribute('name');
+                
+                // Aynı gruptaki tüm butonların 'active' sınıfını kaldır
+                document.querySelectorAll(`.filtre-radyo input[name="${name}"] + span`).forEach(span => {
+                    span.classList.remove('active');
+                });
+                
+                // Seçilen radyo butonunun yanındaki span elementine 'active' sınıfını ekle
+                this.nextElementSibling.classList.add('active');
+            });
+        });
+    });
+</script>
+{% endblock %} 
