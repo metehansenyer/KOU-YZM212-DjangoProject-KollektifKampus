@@ -4,15 +4,13 @@ Kocaeli Üniversitesi Mühendislik Fakültesi Yazılım Mühendisliği 24-25 Web
 
 # İçerik
 
-- [KOÜ Yazılım Müh. Web Programlama Dersi Dönem Projesi](#koü-yazılım-müh-web-programlama-dersi-dönem-projesi)
-- [İçerik](#i̇çerik)
-  - [Kullanılan Araçlar](#kullanılan-araçlar)
-  - [Amaç](#amaç)
-  - [Projeden Beklenenler](#projeden-beklenenler)
-  - [Karşılanan Beklentiler](#karşılanan-beklentiler)
-  - [İndirme ve Çalıştırma](#i̇ndirme-ve-çalıştırma)
-  - [Teşekkürler](#teşekkürler)
-  - [Proje Ekibi](#proje-ekibi)
+- [Kullanılan Araçlar](https://github.com/metehansenyer/KOU-YZM212-DjangoProject-KollektifKampus?tab=readme-ov-file#kullanılan-araçlar)
+- [Amaç](https://github.com/metehansenyer/KOU-YZM212-DjangoProject-KollektifKampus?tab=readme-ov-file#amaç)
+- [Projeden Beklenenler](https://github.com/metehansenyer/KOU-YZM212-DjangoProject-KollektifKampus?tab=readme-ov-file#projeden-beklenenler)
+- [Karşılanan Beklentiler](https://github.com/metehansenyer/KOU-YZM212-DjangoProject-KollektifKampus?tab=readme-ov-file#karşılanan-beklentiler)
+- [İndirme ve Çalıştırma](https://github.com/metehansenyer/KOU-YZM212-DjangoProject-KollektifKampus?tab=readme-ov-file#i̇ndirme-ve-çalıştırma)
+- [Teşekkürler](https://github.com/metehansenyer/KOU-YZM212-DjangoProject-KollektifKampus?tab=readme-ov-file#teşekkürler)
+- [Proje Ekibi](https://github.com/metehansenyer/KOU-YZM212-DjangoProject-KollektifKampus?tab=readme-ov-file#proje-ekibi)
 
 ## Kullanılan Araçlar
 
